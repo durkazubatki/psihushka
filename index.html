@@ -102,6 +102,18 @@
       font-weight:700;
       font-size:1.1em;
     }
+    .slide-text .found {
+      color:#4cff6a;
+      font-weight:700;
+      font-size:1.1em;
+      text-shadow:0 0 20px rgba(76,255,106,0.2);
+    }
+    .slide-text .savva {
+      color:#4fc3f7;
+      font-weight:700;
+      font-size:1.05em;
+      text-shadow:0 0 15px rgba(79,195,247,0.2);
+    }
 
     .door-choice { display:flex; flex-direction:column; gap:10px; margin-top:6px; }
     .door-btn {
@@ -178,6 +190,36 @@
       letter-spacing:0.02em;
       text-transform:none;
       font-family:'Share Tech Mono',monospace;
+    }
+
+    /* ============================================ */
+    /* КНОПКА ПОДНЯТЬ */
+    /* ============================================ */
+    .pickup-btn {
+      font-family:'Oswald',sans-serif;
+      font-size:0.6rem;
+      font-weight:700;
+      letter-spacing:0.1em;
+      text-transform:uppercase;
+      color:#fff;
+      background:rgba(76,255,106,0.1);
+      border:1px solid rgba(76,255,106,0.2);
+      border-left:3px solid #4cff6a;
+      padding:8px 18px;
+      cursor:pointer;
+      margin-top:8px;
+      transition:background 0.3s, border-color 0.3s;
+      outline:none;
+      -webkit-tap-highlight-color:transparent;
+    }
+    .pickup-btn:hover {
+      background:rgba(76,255,106,0.05);
+      border-color:rgba(76,255,106,0.3);
+    }
+    .pickup-btn:disabled {
+      opacity:0.3;
+      cursor:default;
+      border-color:rgba(76,255,106,0.1);
     }
 
     #btn-next {
@@ -277,6 +319,20 @@
       padding:0 6px;
       border-radius:2px;
     }
+    .inv-slot .badge-new {
+      position:absolute;
+      top:-4px;
+      right:-4px;
+      background:#4cff6a;
+      color:#000;
+      font-size:0.4rem;
+      font-weight:700;
+      padding:1px 5px;
+      border-radius:8px;
+      font-family:'Oswald',sans-serif;
+      animation:pulse 1.5s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
 
     /* ============================================ */
     /* МОДАЛЬНЫЕ ОКНА */
@@ -411,7 +467,7 @@
     }
 
     /* ============================================ */
-    /* ТЕЛЕФОН — КАК НАСТОЯЩИЙ */
+    /* ТЕЛЕФОН */
     /* ============================================ */
     .phone-frame {
       background:linear-gradient(145deg, #1a1a1a, #0d0d0d);
@@ -503,7 +559,6 @@
     .phone-app .app-icon.green { background:linear-gradient(135deg, #34c759, #28a745); }
     .phone-app .app-icon.blue { background:linear-gradient(135deg, #007aff, #0055cc); }
     .phone-app .app-icon.purple { background:linear-gradient(135deg, #af52de, #8944b8); }
-    .phone-app .app-icon.red { background:linear-gradient(135deg, #ff3b30, #cc2a20); }
     .phone-app .app-icon.orange { background:linear-gradient(135deg, #ff9500, #cc7700); }
     .phone-app .app-icon.pink { background:linear-gradient(135deg, #ff2d55, #cc1a3a); }
     .phone-app .app-name {
@@ -533,7 +588,6 @@
     .phone-app-content::-webkit-scrollbar-track { background:rgba(255,255,255,0.02); }
     .phone-app-content::-webkit-scrollbar-thumb { background:#c0392b; border-radius:2px; }
 
-    /* Сообщения в телефоне */
     .phone-msg {
       padding:6px 10px;
       margin-bottom:4px;
@@ -566,6 +620,7 @@
     }
     .phone-msg .meme-text { color:#f0c040; font-weight:700; }
     .phone-msg .em { color:#f0c040; font-style:normal; }
+    .phone-msg .savva-name { color:#4fc3f7; font-weight:700; }
 
     .phone-input-area {
       display:flex;
@@ -623,13 +678,14 @@
       width:100%;
       display:flex;
       justify-content:center;
+      min-height:150px;
     }
     .cake-game-canvas-wrap canvas {
       width:100%;
       height:auto;
       max-height:220px;
       border-radius:6px;
-      background:rgba(10,10,10,0.5);
+      background:#1a0a2e;
       display:block;
     }
     .cake-game-stats {
@@ -708,6 +764,7 @@
     .diary-page .diary-entry-text .highlight { color:#c0392b; font-weight:700; }
     .diary-page .diary-entry-text .danger-text { color:#b22222; font-weight:700; }
     .diary-page .diary-entry-text .em { color:#8a6a3a; font-style:italic; }
+    .diary-page .diary-entry-text .savva-name { color:#4fc3f7; font-weight:700; }
 
     .diary-unlock-btn {
       display:block;
@@ -758,6 +815,7 @@
       .phone-app .app-name { font-size:0.35rem; }
       .phone-msg { font-size:0.5rem; padding:4px 8px; }
       .cake-game-canvas-wrap canvas { max-height:160px; }
+      .pickup-btn { font-size:0.5rem; padding:6px 14px; }
     }
   </style>
 </head>
@@ -845,9 +903,39 @@
     </div>
   </div>
 
-  <!-- ПАЛАТА №15 -->
-  <div class="slide" id="s-ward1"><img class="bg" src="ward.jpg" alt="палата с дырой" /><div class="slide-overlay none"></div></div>
-  <div class="slide" id="s-ward2"><img class="bg" src="report.jpg" alt="личное дело" /><div class="slide-overlay none"></div></div>
+  <!-- ПАЛАТА №15: ward.jpg + НАХОДКА ЗАКЛЮЧЕНИЯ -->
+  <div class="slide" id="s-ward1">
+    <img class="bg" src="ward.jpg" alt="палата с дырой" />
+    <div class="slide-overlay none"></div>
+    <div class="slide-content" style="bottom:110px;">
+      <div class="badge">🔍 ОСМОТР ПАЛАТЫ</div>
+      <div class="slide-title">ПАЛАТА №<span class="red">15</span></div>
+      <div class="divider"></div>
+      <div class="slide-text" data-type="slow" style="margin-bottom:6px;">
+        <span class="shout">— Смотрите!</span> На полу валяется <span class="danger">заключение врача</span>.<br>
+        <em>— Похоже, её признали невменяемой…</em>
+      </div>
+      <button class="pickup-btn" id="pickup-doctor" onclick="pickupDoctorNote()">📄 ПОДНЯТЬ ЗАКЛЮЧЕНИЕ</button>
+    </div>
+  </div>
+
+  <!-- ПАЛАТА №15: report.jpg (ЗАКЛЮЧЕНИЕ ВРАЧА УЖЕ В ТЕКСТЕ) -->
+  <div class="slide" id="s-ward2">
+    <img class="bg" src="report.jpg" alt="личное дело" />
+    <div class="slide-overlay none"></div>
+    <div class="slide-content">
+      <div class="badge">📋 ЗАКЛЮЧЕНИЕ ВРАЧА</div>
+      <div class="slide-title">ДИАГНОЗ: <span class="red">НЕПОДЛЕЖИТ ЛЕЧЕНИЮ</span></div>
+      <div class="divider"></div>
+      <div class="slide-text" data-type="slow">
+        <span class="found">✓ Заключение поднято!</span><br><br>
+        <em>«Пациентка Зубатка признана <span class="danger">неподлежащей лечению</span>.</em><br>
+        <em>Причина: смеховая нестабильность, мем-зависимость, шортс-аддикция.</em><br>
+        <em>Рекомендовано: наблюдение, мемы, шорты.</em><br>
+        <em>Подпись: д-р Смехов.»</em>
+      </div>
+    </div>
+  </div>
 
   <!-- УЛИКИ -->
   <div class="slide" id="s-clues">
@@ -878,22 +966,40 @@
     </div>
   </div>
 
-  <!-- ПАЛАТА №14 -->
+  <!-- ПАЛАТА №14: shorts.jpg + НАХОДКА ЗАПИСКИ -->
   <div class="slide" id="s-shorts1">
     <img class="bg" src="shorts.jpg" alt="палата с шортсами" />
     <div class="slide-overlay medium"></div>
-    <div class="slide-content">
+    <div class="slide-content" style="bottom:110px;">
       <div class="badge">📱 ОТДЕЛ ШОРТСОЗАВИСИМОСТИ</div>
       <div class="slide-title">ПАЛАТА №<span class="red">14</span></div>
       <div class="divider"></div>
-      <div class="slide-text" data-type="slow">
+      <div class="slide-text" data-type="slow" style="margin-bottom:6px;">
         <span class="shout">— О, нет…</span><br>
         Вся палата завалена <span class="danger">шортсами</span>.<br>
         <em>— 600 видео с её смехом</em><br>
         <em>— 400 видео с мемами</em><br>
         <em>— 200 видео с реакциями на мемы</em><br>
-        <strong>Диагноз:</strong> острая <span class="danger">шортсозависимость</span>.<br>
-        Прогноз: <em>неблагоприятный для рассудка.</em>
+        <span class="shout">— Смотрите!</span> Между шортсами <span class="savva">записка</span>!<br>
+        <em>— Похоже, от Саввы…</em>
+      </div>
+      <button class="pickup-btn" id="pickup-savva" onclick="pickupSavvaNote()">📄 ПОДНЯТЬ ЗАПИСКУ</button>
+    </div>
+  </div>
+
+  <!-- ПАЛАТА №14: ЗАПИСКА ОТ САВВЫ (дополнительный слайд) -->
+  <div class="slide" id="s-shorts2">
+    <img class="bg" src="shorts.jpg" alt="палата с шортсами" />
+    <div class="slide-overlay medium"></div>
+    <div class="slide-content">
+      <div class="badge">💌 ЗАПИСКА ОТ <span class="red">САВВЫ</span></div>
+      <div class="slide-title">«ЗУБАТКА, <span class="savva">ТЫ ГДЕ?</span>»</div>
+      <div class="divider"></div>
+      <div class="slide-text" data-type="slow">
+        <span class="found">✓ Записка поднята!</span><br><br>
+        <em>«Зубатка, ты где? Я волнуюсь.</em><br>
+        <em>Напиши мне, пожалуйста.</em><br>
+        <em>Твой <span class="savva">Савва</span> 💔»</em>
       </div>
     </div>
   </div>
@@ -996,10 +1102,25 @@
     </div>
   </div>
 
-  <!-- ФИНАЛ -->
+  <!-- ФИНАЛ — Зубатка нашлась! С Саввой ❤️ -->
   <div class="slide" id="s11">
     <img class="bg" src="birthday.jpg" alt="с днём рождения" />
     <div class="slide-overlay none"></div>
+    <div class="slide-content" style="bottom:90px;">
+      <div class="badge">💖 СЧАСТЛИВЫЙ ФИНАЛ</div>
+      <div class="slide-title">ЗУБАТКА <span class="red">НАШЛАСЬ!</span></div>
+      <div class="divider"></div>
+      <div class="slide-text" data-type="slow">
+        <span class="found">— Она здесь!</span><br><br>
+        Зубатка нашлась! Она была у <span class="savva">Саввы</span>.<br>
+        Оказывается, она просто сбежала, чтобы<br>
+        <em>— встретиться с ним</em><br>
+        <em>— показать ему свои мемы</em><br>
+        <em>— и посмеяться вместе</em><br><br>
+        <span class="shout">❤️ Теперь они вместе! ❤️</span><br>
+        <span class="found">Рассудок спасён! 🎉</span>
+      </div>
+    </div>
     <audio id="birthday-music" class="hidden-audio" src="birthday_music.mp3" preload="auto"></audio>
   </div>
 
@@ -1034,13 +1155,25 @@
     <span style="font-size:2rem;">📜</span>
     <span class="label">Дневник</span>
   </div>
+  <!-- Слот для заключения врача -->
+  <div class="inv-slot" id="doctor-slot" style="display:none;" onclick="openModal('doctorModal')" title="Заключение врача">
+    <span style="font-size:1.8rem;">📋</span>
+    <span class="label">Заключение</span>
+    <span class="badge-new">НОВОЕ</span>
+  </div>
+  <!-- Слот для записки Саввы -->
+  <div class="inv-slot" id="savva-slot" style="display:none;" onclick="openModal('savvaModal')" title="Записка от Саввы">
+    <span style="font-size:1.8rem;">💌</span>
+    <span class="label">Записка</span>
+    <span class="badge-new">НОВОЕ</span>
+  </div>
 </div>
 
 <!-- ============================================ -->
 <!-- МОДАЛЬНЫЕ ОКНА -->
 <!-- ============================================ -->
 
-<!-- === ПЛЕЕР (только 3 трека) === -->
+<!-- === ПЛЕЕР === -->
 <div class="modal-overlay" id="playerModal">
   <div class="modal-window">
     <button class="close-btn" onclick="closeModal('playerModal')">✕</button>
@@ -1084,7 +1217,6 @@
               <div class="app-icon purple">📸</div>
               <span class="app-name">Галерея</span>
             </div>
-            <!-- Музыка убрана из телефона -->
             <div class="phone-app" onclick="openPhoneApp('notes')">
               <div class="app-icon orange">📋</div>
               <span class="app-name">Заметки</span>
@@ -1093,7 +1225,6 @@
               <div class="app-icon pink">⚙️</div>
               <span class="app-name">Настройки</span>
             </div>
-            <!-- Пустая ячейка для баланса -->
             <div style="visibility:hidden;"></div>
           </div>
           <div class="phone-home-indicator"></div>
@@ -1114,6 +1245,36 @@
   </div>
 </div>
 
+<!-- === МОДАЛКА ДЛЯ ЗАКЛЮЧЕНИЯ ВРАЧА === -->
+<div class="modal-overlay" id="doctorModal">
+  <div class="modal-window">
+    <button class="close-btn" onclick="closeModal('doctorModal')">✕</button>
+    <div class="modal-title">📋 ЗАКЛЮЧЕНИЕ <span class="red">ВРАЧА</span></div>
+    <div style="font-family:'Share Tech Mono',monospace; font-size:0.8rem; color:#b8b8a8; background:rgba(0,0,0,0.3); border-radius:8px; padding:20px; line-height:1.8; border-left:3px solid #c0392b;">
+      <div style="color:#c0392b; font-weight:700; font-size:0.6rem; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:8px;">🔴 ДИАГНОЗ</div>
+      <div>Пациентка <strong style="color:#fff;">Зубатка</strong> признана <span style="color:#c0392b; font-weight:700;">неподлежащей лечению</span>.</div>
+      <div style="margin-top:8px;">Причина: <span style="color:#f0c040;">смеховая нестабильность, мем-зависимость, шортс-аддикция</span>.</div>
+      <div style="margin-top:8px; color:#666; font-size:0.7rem;">Рекомендовано: наблюдение, мемы, шорты, <span style="color:#4fc3f7;">общение с Саввой</span>.</div>
+      <div style="margin-top:12px; text-align:right; color:#666; font-size:0.6rem;">Подпись: д-р Смехов.</div>
+    </div>
+  </div>
+</div>
+
+<!-- === МОДАЛКА ДЛЯ ЗАПИСКИ САВВЫ === -->
+<div class="modal-overlay" id="savvaModal">
+  <div class="modal-window">
+    <button class="close-btn" onclick="closeModal('savvaModal')">✕</button>
+    <div class="modal-title">💌 ЗАПИСКА ОТ <span class="red">САВВЫ</span></div>
+    <div style="font-family:'Caveat', cursive; font-size:1.4rem; color:#2a241a; background:linear-gradient(180deg, #f5efe0 0%, #e8ddc8 100%); border-radius:8px; padding:24px 20px; line-height:1.8; text-align:center; box-shadow:inset 0 0 30px rgba(0,0,0,0.05);">
+      <div style="margin-bottom:12px;">💔</div>
+      <div style="font-size:1.6rem; color:#8a3a3a; font-weight:700;">«Зубатка, ты где?»</div>
+      <div style="font-size:1.4rem; margin:8px 0;">Я волнуюсь.</div>
+      <div style="font-size:1.2rem; margin:4px 0; color:#666;">Напиши мне, пожалуйста.</div>
+      <div style="font-size:1.6rem; color:#4fc3f7; font-weight:700; margin-top:12px; text-shadow:0 0 20px rgba(79,195,247,0.1);">Твой Савва 💔</div>
+    </div>
+  </div>
+</div>
+
 <script>
   // ============================================
   // ОСНОВНАЯ ЛОГИКА СЛАЙДОВ
@@ -1128,6 +1289,8 @@
     let afterRoomFn = null;
     let linearNext = null;
     const typingIntervals = {};
+    let doctorPickedUp = false;
+    let savvaPickedUp = false;
 
     const flash = document.getElementById('flash');
     const btnNext = document.getElementById('btn-next');
@@ -1306,6 +1469,28 @@
       setTimeout(startTypingForActiveSlide, 400);
     };
 
+    // ===== ПОДНЯТЬ ЗАКЛЮЧЕНИЕ ВРАЧА (переход на s-ward2) =====
+    window.pickupDoctorNote = function() {
+      if (doctorPickedUp) return;
+      doctorPickedUp = true;
+      document.getElementById('pickup-doctor').disabled = true;
+      document.getElementById('pickup-doctor').textContent = '✅ ПОДНЯТО';
+      document.getElementById('doctor-slot').style.display = 'flex';
+      // Переход на следующий слайд (s-ward2)
+      goTo('s-ward2');
+    };
+
+    // ===== ПОДНЯТЬ ЗАПИСКУ САВВЫ (переход на s-shorts2) =====
+    window.pickupSavvaNote = function() {
+      if (savvaPickedUp) return;
+      savvaPickedUp = true;
+      document.getElementById('pickup-savva').disabled = true;
+      document.getElementById('pickup-savva').textContent = '✅ ПОДНЯТО';
+      document.getElementById('savva-slot').style.display = 'flex';
+      // Переход на следующий слайд (s-shorts2)
+      goTo('s-shorts2');
+    };
+
     function updateCorridorUI() {
       if (visited.ward) document.getElementById('btn-ward').classList.add('visited');
       if (visited.shorts) document.getElementById('btn-shorts').classList.add('visited');
@@ -1330,7 +1515,7 @@
 
     const roomSteps = {
       ward: ['s-ward1','s-ward2','s-clues'],
-      shorts: ['s-shorts1'],
+      shorts: ['s-shorts1','s-shorts2'],
       cameras: ['s-cameras-door','s-cameras-inside']
     };
 
@@ -1447,7 +1632,7 @@
   });
 
   // ============================================
-  // ПЛЕЕР — ТОЛЬКО 3 ТРЕКА
+  // ПЛЕЕР
   // ============================================
   const tracks = [
     { name: 'ДЕЛО №15', file: 'track1.mp3' },
@@ -1544,32 +1729,38 @@
 
   // --- ИГРА "ТОРТ В ВЫСЬ" ---
   let cakeGame = null;
+  let gameAnimationId = null;
 
   function initCakeGame() {
     const canvas = document.getElementById('cake-canvas');
     if (!canvas) return;
+    
     const ctx = canvas.getContext('2d');
-    const rect = canvas.parentElement.getBoundingClientRect();
-    const w = Math.min(rect.width - 8, 300);
+    const container = canvas.parentElement;
+    const containerWidth = container.clientWidth || 280;
+    const w = Math.min(containerWidth - 8, 300);
     const h = Math.min(220, w * 0.7);
+    
     canvas.width = w;
     canvas.height = h;
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    canvas.style.display = 'block';
 
     const game = {
       ctx, w, h,
       blocks: [],
-      currentX: w/2,
+      currentX: w/2 - 20,
       currentWidth: 40,
-      speed: 1.2,
+      speed: 1.8,
       direction: 1,
       score: 0,
       gameOver: false,
       blockHeight: 16,
-      lastX: w/2,
-      lastWidth: 40,
       fallOffset: 0,
       falling: false,
-      fallSpeed: 0
+      fallSpeed: 0,
+      started: false
     };
 
     game.blocks.push({
@@ -1580,28 +1771,69 @@
     });
 
     cakeGame = game;
+    game.started = true;
     updateCakeScore();
+    
+    if (gameAnimationId) {
+      cancelAnimationFrame(gameAnimationId);
+      gameAnimationId = null;
+    }
+    
     gameLoop();
   }
 
   function gameLoop() {
-    if (!cakeGame || cakeGame.gameOver) return;
+    if (!cakeGame) {
+      gameAnimationId = requestAnimationFrame(gameLoop);
+      return;
+    }
+    
+    drawGame();
+    
+    if (!cakeGame.gameOver && !cakeGame.falling) {
+      updateGame();
+    }
+    
+    gameAnimationId = requestAnimationFrame(gameLoop);
+  }
+
+  function drawGame() {
     const g = cakeGame;
+    if (!g) return;
     const ctx = g.ctx;
     const w = g.w, h = g.h;
 
-    ctx.fillStyle = 'rgba(10,10,10,0.5)';
+    const grad = ctx.createLinearGradient(0, 0, 0, h);
+    grad.addColorStop(0, '#1a0a2e');
+    grad.addColorStop(0.5, '#2d1b4e');
+    grad.addColorStop(1, '#1a0a2e');
+    ctx.fillStyle = grad;
     ctx.fillRect(0, 0, w, h);
+    
+    ctx.fillStyle = 'rgba(255,255,255,0.15)';
+    for (let i = 0; i < 30; i++) {
+      const x = (i * 13 + 7) % w;
+      const y = (i * 7 + 3) % h;
+      const size = (i % 3) + 1;
+      ctx.beginPath();
+      ctx.arc(x, y, size, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    
+    ctx.fillStyle = 'rgba(100,200,255,0.05)';
+    ctx.fillRect(0, h - 2, w, 2);
 
     g.blocks.forEach((block, index) => {
       const y = block.y;
       const x = block.x;
-      const width = block.width;
-      const colors = ['#f5a623', '#e8c84a', '#f7d44a', '#f0c040', '#e8b830', '#f5c842'];
+      const width = Math.max(block.width, 4);
+      
+      const colors = ['#ff6b35', '#ff8c42', '#ffb347', '#f5a623', '#e8c84a', '#f7d44a', '#f0c040', '#ffcc5c'];
       const color = colors[index % colors.length];
-      ctx.fillStyle = color;
-      ctx.shadowColor = 'rgba(255,200,50,0.2)';
-      ctx.shadowBlur = 10;
+      
+      ctx.shadowColor = 'rgba(255,200,50,0.25)';
+      ctx.shadowBlur = 15;
+      
       const r = 4;
       ctx.beginPath();
       ctx.moveTo(x + r, y);
@@ -1614,19 +1846,52 @@
       ctx.lineTo(x, y + r);
       ctx.quadraticCurveTo(x, y, x + r, y);
       ctx.closePath();
+      
+      ctx.fillStyle = color;
       ctx.fill();
+      
       ctx.shadowBlur = 0;
+      ctx.strokeStyle = 'rgba(255,200,100,0.2)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+      
       if (index > 0) {
-        ctx.fillStyle = 'rgba(255,255,255,0.15)';
-        ctx.fillRect(x + 4, y + 2, width - 8, 4);
+        ctx.fillStyle = 'rgba(255,255,255,0.2)';
+        ctx.fillRect(x + 4, y + 2, width - 8, 3);
+      }
+      
+      ctx.fillStyle = 'rgba(255,255,255,0.05)';
+      ctx.fillRect(x + 2, y + 4, 6, 4);
+      
+      if (index === g.blocks.length - 1 && g.blocks.length > 2) {
+        ctx.fillStyle = '#ff6b4a';
+        ctx.shadowColor = 'rgba(255,100,50,0.4)';
+        ctx.shadowBlur = 20;
+        const cx = x + width/2;
+        ctx.fillRect(cx - 2, y - 8, 4, 8);
+        
+        ctx.shadowColor = 'rgba(255,200,0,0.6)';
+        ctx.shadowBlur = 25;
+        ctx.fillStyle = '#ffcc00';
+        ctx.beginPath();
+        ctx.arc(cx, y - 10, 5, 0, Math.PI * 2);
+        ctx.fill();
+        
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = '#ff8800';
+        ctx.beginPath();
+        ctx.arc(cx - 1, y - 11, 2, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.shadowBlur = 0;
       }
     });
 
-    if (!g.falling) {
+    if (!g.falling && !g.gameOver && g.blocks.length > 0) {
       const currentY = g.blocks[g.blocks.length-1].y - g.blockHeight;
-      ctx.fillStyle = '#f5a623';
-      ctx.shadowColor = 'rgba(255,200,50,0.3)';
-      ctx.shadowBlur = 15;
+      
+      ctx.shadowColor = 'rgba(255,200,50,0.4)';
+      ctx.shadowBlur = 25;
+      
       const r = 4;
       ctx.beginPath();
       ctx.moveTo(g.currentX + r, currentY);
@@ -1636,20 +1901,64 @@
       ctx.quadraticCurveTo(g.currentX + g.currentWidth, currentY + g.blockHeight, g.currentX + g.currentWidth - r, currentY + g.blockHeight);
       ctx.lineTo(g.currentX + r, currentY + g.blockHeight);
       ctx.quadraticCurveTo(g.currentX, currentY + g.blockHeight, g.currentX, currentY + g.blockHeight - r);
-      ctx.lineTo(g.currentX, y + r);
+      ctx.lineTo(g.currentX, currentY + r);
       ctx.quadraticCurveTo(g.currentX, currentY, g.currentX + r, currentY);
       ctx.closePath();
+      
+      ctx.fillStyle = '#ff6b35';
       ctx.fill();
       ctx.shadowBlur = 0;
+      
+      ctx.fillStyle = 'rgba(255,255,255,0.15)';
+      ctx.fillRect(g.currentX + 4, currentY + 2, g.currentWidth - 8, 3);
+      
+      ctx.strokeStyle = 'rgba(255,200,100,0.2)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
     }
 
-    if (!g.falling && !g.gameOver) {
-      g.currentX += g.speed * g.direction;
-      if (g.currentX + g.currentWidth > w) { g.direction = -1; }
-      if (g.currentX < 0) { g.direction = 1; }
-    }
+    ctx.fillStyle = 'rgba(0,0,0,0.3)';
+    ctx.fillRect(w - 75, 6, 65, 24);
+    
+    ctx.fillStyle = '#ffcc00';
+    ctx.font = 'bold 13px "Share Tech Mono", monospace';
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'middle';
+    ctx.shadowColor = 'rgba(255,200,0,0.2)';
+    ctx.shadowBlur = 10;
+    ctx.fillText('🎂 ' + g.score, w - 14, 18);
+    ctx.shadowBlur = 0;
 
-    requestAnimationFrame(gameLoop);
+    if (g.gameOver) {
+      ctx.fillStyle = 'rgba(0,0,0,0.4)';
+      ctx.fillRect(0, h/2 - 30, w, 60);
+      ctx.fillStyle = '#ffcc00';
+      ctx.font = 'bold 18px "Oswald", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.shadowColor = 'rgba(255,200,0,0.3)';
+      ctx.shadowBlur = 20;
+      ctx.fillText('🏆 ПОБЕДА!', w/2, h/2);
+      ctx.shadowBlur = 0;
+      ctx.fillStyle = '#888';
+      ctx.font = '10px "Share Tech Mono", monospace';
+      ctx.fillText('20 кусков собрано!', w/2, h/2 + 24);
+    }
+  }
+
+  function updateGame() {
+    const g = cakeGame;
+    if (!g || g.gameOver || g.falling) return;
+    
+    g.currentX += g.speed * g.direction;
+    if (g.currentX + g.currentWidth > g.w) { 
+      g.direction = -1; 
+      g.currentX = g.w - g.currentWidth;
+    }
+    if (g.currentX < 0) { 
+      g.direction = 1; 
+      g.currentX = 0;
+    }
   }
 
   function dropCakePiece() {
@@ -1676,8 +1985,6 @@
       });
       g.score++;
       g.currentWidth = Math.max(20, newBlockWidth - 2);
-      g.lastX = newBlockX;
-      g.lastWidth = newBlockWidth;
       updateCakeScore();
 
       if (g.score >= 20) {
@@ -1711,9 +2018,10 @@
       }, 16);
     }
 
-    g.currentX = g.currentWidth / 2 + Math.random() * (g.w - g.currentWidth - 10);
-    if (g.currentX < 0) g.currentX = 10;
-    if (g.currentX + g.currentWidth > g.w) g.currentX = g.w - g.currentWidth - 10;
+    const maxX = g.w - g.currentWidth;
+    g.currentX = Math.random() * maxX;
+    if (g.currentX < 0) g.currentX = 0;
+    if (g.currentX + g.currentWidth > g.w) g.currentX = g.w - g.currentWidth;
   }
 
   function updateCakeScore() {
@@ -1724,28 +2032,33 @@
   function resetCakeGame() {
     const canvas = document.getElementById('cake-canvas');
     if (!canvas) return;
-    const rect = canvas.parentElement.getBoundingClientRect();
-    const w = Math.min(rect.width - 8, 300);
+    
+    const container = canvas.parentElement;
+    const containerWidth = container.clientWidth || 280;
+    const w = Math.min(containerWidth - 8, 300);
     const h = Math.min(220, w * 0.7);
+    
     canvas.width = w;
     canvas.height = h;
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    canvas.style.display = 'block';
 
     cakeGame = {
       ctx: canvas.getContext('2d'),
       w, h,
       blocks: [],
-      currentX: w/2,
+      currentX: w/2 - 20,
       currentWidth: 40,
-      speed: 1.2,
+      speed: 1.8,
       direction: 1,
       score: 0,
       gameOver: false,
       blockHeight: 16,
-      lastX: w/2,
-      lastWidth: 40,
       fallOffset: 0,
       falling: false,
-      fallSpeed: 0
+      fallSpeed: 0,
+      started: true
     };
 
     cakeGame.blocks.push({
@@ -1836,14 +2149,18 @@
     }
   }
 
-  // --- СООБЩЕНИЯ (ДИАЛОГ: ТЫ ПИШЕШЬ — ОНА ОТВЕЧАЕТ) ---
+  // --- СООБЩЕНИЯ (с Саввой!) ---
   const chatMessages = [
     { from: 'zubatka', text: 'Ха-ха! Ты меня ищешь? 😏' },
     { from: 'zubatka', text: 'Я уже в интернете! Там так весело!' },
     { from: 'zubatka', text: 'Смотри, какой мем я нашла: 🧠 <span class="meme-text">«Когда думаешь, что всё под контролем, а ты в психушке»</span>' },
     { from: 'zubatka', text: 'А ещё я танцевала у кровати! 💃' },
+    { from: 'savva', text: '<span class="savva-name">Савва:</span> Зубатка, ты где? Я волнуюсь...' },
+    { from: 'zubatka', text: 'Не волнуйся! Я просто развлекаюсь! 😜' },
     { from: 'zubatka', text: 'В палате №15 я оставила <span class="meme-text">дыру размером с улыбку</span>!' },
     { from: 'zubatka', text: 'А в палате №14 — 600 шортсов с моим смехом 😂' },
+    { from: 'savva', text: '<span class="savva-name">Савва:</span> Ты невыносима... Но я тебя люблю ❤️' },
+    { from: 'zubatka', text: 'Я тоже тебя люблю! 💕' },
     { from: 'zubatka', text: 'Камера №5 вообще расплавилась! Представляешь?' },
     { from: 'zubatka', text: 'Я теперь <span class="em">легенда</span> этого диспансера!' },
     { from: 'zubatka', text: 'Тогда <span class="meme-text">эвакуируй рассудок</span> и беги за мной!' },
@@ -1851,14 +2168,11 @@
   ];
 
   let chatIndex = 0;
-  let chatInitialized = false;
 
   function getMessagesApp() {
-    chatInitialized = false;
     chatIndex = 0;
 
     let html = '<div style="display:flex;flex-direction:column;gap:3px;" id="chat-container">';
-    // Показываем только первое сообщение от Зубатки
     html += `<div class="phone-msg left">${chatMessages[0].text}<span class="msg-time">${new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}</span></div>`;
     html += '</div>';
 
@@ -1870,8 +2184,6 @@
     `;
 
     chatIndex = 1;
-    chatInitialized = true;
-
     return html;
   }
 
@@ -1890,7 +2202,6 @@
     }
     input.value = '';
 
-    // Ответ от Зубатки
     setTimeout(() => {
       if (chatIndex < chatMessages.length) {
         const msg = chatMessages[chatIndex];
@@ -1904,7 +2215,6 @@
         }
         chatIndex++;
       } else {
-        // Если все сообщения закончились — случайный ответ
         const responses = [
           'Ха-ха! Ты меня раскусил! 😂',
           'Ого, ты серьёзно? 😏',
@@ -1970,14 +2280,15 @@
     return html;
   }
 
-  // --- ЗАМЕТКИ ---
+  // --- ЗАМЕТКИ (без спойлеров) ---
   function getNotesApp() {
     const notes = [
-      { title: 'Объект Зубатка', text: 'Сбежала из палаты №15. Смех заразен.' },
+      { title: 'Объект Зубатка', text: 'Сбежала из палаты №15. Смех заразен. Веселье гарантировано.' },
       { title: 'Дыра в стене', text: 'Размером с улыбку. Возможно, она смеялась слишком сильно.' },
       { title: '600 шортсов', text: 'В палате №14. Все с её смехом. Диагноз: шортсозависимость.' },
       { title: 'Камера №5', text: 'Расплавилась от смеха. 91% сходства с голосом Зубатки.' },
-      { title: 'Эвакуация', text: 'Рассудок эвакуирован. Зубатка в интернете. Мемы повсюду.' },
+      { title: 'Заключение врача', text: 'Признана неподлежащей лечению. Рекомендовано: мемы, шорты, наблюдение.' },
+      { title: 'Записка', text: 'Кто-то ищет Зубатку. Похоже, она кому-то нужна...' },
     ];
 
     let html = '';
@@ -2024,16 +2335,16 @@
   }
 
   // ============================================
-  // ДНЕВНИК
+  // ДНЕВНИК (с Саввой)
   // ============================================
   const diaryEntries = [
     { id: 'start', text: 'Объект <span class="highlight">Зубатка</span> замечен в коридоре. Поведение: <span class="danger-text">неадекватное</span>.' },
     { id: 'yard', text: 'Пациентка смеялась так, что стены дрожали. Акустический анализ зафиксировал <span class="highlight">7 секунд тишины</span>, а затем — <span class="danger-text">взрыв смеха</span>.' },
     { id: 'corridor', text: 'Акустический анализ зафиксировал <span class="highlight">странный звук</span> в коридоре. Похоже на <span class="em">подавленный смех</span> и звук падающих мемов.' },
-    { id: 'ward15', text: 'Палата №15: <span class="highlight">пуста</span>. В стене обнаружена <span class="danger-text">дыра размером с улыбку</span>.' },
-    { id: 'ward14', text: 'Палата №14: <span class="highlight">600 шортсов</span> с её смехом. Диагноз: <span class="danger-text">шортсозависимость</span>.' },
+    { id: 'ward15', text: 'Палата №15: <span class="highlight">пуста</span>. В стене обнаружена <span class="danger-text">дыра размером с улыбку</span>. Найдено <span class="highlight">заключение врача</span>.' },
+    { id: 'ward14', text: 'Палата №14: <span class="highlight">600 шортсов</span> с её смехом. Диагноз: <span class="danger-text">шортсозависимость</span>. Найдена <span class="savva-name">записка от Саввы</span>.' },
     { id: 'cameras', text: 'Комната охраны: камера №5 <span class="danger-text">расплавилась</span> от смеха. Зафиксировано <span class="highlight">91% сходства</span> со звуком Зубатки.' },
-    { id: 'final', text: 'Объект покинул учреждение. Местонахождение: <span class="highlight">интернет</span>. Эвакуация рассудка — <span class="danger-text">КРИТИЧЕСКАЯ</span>.' },
+    { id: 'final', text: 'Объект покинул учреждение. Местонахождение: <span class="highlight">интернет</span>. Эвакуация рассудка — <span class="danger-text">КРИТИЧЕСКАЯ</span>. Но она нашлась! Зубатка теперь с <span class="savva-name">Саввой</span> ❤️' },
   ];
 
   let diaryUnlocked = 0;
@@ -2114,7 +2425,8 @@
       case 's-ward1':
       case 's-ward2':
       case 's-clues': entriesToShow = 4; break;
-      case 's-shorts1': entriesToShow = 5; break;
+      case 's-shorts1':
+      case 's-shorts2': entriesToShow = 5; break;
       case 's-cameras-door':
       case 's-cameras-inside': entriesToShow = 6; break;
       case 's-conclusion':
@@ -2141,4 +2453,4 @@
   observerDiary.observe(document.getElementById('diaryModal'), { attributes: true, attributeFilter: ['class'] });
 </script>
 </body>
-  </html>
+      </html>
