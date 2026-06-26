@@ -17,24 +17,20 @@
     .slide { position:absolute; inset:0; opacity:0; pointer-events:none; transition:opacity 0.8s ease; overflow:hidden; }
     .slide.active { opacity:1; pointer-events:all; }
 
-    /* все фото — без обрезки, с сохранением пропорций */
     .slide img.bg {
       position:absolute; inset:0;
       width:100%; height:100%;
       display:block;
     }
-    /* горизонтальные фото — покрывают экран */
     .slide img.bg.landscape {
       object-fit:cover;
       object-position:center center;
     }
-    /* вертикальные фото — вписываются в экран с чёрными полями */
     .slide img.bg.vertical {
       object-fit:contain;
       background:#0a0a0a;
     }
 
-    /* зум только на первом слайде (вход) */
     #s1 img.bg { transform:scale(1); transition:transform 0s; }
     #s1.active img.bg { transform:scale(1.5); transition:transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94); }
 
@@ -42,6 +38,7 @@
     .slide-overlay.none { display:none; }
     .slide-overlay.soft { background:rgba(0,0,0,0.15); }
     .slide-overlay.dark { background:rgba(0,0,0,0.7); }
+    .slide-overlay.medium { background:rgba(0,0,0,0.5); }
 
     .slide-content {
       position:absolute; bottom:100px; left:28px;
@@ -59,6 +56,7 @@
     .slide-text em { color:#f0c040; font-style:normal; }
     .slide-text strong { color:#fff; }
     .slide-text .danger { color:#c0392b; text-shadow:0 0 8px #ff3b2b; font-family:'Oswald',sans-serif; font-size:1.1em; font-weight:700; }
+    .slide-text .shout { color:#ff6b4a; font-weight:700; font-size:1.2em; }
 
     .door-choice { display:flex; flex-direction:column; gap:10px; margin-top:6px; }
     .door-btn {
@@ -78,13 +76,19 @@
     .door-btn.visited span { color:#4cff6a; opacity:0.7; }
 
     .clue-wrap { display:flex; flex-direction:column; gap:8px; margin-top:4px; }
-    .clue-item { border:1px solid rgba(255,255,255,0.12); padding:10px 14px; display:flex; gap:12px; align-items:center; cursor:pointer; transition:background 0.2s, border-color 0.2s; max-width:400px; }
-    .clue-item:hover { background:rgba(192,57,43,0.1); border-color:rgba(192,57,43,0.6); }
-    .clue-icon { font-size:1.4rem; flex-shrink:0; }
+    .clue-item {
+      border:1px solid rgba(255,255,255,0.12); padding:10px 14px;
+      display:flex; gap:12px; align-items:center;
+      cursor:pointer; transition:background 0.2s, border-color 0.2s;
+      max-width:400px; background:rgba(0,0,0,0.5);
+      backdrop-filter:blur(4px);
+    }
+    .clue-item:hover { background:rgba(192,57,43,0.15); border-color:rgba(192,57,43,0.6); }
+    .clue-icon { font-size:1.6rem; flex-shrink:0; }
     .clue-name { font-family:'Oswald',sans-serif; font-size:0.9rem; font-weight:700; color:#fff; }
     .clue-reveal { font-size:0.72rem; color:#f0c040; margin-top:4px; display:none; }
     .clue-item.open .clue-reveal { display:block; }
-    .clue-hint { font-size:0.65rem; color:#555; margin-top:6px; }
+    .clue-hint { font-size:0.65rem; color:#888; margin-top:6px; font-style:italic; }
 
     #btn-next {
       position:fixed; bottom:28px; left:28px; z-index:500;
@@ -106,6 +110,7 @@
     @media(max-width:500px) {
       .slide-content { left:16px; bottom:90px; }
       #btn-next { left:16px; bottom:20px; }
+      .clue-item { padding:8px 12px; }
     }
   </style>
 </head>
@@ -113,7 +118,7 @@
 <div id="flash"></div>
 <div id="stage">
 
-  <!-- 1. ВХОД (entrance.jpg) -->
+  <!-- 1. ВХОД -->
   <div class="slide active" id="s1">
     <img class="bg landscape" src="entrance.jpg" alt="вход" />
     <div class="slide-overlay"></div>
@@ -122,15 +127,16 @@
       <div class="slide-title">Объект <span class="red">ЗУБАТКА</span><br>сбежал из учреждения</div>
       <div class="divider"></div>
       <div class="slide-text">
-        Последний раз был замечен:<br>
-        <em>— смеющимся как чайка</em><br>
-        <em>— сверкающим брекетами</em><br>
-        <em>— распространяющим мемы</em>
+        <span class="shout">— Ой, боже!</span> Это случилось сегодня ночью.<br><br>
+        Последний раз её видели:<br>
+        <em>— смеющейся как безумная чайка</em><br>
+        <em>— сверкающей брекетами в темноте</em><br>
+        <em>— разбрасывающей мемы по всему коридору</em>
       </div>
     </div>
   </div>
 
-  <!-- 2. ДВОР (yard.jpg) -->
+  <!-- 2. ДВОР -->
   <div class="slide" id="s2">
     <img class="bg landscape" src="yard.jpg" alt="двор" />
     <div class="slide-overlay"></div>
@@ -139,13 +145,15 @@
       <div class="slide-title">Двор <span class="red">учреждения</span></div>
       <div class="divider"></div>
       <div class="slide-text">
-        <strong>«Пациентка вела себя спокойно<br>примерно <em>7 секунд</em>.»</strong><br><br>
-        После получения доступа к интернету —<br>произошёл инцидент.
+        <span class="shout">— Да что ж такое!</span><br><br>
+        <strong>«Пациентка вела себя спокойно<br>примерно <em>7 секунд</em>. А потом…»</strong><br><br>
+        После получения доступа к интернету произошёл <span class="danger">инцидент</span>.<br>
+        <em>— Она смеялась так, что стены дрожали.</em>
       </div>
     </div>
   </div>
 
-  <!-- 3. КОРИДОР (corridor1.jpg) -->
+  <!-- 3. КОРИДОР — ВЫБОР -->
   <div class="slide" id="s3">
     <img class="bg landscape" src="corridor1.jpg" alt="коридор" />
     <div class="slide-overlay"></div>
@@ -171,60 +179,77 @@
     </div>
   </div>
 
-  <!-- ПАЛАТА №15: corridor2.jpg (анализ звука) -->
+  <!-- ПАЛАТА №15: шаг 1 — corridor2.jpg -->
   <div class="slide" id="s-ward1">
     <img class="bg landscape" src="corridor2.jpg" alt="коридор после анализа" />
     <div class="slide-overlay none"></div>
   </div>
-  <!-- ПАЛАТА №15: ward.jpg (палата с дырой) -->
+  <!-- ПАЛАТА №15: шаг 2 — ward.jpg -->
   <div class="slide" id="s-ward2">
     <img class="bg vertical" src="ward.jpg" alt="палата с дырой" />
     <div class="slide-overlay none"></div>
   </div>
-  <!-- ПАЛАТА №15: report.jpg (личное дело) -->
+  <!-- ПАЛАТА №15: шаг 3 — report.jpg -->
   <div class="slide" id="s-ward3">
     <img class="bg vertical" src="report.jpg" alt="личное дело" />
     <div class="slide-overlay none"></div>
   </div>
 
-  <!-- ПАЛАТА №14: clues.jpg (улики) -->
-  <div class="slide" id="s-shorts1">
+  <!-- УЛИКИ — clues.jpg -->
+  <div class="slide" id="s-clues">
     <img class="bg vertical" src="clues.jpg" alt="улики" />
     <div class="slide-overlay soft"></div>
     <div class="slide-content">
       <div class="badge">🔍 Улики на тумбочке</div>
       <div class="slide-title">Вещественные <span class="red">доказательства</span></div>
       <div class="divider"></div>
+      <div class="slide-text" style="margin-bottom:8px;">
+        <span class="shout">— Ого…</span> Вот что она оставила после себя.
+      </div>
       <div class="clue-wrap">
         <div class="clue-item" onclick="this.classList.toggle('open')">
           <div class="clue-icon">🦷</div>
-          <div><div class="clue-name">Брекет</div><div class="clue-reveal">Этот брекет видал больше приколов, чем ты за жизнь.</div></div>
+          <div><div class="clue-name">Брекет</div><div class="clue-reveal">«Этот брекет видал больше мемов, чем весь интернет. Он светится в темноте.»</div></div>
         </div>
         <div class="clue-item" onclick="this.classList.toggle('open')">
           <div class="clue-icon">📱</div>
-          <div><div class="clue-name">Мем</div><div class="clue-reveal">Этот мем признан опасным в 17 странах.</div></div>
+          <div><div class="clue-name">Телефон</div><div class="clue-reveal">«На экране — 600 непросмотренных шортсов. Все с котами. Все с её смехом.»</div></div>
         </div>
         <div class="clue-item" onclick="this.classList.toggle('open')">
           <div class="clue-icon">👓</div>
-          <div><div class="clue-name">Очки</div><div class="clue-reveal">С ними она видит мир в формате «лол».</div></div>
+          <div><div class="clue-name">Очки</div><div class="clue-reveal">«С ними она видит мир в формате «лол». Даже стены кажутся смешными.»</div></div>
         </div>
       </div>
-      <div class="clue-hint">↑ нажмите на предмет для досье</div>
+      <div class="clue-hint">👆 нажмите на предмет, чтобы узнать детали</div>
     </div>
   </div>
+
   <!-- ПАЛАТА №14: shorts.jpg -->
-  <div class="slide" id="s-shorts2">
+  <div class="slide" id="s-shorts1">
     <img class="bg vertical" src="shorts.jpg" alt="палата с шортсами" />
     <div class="slide-overlay none"></div>
   </div>
 
-  <!-- КАМЕРЫ (cameras.jpg) -->
+  <!-- КОМНАТА ВИДЕОНАБЛЮДЕНИЯ — cameras.jpg (ТЕПЕРЬ С ТЕКСТОМ!) -->
   <div class="slide" id="s-cameras">
     <img class="bg landscape" src="cameras.jpg" alt="комната видеонаблюдения" />
-    <div class="slide-overlay none"></div>
+    <div class="slide-overlay medium"></div>
+    <div class="slide-content">
+      <div class="badge">📹 Система видеонаблюдения</div>
+      <div class="slide-title">Последние <span class="red">кадры</span></div>
+      <div class="divider"></div>
+      <div class="slide-text">
+        <span class="shout">— О, нет…</span><br><br>
+        Камера №5 зафиксировала <span class="danger">невероятное</span>:<br>
+        <em>— Зубатка смеётся, глядя в объектив</em><br>
+        <em>— Её брекеты светятся как звёзды</em><br>
+        <em>— Через 3 секунды камера перегрелась и отключилась</em><br><br>
+        <strong>Вывод:</strong> Её смех буквально <span class="danger">уничтожает</span> технику.
+      </div>
+    </div>
   </div>
 
-  <!-- ИТОГ (corridor1.jpg, затемнённый) -->
+  <!-- ИТОГ -->
   <div class="slide" id="s-conclusion">
     <img class="bg landscape" src="corridor1.jpg" alt="коридор" style="filter:brightness(0.2) saturate(0);" />
     <div class="slide-overlay dark"></div>
@@ -233,17 +258,18 @@
       <div class="slide-title">Вывод по всем <span class="red">объектам</span></div>
       <div class="divider"></div>
       <div class="slide-text">
-        Палата №15 — <em>пуста. Дыра в стене.</em><br>
-        Палата №14 — <em>пуста. 600 шортсов.</em><br>
-        Камеры — <em>камера №5 уничтожена смехом.</em><br><br>
+        <span class="shout">— Ну всё, приплыли…</span><br><br>
+        Палата №15 — <em>пуста. Дыра в стене размером с улыбку.</em><br>
+        Палата №14 — <em>пуста. 600 шортсов с её смехом.</em><br>
+        Камеры — <em>камера №5 буквально расплавилась от смеха.</em><br><br>
         <strong>Вывод:</strong> Зубатка покинула объект.<br>
         Местонахождение — <span class="danger">неизвестно.</span><br><br>
-        Объявляется <span class="danger">эвакуация рассудка.</span>
+        <span class="danger">ОБЪЯВЛЯЕТСЯ ЭВАКУАЦИЯ РАССУДКА.</span>
       </div>
     </div>
   </div>
 
-  <!-- ЭКСТРЕННОЕ СООБЩЕНИЕ (corridor1.jpg, затемнённый) -->
+  <!-- ЭКСТРЕННОЕ СООБЩЕНИЕ -->
   <div class="slide" id="s10">
     <img class="bg landscape" src="corridor1.jpg" alt="коридор" style="filter:brightness(0.1) saturate(0);" />
     <div class="slide-overlay dark"></div>
@@ -252,13 +278,15 @@
       <div class="slide-title">Объект <span class="red">ЗУБАТКА</span><br>покинула учреждение</div>
       <div class="divider"></div>
       <div class="slide-text">
+        <span class="shout">— АААА! Она сбежала!</span><br><br>
         Зафиксировано в <em>02:19</em>.<br><br>
         Предполагаемое местонахождение:<br>
         <em>— интернет</em><br>
         <em>— чат друзей</em><br>
-        <em>— комментарии</em><br>
-        <em>— ближайший источник мемов</em><br><br>
-        <span class="danger">Степень опасности: КРИТИЧЕСКАЯ.</span>
+        <em>— комментарии под мемами</em><br>
+        <em>— ближайший источник хаоса</em><br><br>
+        <span class="danger">Степень опасности: КРИТИЧЕСКАЯ.</span><br>
+        <span class="shout">СПАСАЙТЕСЬ, КТО МОЖЕТ!</span>
       </div>
     </div>
   </div>
@@ -290,9 +318,9 @@
     const music = document.getElementById('bday-music');
 
     const roomSteps = {
-      ward:    ['s-ward1','s-ward2','s-ward3'],
-      shorts:  ['s-shorts1','s-shorts2'],
-      cameras: ['s-cameras']
+      ward:    ['s-ward1','s-ward2','s-ward3','s-clues'],
+      shorts:  ['s-shorts1'],
+      cameras: ['s-cameras']  // теперь это полноценный слайд с контентом
     };
 
     function updateCorridorUI() {
