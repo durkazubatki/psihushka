@@ -798,31 +798,90 @@
     #btn-next { z-index:900; }
 
     /* ============================================ */
-    /* САЛЮТ В ФИНАЛЕ */
+    /* УВЕДОМЛЕНИЯ */
     /* ============================================ */
-    @keyframes firework {
+    .notification {
+      position: fixed;
+      bottom: 90px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10000;
+      background: rgba(0,0,0,0.88);
+      color: #fff;
+      padding: 10px 24px;
+      border-radius: 10px;
+      border-left: 3px solid #4cff6a;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.75rem;
+      box-shadow: 0 4px 30px rgba(0,0,0,0.8);
+      backdrop-filter: blur(8px);
+      opacity: 0;
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      transform: translateX(-50%) translateY(20px);
+      pointer-events: none;
+      text-align: center;
+      min-width: 200px;
+      max-width: 90vw;
+      white-space: nowrap;
+    }
+    .notification.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    .notification .notif-icon { margin-right: 8px; }
+
+    /* ============================================ */
+    /* САЛЮТ — ЯРКИЙ, КАК НАСТОЯЩИЙ */
+    /* ============================================ */
+    @keyframes firework-boom {
       0% { transform: scale(0) rotate(0deg); opacity: 1; }
-      100% { transform: scale(1.5) rotate(360deg); opacity: 0; }
+      30% { transform: scale(1) rotate(180deg); opacity: 1; }
+      100% { transform: scale(0.3) rotate(360deg); opacity: 0; }
+    }
+    @keyframes firework-spark {
+      0% { transform: translate(0, 0) scale(1); opacity: 1; }
+      100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+    }
+    @keyframes firework-flash {
+      0% { opacity: 0.8; transform: scale(1); }
+      100% { opacity: 0; transform: scale(2); }
     }
     .firework-container {
       position: fixed; inset: 0; pointer-events: none; z-index: 9999;
       overflow: hidden;
     }
-    .firework {
+    .firework-boom {
       position: absolute;
-      width: 10px; height: 10px;
+      width: 14px; height: 14px;
       border-radius: 50%;
-      animation: firework 1.5s ease-out forwards;
+      animation: firework-boom 1.2s ease-out forwards;
+      box-shadow: 0 0 30px rgba(255,255,255,0.3);
     }
-    .firework .spark {
+    .firework-boom::before {
+      content: '';
       position: absolute;
-      width: 4px; height: 4px;
+      inset: -20px;
       border-radius: 50%;
-      animation: firework-spark 1.2s ease-out forwards;
+      background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+      animation: firework-flash 0.4s ease-out forwards;
     }
-    @keyframes firework-spark {
-      0% { transform: translate(0, 0) scale(1); opacity: 1; }
-      100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+    .firework-spark {
+      position: absolute;
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      animation: firework-spark 1s ease-out forwards;
+      box-shadow: 0 0 10px currentColor;
+    }
+
+    /* ============================================ */
+    /* ТРЯСКА ЭКРАНА */
+    /* ============================================ */
+    .shake {
+      animation: shake 0.12s infinite alternate;
+    }
+    @keyframes shake {
+      0% { transform: translate(0, 0) rotate(0deg); }
+      100% { transform: translate(3px, -2px) rotate(0.4deg); }
     }
 
     @media(max-width:500px) {
@@ -852,6 +911,7 @@
       .phone-msg { font-size:0.5rem; padding:4px 8px; }
       .cake-game-canvas-wrap canvas { max-height:160px; }
       .pickup-btn { font-size:0.5rem; padding:6px 14px; }
+      .notification { bottom:75px; font-size:0.6rem; padding:8px 16px; white-space:normal; }
     }
   </style>
 </head>
@@ -859,7 +919,7 @@
 <div id="flash"></div>
 <div id="stage">
 
-  <!-- 1. ВХОД (с подсказкой про плеер) -->
+  <!-- 1. ВХОД -->
   <div class="slide active" id="s1">
     <img class="bg" src="entrance.jpg" alt="вход" />
     <div class="slide-overlay"></div>
@@ -895,7 +955,7 @@
     </div>
   </div>
 
-  <!-- 3. КОРИДОР — анализ звука -->
+  <!-- 3. КОРИДОР — анализ звука (SHAKE) -->
   <div class="slide" id="s3">
     <img class="bg" src="corridor2.jpg" alt="коридор после анализа" />
     <div class="slide-overlay light"></div>
@@ -940,7 +1000,7 @@
     </div>
   </div>
 
-  <!-- ПАЛАТА №15: ward.jpg + НАХОДКА ЗАКЛЮЧЕНИЯ -->
+  <!-- ПАЛАТА №15: ward.jpg -->
   <div class="slide" id="s-ward1">
     <img class="bg" src="ward.jpg" alt="палата с дырой" />
     <div class="slide-overlay none"></div>
@@ -956,7 +1016,7 @@
     </div>
   </div>
 
-  <!-- ПАЛАТА №15: report.jpg (ЗАКЛЮЧЕНИЕ ВРАЧА УЖЕ В ТЕКСТЕ) -->
+  <!-- ПАЛАТА №15: report.jpg -->
   <div class="slide" id="s-ward2">
     <img class="bg" src="report.jpg" alt="личное дело" />
     <div class="slide-overlay none"></div>
@@ -1003,7 +1063,7 @@
     </div>
   </div>
 
-  <!-- ПАЛАТА №14: shorts.jpg + НАХОДКА ЗАПИСКИ -->
+  <!-- ПАЛАТА №14: shorts.jpg -->
   <div class="slide" id="s-shorts1">
     <img class="bg" src="shorts.jpg" alt="палата с шортсами" />
     <div class="slide-overlay medium"></div>
@@ -1024,7 +1084,7 @@
     </div>
   </div>
 
-  <!-- ПАЛАТА №14: ЗАПИСКА ОТ САВВЫ (исправлен текст) -->
+  <!-- ПАЛАТА №14: ЗАПИСКА ОТ САВВЫ -->
   <div class="slide" id="s-shorts2">
     <img class="bg" src="shorts.jpg" alt="палата с шортсами" />
     <div class="slide-overlay medium"></div>
@@ -1034,7 +1094,8 @@
       <div class="divider"></div>
       <div class="slide-text" data-type="slow">
         <span class="found">✓ Записка поднята!</span><br><br>
-        <em>«Кира, я давно хотел тебе сказать что ты мне нравишься ❤️❤️❤️, очень скучаю по тебе»</em>
+        <em>«Кира, я давно хотел тебе сказать что ты мне нравишься ❤️❤️❤️, очень скучаю по тебе»</em><br><br>
+        <em style="color:#4fc3f7;">— Савва</em>
       </div>
     </div>
   </div>
@@ -1190,13 +1251,11 @@
     <span style="font-size:2rem;">📜</span>
     <span class="label">Дневник</span>
   </div>
-  <!-- Слот для заключения врача -->
   <div class="inv-slot" id="doctor-slot" style="display:none;" onclick="openModal('doctorModal')" title="Заключение врача">
     <span style="font-size:1.8rem;">📋</span>
     <span class="label">Заключение</span>
     <span class="badge-new">НОВОЕ</span>
   </div>
-  <!-- Слот для записки Саввы -->
   <div class="inv-slot" id="savva-slot" style="display:none;" onclick="openModal('savvaModal')" title="Записка от Саввы">
     <span style="font-size:1.8rem;">💌</span>
     <span class="label">Записка</span>
@@ -1295,7 +1354,7 @@
   </div>
 </div>
 
-<!-- === МОДАЛКА ДЛЯ ЗАПИСКИ САВВЫ (исправлен текст) === -->
+<!-- === МОДАЛКА ДЛЯ ЗАПИСКИ САВВЫ === -->
 <div class="modal-overlay" id="savvaModal">
   <div class="modal-window">
     <button class="close-btn" onclick="closeModal('savvaModal')">✕</button>
@@ -1305,7 +1364,7 @@
       <div style="font-size:1.4rem; margin:8px 0; color:#2a241a;">
         «Кира, я давно хотел тебе сказать что ты мне нравишься ❤️❤️❤️, очень скучаю по тебе»
       </div>
-      <div style="font-size:1.2rem; margin-top:12px; color:#666; font-style:italic;">— Савва</div>
+      <div style="font-size:1.2rem; margin-top:12px; color:#4fc3f7; font-weight:700;">— Савва</div>
     </div>
   </div>
 </div>
@@ -1361,18 +1420,16 @@
       } catch(e) {}
     }
 
-    // ---- Функция печати текста (с защитой от двойного запуска) ----
+    // ---- Функция печати текста ----
     function typeTextForSlide(slideElement) {
       const textEl = slideElement.querySelector('.slide-text[data-type]');
       if (!textEl) return;
       const slideId = slideElement.id;
-      // Если текст уже напечатан на этом слайде, не запускаем повторно
       if (textEl.getAttribute('data-typed') === 'true') return;
       if (typingIntervals[slideId]) {
         clearInterval(typingIntervals[slideId]);
         delete typingIntervals[slideId];
       }
-      // Сохраняем оригинал
       if (!textEl.getAttribute('data-original')) {
         textEl.setAttribute('data-original', textEl.innerHTML);
       }
@@ -1456,7 +1513,6 @@
     function startTypingForActiveSlide() {
       const activeSlide = document.querySelector('.slide.active');
       if (!activeSlide) return;
-      // Останавливаем все интервалы для других слайдов
       Object.keys(typingIntervals).forEach(key => {
         if (key !== activeSlide.id) {
           clearInterval(typingIntervals[key]);
@@ -1472,6 +1528,35 @@
     });
     setTimeout(startTypingForActiveSlide, 700);
 
+    // ===== УВЕДОМЛЕНИЕ О ЗАПИСИ В ДНЕВНИКЕ (по сценам) =====
+    let diaryNotifySent = false;
+
+    function showDiaryNotification() {
+      // Показываем уведомление о новой записи в дневнике
+      const notif = document.createElement('div');
+      notif.className = 'notification';
+      notif.innerHTML = `<span class="notif-icon">📜</span> Новая запись в дневнике`;
+      document.body.appendChild(notif);
+      setTimeout(() => { notif.classList.add('show'); }, 50);
+      setTimeout(() => {
+        notif.classList.remove('show');
+        setTimeout(() => { notif.remove(); }, 500);
+      }, 2500);
+    }
+
+    // Отслеживаем переходы на новые слайды (кроме первого)
+    let prevSlide = 's1';
+
+    // ===== ТРЯСКА ЭКРАНА =====
+    function updateShake() {
+      const body = document.body;
+      if (cur === 's3') {
+        body.classList.add('shake');
+      } else {
+        body.classList.remove('shake');
+      }
+    }
+
     function playLaugh() {
       if (laughSound && cur === 's3') {
         laughSound.currentTime = 0;
@@ -1483,18 +1568,7 @@
       if (laughSound) { laughSound.pause(); laughSound.currentTime = 0; }
     }
 
-    function playBirthday() {
-      if (birthdayMusic && cur === 's11') {
-        birthdayMusic.currentTime = 0;
-        birthdayMusic.volume = 0.5;
-        birthdayMusic.play().catch(() => {});
-        if (ambientMusic) ambientMusic.volume = 0.02;
-        // Запуск салюта
-        setTimeout(startFireworks, 300);
-      }
-    }
-
-    // ===== САЛЮТ =====
+    // ===== САЛЮТ (ЯРКИЙ) =====
     function startFireworks() {
       if (cur !== 's11') return;
       const container = document.createElement('div');
@@ -1502,33 +1576,70 @@
       container.id = 'fireworks';
       document.body.appendChild(container);
 
-      const colors = ['#ff6b4a', '#f0c040', '#4cff6a', '#4fc3f7', '#c0392b', '#ffcc00', '#ff2d55'];
-      for (let i = 0; i < 30; i++) {
-        const f = document.createElement('div');
-        f.className = 'firework';
-        const x = 10 + Math.random() * 80;
-        const y = 10 + Math.random() * 80;
-        f.style.left = x + '%';
-        f.style.top = y + '%';
-        f.style.background = colors[Math.floor(Math.random() * colors.length)];
-        f.style.width = 6 + Math.random() * 10 + 'px';
-        f.style.height = f.style.width;
-        f.style.animationDuration = 1 + Math.random() * 0.8 + 's';
-        f.style.animationDelay = Math.random() * 1.5 + 's';
-        // искры
-        for (let j = 0; j < 6; j++) {
-          const s = document.createElement('div');
-          s.className = 'spark';
-          const angle = Math.random() * 2 * Math.PI;
-          const dist = 30 + Math.random() * 60;
-          s.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
-          s.style.setProperty('--ty', Math.sin(angle) * dist + 'px');
-          s.style.background = colors[Math.floor(Math.random() * colors.length)];
-          s.style.animationDuration = 0.8 + Math.random() * 0.6 + 's';
-          s.style.animationDelay = Math.random() * 0.3 + 's';
-          f.appendChild(s);
-        }
-        container.appendChild(f);
+      const colors = ['#ff1744', '#ffea00', '#00e676', '#2979ff', '#d500f9', '#ff9100', '#00e5ff', '#ff4081', '#76ff03'];
+
+      // Несколько залпов
+      for (let burst = 0; burst < 4; burst++) {
+        setTimeout(() => {
+          const cx = 15 + Math.random() * 70;
+          const cy = 15 + Math.random() * 60;
+          const color = colors[Math.floor(Math.random() * colors.length)];
+
+          // Центральная вспышка
+          const boom = document.createElement('div');
+          boom.className = 'firework-boom';
+          boom.style.left = cx + '%';
+          boom.style.top = cy + '%';
+          boom.style.background = color;
+          boom.style.boxShadow = `0 0 40px ${color}`;
+          container.appendChild(boom);
+
+          // Искры
+          const sparkCount = 30 + Math.floor(Math.random() * 25);
+          for (let i = 0; i < sparkCount; i++) {
+            const s = document.createElement('div');
+            s.className = 'firework-spark';
+            const angle = Math.random() * 2 * Math.PI;
+            const dist = 40 + Math.random() * 100;
+            s.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
+            s.style.setProperty('--ty', Math.sin(angle) * dist + 'px');
+            s.style.background = colors[Math.floor(Math.random() * colors.length)];
+            s.style.color = s.style.background;
+            s.style.left = cx + '%';
+            s.style.top = cy + '%';
+            s.style.animationDuration = 0.8 + Math.random() * 0.6 + 's';
+            s.style.animationDelay = Math.random() * 0.2 + 's';
+            s.style.width = 4 + Math.random() * 4 + 'px';
+            s.style.height = s.style.width;
+            container.appendChild(s);
+          }
+
+          // Убираем через 2 секунды после последнего залпа
+          if (burst === 3) {
+            setTimeout(() => {
+              if (container) container.remove();
+            }, 2500);
+          }
+        }, burst * 700);
+      }
+    }
+
+    function clearFireworks() {
+      const container = document.getElementById('fireworks');
+      if (container) container.remove();
+    }
+
+    function playBirthday() {
+      if (birthdayMusic && cur === 's11') {
+        birthdayMusic.currentTime = 0;
+        birthdayMusic.volume = 0.5;
+        birthdayMusic.play().catch(() => {});
+        if (ambientMusic) ambientMusic.volume = 0.02;
+        setTimeout(startFireworks, 400);
+        // Показываем уведомление о финальной записи
+        setTimeout(() => {
+          showDiaryNotification();
+        }, 600);
       }
     }
 
@@ -1551,23 +1662,42 @@
       setTimeout(startTypingForActiveSlide, 400);
     };
 
-    // ===== ПОДНЯТЬ ЗАКЛЮЧЕНИЕ ВРАЧА =====
+    // ===== УВЕДОМЛЕНИЯ ПРИ ПОДНЯТИИ =====
+    function showNotification(text, icon) {
+      const notif = document.createElement('div');
+      notif.className = 'notification';
+      notif.innerHTML = `<span class="notif-icon">${icon}</span> ${text}`;
+      document.body.appendChild(notif);
+      setTimeout(() => { notif.classList.add('show'); }, 50);
+      setTimeout(() => {
+        notif.classList.remove('show');
+        setTimeout(() => { notif.remove(); }, 500);
+      }, 3000);
+    }
+
     window.pickupDoctorNote = function() {
       if (doctorPickedUp) return;
       doctorPickedUp = true;
       document.getElementById('pickup-doctor').disabled = true;
       document.getElementById('pickup-doctor').textContent = '✅ ПОДНЯТО';
       document.getElementById('doctor-slot').style.display = 'flex';
+      showNotification('Заключение врача добавлено в инвентарь', '📋');
+      setTimeout(() => {
+        showNotification('Новая запись в дневнике', '📜');
+      }, 2000);
       goTo('s-ward2');
     };
 
-    // ===== ПОДНЯТЬ ЗАПИСКУ САВВЫ =====
     window.pickupSavvaNote = function() {
       if (savvaPickedUp) return;
       savvaPickedUp = true;
       document.getElementById('pickup-savva').disabled = true;
       document.getElementById('pickup-savva').textContent = '✅ ПОДНЯТО';
       document.getElementById('savva-slot').style.display = 'flex';
+      showNotification('Записка от Саввы добавлена в инвентарь', '💌');
+      setTimeout(() => {
+        showNotification('Новая запись в дневнике', '📜');
+      }, 2000);
       goTo('s-shorts2');
     };
 
@@ -1611,6 +1741,18 @@
       busy = true;
       if (afterFn) afterRoomFn = afterFn;
 
+      // Уведомление о новой записи в дневнике при переключении слайда (кроме первого)
+      if (id !== 's1' && id !== cur) {
+        // Показываем не чаще раза в секунду
+        if (!window._diaryNotifTimer) {
+          setTimeout(() => {
+            showDiaryNotification();
+            window._diaryNotifTimer = null;
+          }, 300);
+          window._diaryNotifTimer = true;
+        }
+      }
+
       stopLaugh();
       flash.classList.add('go');
       setTimeout(() => {
@@ -1619,6 +1761,7 @@
         allSlides[cur].classList.add('active');
         flash.classList.remove('go');
         setTimeout(startTypingForActiveSlide, 400);
+        updateShake();
         if (id === 's3') setTimeout(playLaugh, 500);
         if (id === 's11') {
           setTimeout(playBirthday, 600);
@@ -1626,6 +1769,7 @@
         } else {
           btnNext.style.display = 'block';
           if (ambientMusic && cur !== 's11') ambientMusic.volume = 0.08;
+          clearFireworks();
         }
         updateDiaryBySlide(id);
         setTimeout(() => { busy = false; }, 400);
@@ -1807,7 +1951,7 @@
   setInterval(updatePhoneTime, 1000);
   updatePhoneTime();
 
-  // --- ИГРА "ТОРТ В ВЫСЬ" (ИСПРАВЛЕНА) ---
+  // --- ИГРА "ТОРТ В ВЫСЬ" ---
   let cakeGame = null;
   let gameAnimationId = null;
 
@@ -2149,7 +2293,6 @@
     });
 
     updateCakeScore();
-    // Запускаем игровой цикл, если он ещё не запущен
     if (!gameAnimationId) {
       gameLoop();
     }
@@ -2239,12 +2382,8 @@
     { from: 'zubatka', text: 'Я уже в интернете! Там так весело!' },
     { from: 'zubatka', text: 'Смотри, какой мем я нашла: 🧠 <span class="meme-text">«Когда думаешь, что всё под контролем, а ты в психушке»</span>' },
     { from: 'zubatka', text: 'А ещё я танцевала у кровати! 💃' },
-    { from: 'savva', text: '<span class="savva-name">Савва:</span> Зубатка, ты где? Я волнуюсь...' },
-    { from: 'zubatka', text: 'Не волнуйся! Я просто развлекаюсь! 😜' },
     { from: 'zubatka', text: 'В палате №15 я оставила <span class="meme-text">дыру размером с улыбку</span>!' },
     { from: 'zubatka', text: 'А в палате №14 — 600 шортсов с моим смехом 😂' },
-    { from: 'savva', text: '<span class="savva-name">Савва:</span> Ты невыносима... Но я тебя люблю ❤️' },
-    { from: 'zubatka', text: 'Я тоже тебя люблю! 💕' },
     { from: 'zubatka', text: 'Камера №5 вообще расплавилась! Представляешь?' },
     { from: 'zubatka', text: 'Я теперь <span class="em">легенда</span> этого диспансера!' },
     { from: 'zubatka', text: 'Тогда <span class="meme-text">эвакуируй рассудок</span> и беги за мной!' },
@@ -2537,4 +2676,4 @@
   observerDiary.observe(document.getElementById('diaryModal'), { attributes: true, attributeFilter: ['class'] });
 </script>
 </body>
-        </html>
+      </html>
