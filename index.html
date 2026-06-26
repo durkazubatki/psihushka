@@ -205,7 +205,6 @@
     }
     .video-container video { max-width:100%; max-height:100%; object-fit:contain; }
 
-    /* Фоновая музыка — тихо и ненавязчиво */
     #ambient-music {
       position:fixed;
       bottom:-9999px;
@@ -264,7 +263,7 @@
     </div>
   </div>
 
-  <!-- 3. КОРИДОР — анализ звука -->
+  <!-- 3. КОРИДОР — анализ звука (ЗДЕСЬ ВКЛЮЧАЕТСЯ СМЕХ) -->
   <div class="slide" id="s3">
     <img class="bg" src="corridor2.jpg" alt="коридор после анализа" />
     <div class="slide-overlay light"></div>
@@ -280,7 +279,8 @@
         <strong>Нужно проверить каждую комнату.</strong>
       </div>
     </div>
-    <audio id="analyzer-sound" class="hidden-audio" src="analyzer.mp3" preload="auto"></audio>
+    <!-- ЗВУК СМЕХА (laugh.mp3) -->
+    <audio id="laugh-sound" class="hidden-audio" src="laugh.mp3" preload="auto"></audio>
   </div>
 
   <!-- 4. КОРИДОР — ВЫБОР -->
@@ -494,15 +494,17 @@
     </div>
   </div>
 
-  <!-- ФИНАЛ -->
+  <!-- ФИНАЛ — birthday.jpg (ЗДЕСЬ ВКЛЮЧАЕТСЯ birthday_music.mp3) -->
   <div class="slide" id="s11">
     <img class="bg" src="birthday.jpg" alt="с днём рождения" />
     <div class="slide-overlay none"></div>
+    <!-- МУЗЫКА ДЛЯ ПОЗДРАВЛЕНИЯ -->
+    <audio id="birthday-music" class="hidden-audio" src="birthday_music.mp3" preload="auto"></audio>
   </div>
 
 </div>
 
-<!-- ФОНОВАЯ МУЗЫКА (ambient.mp3 — объединённый файл) -->
+<!-- ФОНОВАЯ МУЗЫКА (ambient.mp3) -->
 <audio id="ambient-music" src="ambient.mp3" loop preload="auto"></audio>
 
 <button id="btn-next" onclick="nextSlide()">Далее</button>
@@ -522,31 +524,31 @@
     const flash = document.getElementById('flash');
     const btnNext = document.getElementById('btn-next');
     const ambientMusic = document.getElementById('ambient-music');
-    const analyzerSound = document.getElementById('analyzer-sound');
+    const laughSound = document.getElementById('laugh-sound');
+    const birthdayMusic = document.getElementById('birthday-music');
     const videoPlayerSlide = document.getElementById('s-video-player');
     const videoPlayer = document.getElementById('video-player');
     const videoSource = document.getElementById('video-source');
 
     // ЗАПУСК ФОНОВОЙ МУЗЫКИ (тихо)
+    let ambientStarted = false;
     function startAmbientMusic() {
-      if (ambientMusic) {
-        ambientMusic.volume = 0.15; // очень тихо
+      if (!ambientStarted && ambientMusic) {
+        ambientMusic.volume = 0.12;
         ambientMusic.play().catch(() => {});
+        ambientStarted = true;
       }
     }
-    // Запускаем музыку после взаимодействия с пользователем
     document.addEventListener('click', startAmbientMusic, { once: true });
     document.addEventListener('touchstart', startAmbientMusic, { once: true });
 
-    // ФУНКЦИЯ ПЕЧАТАЮЩЕГОСЯ ТЕКСТА — ПРИНУДИТЕЛЬНЫЙ ЗАПУСК
+    // ФУНКЦИЯ ПЕЧАТАЮЩЕГОСЯ ТЕКСТА
     function typeText(element) {
-      // Останавливаем предыдущий интервал
       if (typeInterval) { clearInterval(typeInterval); typeInterval = null; }
 
       const fullHtml = element.innerHTML;
       element.innerHTML = '';
 
-      // Разбираем HTML на токены (текст и теги)
       const tokens = [];
       let i = 0;
       while (i < fullHtml.length) {
@@ -592,7 +594,6 @@
             continue;
           }
         }
-        // Всё напечатано
         element.innerHTML = fullHtml;
         clearInterval(typeInterval);
         typeInterval = null;
@@ -602,30 +603,24 @@
       typeInterval = setInterval(typeNext, speed);
     }
 
-    // ЗАПУСК ПЕЧАТИ НА АКТИВНОМ СЛАЙДЕ (принудительно)
     function forceTypingOnActiveSlide() {
       const activeSlide = document.querySelector('.slide.active');
       if (!activeSlide) return;
       
       const textEl = activeSlide.querySelector('.slide-text[data-type]');
       if (textEl) {
-        // Всегда перезапускаем печать, независимо от флага
-        // Сохраняем оригинальный HTML
         const originalHtml = textEl.getAttribute('data-original-html');
         if (originalHtml) {
           textEl.innerHTML = originalHtml;
         } else {
-          // Сохраняем оригинал при первом запуске
           textEl.setAttribute('data-original-html', textEl.innerHTML);
         }
-        // Запускаем печать с задержкой
         setTimeout(() => {
           typeText(textEl);
         }, 300);
       }
     }
 
-    // Наблюдатель за активацией слайдов
     const observer = new MutationObserver(() => {
       forceTypingOnActiveSlide();
     });
@@ -633,14 +628,27 @@
       observer.observe(s, { attributes: true, attributeFilter: ['class'] });
     });
 
-    // Запускаем для первого слайда
     setTimeout(forceTypingOnActiveSlide, 600);
 
-    function playAnalyzerSound() {
-      if (analyzerSound && cur === 's3') {
-        analyzerSound.currentTime = 0;
-        analyzerSound.volume = 0.3;
-        analyzerSound.play().catch(() => {});
+    // ВКЛЮЧЕНИЕ СМЕХА НА СЛАЙДЕ s3 (corridor2)
+    function playLaughSound() {
+      if (laughSound && cur === 's3') {
+        laughSound.currentTime = 0;
+        laughSound.volume = 0.4;
+        laughSound.play().catch(() => {});
+      }
+    }
+
+    // ВКЛЮЧЕНИЕ МУЗЫКИ НА ФИНАЛЬНОМ СЛАЙДЕ (birthday.jpg)
+    function playBirthdayMusic() {
+      if (birthdayMusic && cur === 's11') {
+        birthdayMusic.currentTime = 0;
+        birthdayMusic.volume = 0.6;
+        birthdayMusic.play().catch(() => {});
+        // Убавляем фоновую музыку
+        if (ambientMusic) {
+          ambientMusic.volume = 0.05;
+        }
       }
     }
 
@@ -661,7 +669,6 @@
       allSlides['s-video-player'].classList.remove('active');
       allSlides[cur].classList.add('active');
       btnNext.style.display = 'block';
-      // При возврате перезапускаем печать
       setTimeout(forceTypingOnActiveSlide, 400);
     };
 
@@ -715,14 +722,15 @@
         allSlides[cur].classList.add('active');
         flash.classList.remove('go');
 
-        // Принудительно запускаем печать на новом слайде
         setTimeout(forceTypingOnActiveSlide, 400);
 
+        // ВОСПРОИЗВЕДЕНИЕ ЗВУКОВ
         if (id === 's3') {
-          setTimeout(playAnalyzerSound, 400);
+          setTimeout(playLaughSound, 500);
         }
 
-        if (cur === 's11') {
+        if (id === 's11') {
+          setTimeout(playBirthdayMusic, 600);
           btnNext.style.display = 'none';
         } else {
           btnNext.style.display = 'block';
@@ -782,4 +790,4 @@
   })();
 </script>
 </body>
-</html>
+  </html>
