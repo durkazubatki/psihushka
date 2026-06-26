@@ -5,15 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Диспансер №15 — Дело Зубатки</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Oswald:wght@400;700&display=swap');
     * { margin:0; padding:0; box-sizing:border-box; }
     html, body {
-      width:100%; height:100%; background:#050505; overflow:hidden;
+      width:100%; height:100%; background:#000; overflow:hidden;
       font-family:'Share Tech Mono', monospace; user-select:none;
     }
     body::before {
       content:''; position:fixed; inset:0;
-      background:repeating-linear-gradient(to bottom,transparent 0px,transparent 3px,rgba(0,30,30,0.06) 3px,rgba(0,30,30,0.06) 4px);
+      background:repeating-linear-gradient(to bottom,transparent 0px,transparent 3px,rgba(0,0,0,0.08) 3px,rgba(0,0,0,0.08) 4px);
       pointer-events:none; z-index:9999;
     }
     #stage { position:fixed; inset:0; }
@@ -30,178 +30,180 @@
       width:100%; height:100%;
       display:block;
       object-fit:contain;
-      background:#050505;
+      background:#000;
     }
 
     .slide-overlay {
       position:absolute; inset:0;
-      background:linear-gradient(to top, rgba(5,5,5,0.9) 0%, rgba(5,5,5,0.2) 50%, rgba(5,5,5,0.0) 100%);
+      background:linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.15) 50%, rgba(0,0,0,0.0) 100%);
     }
     .slide-overlay.none { display:none; }
-    .slide-overlay.soft { background:rgba(5,5,5,0.15); }
-    .slide-overlay.dark { background:rgba(5,5,5,0.8); }
-    .slide-overlay.medium { background:rgba(5,5,5,0.5); }
-    .slide-overlay.light { background:rgba(5,5,5,0.2); }
-    .slide-overlay.darker { background:rgba(5,5,5,0.7); }
+    .slide-overlay.soft { background:rgba(0,0,0,0.1); }
+    .slide-overlay.dark { background:rgba(0,0,0,0.6); }
+    .slide-overlay.medium { background:rgba(0,0,0,0.3); }
+    .slide-overlay.light { background:rgba(0,0,0,0.05); }
+    .slide-overlay.darker { background:rgba(0,0,0,0.5); }
 
     .slide-content {
-      position:absolute; bottom:80px; left:28px;
-      z-index:10; max-width:min(520px,90vw);
+      position:absolute; bottom:100px; left:32px;
+      z-index:10; max-width:min(560px,92vw);
       opacity:0; transform:translateY(18px);
       transition:opacity 0.7s ease 0.5s, transform 0.7s ease 0.5s;
     }
     .slide.active .slide-content { opacity:1; transform:translateY(0); }
 
     .badge {
-      display:inline-block; font-family:'Orbitron',sans-serif; font-size:0.5rem; font-weight:700;
-      letter-spacing:0.3em; text-transform:uppercase;
-      color:#3a7a7a; border:1px solid rgba(58,122,122,0.2); border-left:2px solid #3a7a7a;
-      padding:3px 10px; margin-bottom:10px;
+      display:inline-block; font-family:'Oswald',sans-serif; font-size:0.6rem; font-weight:700;
+      letter-spacing:0.2em; text-transform:uppercase;
+      color:#c0392b; border:1px solid rgba(192,57,43,0.3); border-left:3px solid #c0392b;
+      padding:4px 12px; margin-bottom:12px;
     }
     .slide-title {
-      font-family:'Orbitron',sans-serif; font-size:clamp(1.3rem,4vw,2rem); font-weight:900;
-      text-transform:uppercase; color:#c8d8d8; letter-spacing:0.06em; line-height:1.15;
-      margin-bottom:10px;
-    }
-    .slide-title .red { color:#8a2a2a; }
-    .divider {
-      width:50px; height:1.5px;
-      background:linear-gradient(to right,#3a7a7a,transparent);
+      font-family:'Oswald',sans-serif; font-size:clamp(1.6rem,4.5vw,2.4rem); font-weight:700;
+      text-transform:uppercase; color:#fff; letter-spacing:0.05em; line-height:1.15;
       margin-bottom:12px;
+    }
+    .slide-title .red { color:#c0392b; text-shadow:0 0 15px rgba(192,57,43,0.2); }
+    .divider {
+      width:60px; height:2px;
+      background:#c0392b;
+      margin-bottom:14px;
     }
 
     .slide-text {
       font-family:'Share Tech Mono',monospace;
-      font-size:clamp(0.7rem,1.8vw,0.8rem);
-      line-height:1.8;
-      color:#8a9a9a;
-      min-height:1.8em;
+      font-size:clamp(0.85rem,2vw,1rem);
+      line-height:2;
+      color:#b8b8a8;
+      min-height:2em;
+      white-space:pre-wrap;
     }
     .slide-text .cursor {
       display:inline-block;
       width:2px;
-      height:1em;
-      background:#3a7a7a;
+      height:1.1em;
+      background:#c0392b;
       margin-left:2px;
       vertical-align:text-bottom;
       animation:blink-cursor 0.8s step-end infinite;
     }
     @keyframes blink-cursor { 0%,100%{opacity:1} 50%{opacity:0} }
 
-    .slide-text em { color:#5a8a8a; font-style:normal; }
-    .slide-text strong { color:#c8d8d8; }
+    .slide-text em { color:#f0c040; font-style:normal; }
+    .slide-text strong { color:#fff; }
     .slide-text .danger {
-      color:#8a2a2a;
-      font-family:'Orbitron',sans-serif;
-      font-size:1.05em;
+      color:#c0392b;
+      font-family:'Oswald',sans-serif;
+      font-size:1.1em;
       font-weight:700;
     }
     .slide-text .shout {
-      color:#b87a5a;
+      color:#ff6b4a;
       font-weight:700;
-      font-size:1.1em;
+      font-size:1.15em;
     }
-    .slide-text .diagnosis { color:#4a8a9a; font-weight:700; }
+    .slide-text .diagnosis { color:#4fc3f7; font-weight:700; }
 
-    .door-choice { display:flex; flex-direction:column; gap:10px; margin-top:6px; }
+    .door-choice { display:flex; flex-direction:column; gap:12px; margin-top:8px; }
     .door-btn {
-      font-family:'Orbitron',sans-serif; font-size:0.6rem; font-weight:700;
-      letter-spacing:0.15em; text-transform:uppercase;
-      color:#8a9a9a; background:rgba(10,20,20,0.6);
-      border:1px solid rgba(58,122,122,0.1); border-left:2px solid rgba(58,122,122,0.3);
-      padding:11px 18px; cursor:pointer; text-align:left;
+      font-family:'Oswald',sans-serif; font-size:0.9rem; font-weight:700;
+      letter-spacing:0.1em; text-transform:uppercase;
+      color:#fff; background:rgba(0,0,0,0.6);
+      border:1px solid rgba(192,57,43,0.3); border-left:3px solid #c0392b;
+      padding:14px 22px; cursor:pointer; text-align:left;
       transition:background 0.3s, border-color 0.3s;
-      outline:none; max-width:380px; position:relative;
+      outline:none; max-width:420px; position:relative;
       -webkit-tap-highlight-color:transparent;
     }
-    .door-btn:hover { background:rgba(58,122,122,0.05); border-color:rgba(58,122,122,0.2); }
+    .door-btn:hover { background:rgba(192,57,43,0.08); border-color:rgba(192,57,43,0.5); }
     .door-btn span {
-      font-size:0.5rem; color:#3a5a5a; display:block; margin-top:3px;
+      font-size:0.6rem; color:#888; display:block; margin-top:4px;
       font-family:'Share Tech Mono',monospace; font-weight:400;
       letter-spacing:0.05em; text-transform:none;
     }
     .door-btn.visited {
-      border-color:rgba(76,255,106,0.15);
-      border-left-color:#3a8a5a;
+      border-color:rgba(76,255,106,0.2);
+      border-left-color:#4cff6a;
     }
     .door-btn.visited::after {
       content:'✓';
-      position:absolute; right:14px; top:50%; transform:translateY(-50%);
-      color:#3a8a5a; font-size:1rem;
+      position:absolute; right:16px; top:50%; transform:translateY(-50%);
+      color:#4cff6a; font-size:1.2rem;
     }
-    .door-btn.visited span { color:#3a8a5a; opacity:0.4; }
+    .door-btn.visited span { color:#4cff6a; opacity:0.4; }
 
-    .clue-wrap { display:flex; flex-direction:column; gap:8px; margin-top:4px; }
+    .clue-wrap { display:flex; flex-direction:column; gap:10px; margin-top:6px; }
     .clue-item {
-      border:1px solid rgba(58,122,122,0.08); padding:10px 14px;
-      display:flex; gap:12px; align-items:center;
+      border:1px solid rgba(255,255,255,0.08); padding:12px 16px;
+      display:flex; gap:14px; align-items:center;
       cursor:pointer; transition:background 0.3s, border-color 0.3s;
-      max-width:400px; background:rgba(10,20,20,0.4);
+      max-width:440px; background:rgba(0,0,0,0.4);
     }
-    .clue-item:hover { background:rgba(58,122,122,0.03); border-color:rgba(58,122,122,0.15); }
-    .clue-icon { font-size:1.4rem; flex-shrink:0; }
-    .clue-name { font-family:'Orbitron',sans-serif; font-size:0.65rem; font-weight:700; color:#8a9a9a; }
-    .clue-reveal { font-size:0.6rem; color:#5a8a8a; margin-top:4px; display:none; }
+    .clue-item:hover { background:rgba(192,57,43,0.05); border-color:rgba(192,57,43,0.15); }
+    .clue-icon { font-size:1.8rem; flex-shrink:0; }
+    .clue-name { font-family:'Oswald',sans-serif; font-size:0.9rem; font-weight:700; color:#fff; }
+    .clue-reveal { font-size:0.75rem; color:#f0c040; margin-top:4px; display:none; }
     .clue-item.open .clue-reveal { display:block; }
-    .clue-hint { font-size:0.5rem; color:#3a5a5a; margin-top:6px; font-style:italic; }
+    .clue-hint { font-size:0.6rem; color:#666; margin-top:6px; font-style:italic; }
 
     .video-grid {
       display:grid;
       grid-template-columns: 1fr 1fr;
-      gap:6px;
-      margin-top:8px;
-      max-width:400px;
+      gap:10px;
+      margin-top:10px;
+      max-width:480px;
     }
     .video-btn {
-      font-family:'Orbitron',sans-serif;
-      font-size:0.5rem;
+      font-family:'Oswald',sans-serif;
+      font-size:0.7rem;
       font-weight:700;
       letter-spacing:0.08em;
       text-transform:uppercase;
-      color:#8a9a9a;
-      background:rgba(10,20,20,0.5);
-      border:1px solid rgba(58,122,122,0.08);
-      padding:8px 6px;
+      color:#fff;
+      background:rgba(0,0,0,0.5);
+      border:1px solid rgba(192,57,43,0.15);
+      padding:12px 10px;
       cursor:pointer;
       transition:background 0.3s, border-color 0.3s;
       text-align:center;
       border-radius:2px;
+      width:100%;
     }
-    .video-btn:hover { background:rgba(58,122,122,0.03); border-color:rgba(58,122,122,0.15); }
+    .video-btn:hover { background:rgba(192,57,43,0.08); border-color:rgba(192,57,43,0.3); }
     .video-btn .diag {
       display:block;
-      font-size:0.4rem;
-      color:#4a7a8a;
+      font-size:0.5rem;
+      color:#4fc3f7;
       font-weight:400;
-      margin-top:2px;
+      margin-top:3px;
       letter-spacing:0.02em;
       text-transform:none;
       font-family:'Share Tech Mono',monospace;
     }
 
     #btn-next {
-      position:fixed; bottom:28px; left:28px; z-index:500;
-      font-family:'Orbitron',sans-serif; font-size:0.6rem; font-weight:700;
-      letter-spacing:0.25em; text-transform:uppercase;
-      color:#8a9a9a; background:transparent;
-      border:1px solid rgba(58,122,122,0.1); border-left:2px solid rgba(58,122,122,0.2);
-      padding:11px 26px; cursor:pointer; outline:none;
+      position:fixed; bottom:32px; left:32px; z-index:500;
+      font-family:'Oswald',sans-serif; font-size:0.9rem; font-weight:700;
+      letter-spacing:0.2em; text-transform:uppercase;
+      color:#fff; background:transparent;
+      border:1px solid rgba(192,57,43,0.3); border-left:3px solid #c0392b;
+      padding:14px 30px; cursor:pointer; outline:none;
       transition:background 0.3s;
       -webkit-tap-highlight-color:transparent;
     }
-    #btn-next:hover { background:rgba(58,122,122,0.03); }
+    #btn-next:hover { background:rgba(192,57,43,0.05); }
     #btn-next::after { content:' ▶'; animation:blink 1.2s step-end infinite; }
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
 
-    #flash { position:fixed; inset:0; background:#050505; opacity:0; pointer-events:none; z-index:8000; transition:opacity 0.15s ease; }
-    #flash.go { opacity:0.7; }
+    #flash { position:fixed; inset:0; background:#000; opacity:0; pointer-events:none; z-index:8000; transition:opacity 0.15s ease; }
+    #flash.go { opacity:0.6; }
 
     .hidden-audio { display:none; }
 
     .video-container {
       position:absolute; inset:0;
       display:flex; align-items:center; justify-content:center;
-      background:#050505;
+      background:#000;
     }
     .video-container video { max-width:100%; max-height:100%; object-fit:contain; }
 
@@ -215,12 +217,17 @@
     }
 
     @media(max-width:500px) {
-      .slide-content { left:16px; bottom:80px; }
-      #btn-next { left:16px; bottom:20px; }
-      .clue-item { padding:8px 12px; }
-      .video-grid { grid-template-columns: 1fr 1fr; gap:6px; }
-      .video-btn { font-size:0.4rem; padding:6px 4px; }
-      .video-btn .diag { font-size:0.35rem; }
+      .slide-content { left:16px; bottom:80px; max-width:95vw; }
+      #btn-next { left:16px; bottom:20px; padding:12px 20px; font-size:0.75rem; }
+      .slide-title { font-size:clamp(1.3rem,3.5vw,1.8rem); }
+      .slide-text { font-size:clamp(0.7rem,1.6vw,0.85rem); }
+      .door-btn { font-size:0.7rem; padding:12px 16px; max-width:100%; }
+      .door-btn span { font-size:0.5rem; }
+      .clue-item { padding:10px 12px; }
+      .clue-name { font-size:0.75rem; }
+      .video-grid { grid-template-columns: 1fr 1fr; gap:8px; max-width:100%; }
+      .video-btn { font-size:0.55rem; padding:10px 6px; }
+      .video-btn .diag { font-size:0.4rem; }
     }
   </style>
 </head>
@@ -263,7 +270,7 @@
     </div>
   </div>
 
-  <!-- 3. КОРИДОР — анализ звука (ЗДЕСЬ ВКЛЮЧАЕТСЯ СМЕХ) -->
+  <!-- 3. КОРИДОР — анализ звука (СМЕХ) -->
   <div class="slide" id="s3">
     <img class="bg" src="corridor2.jpg" alt="коридор после анализа" />
     <div class="slide-overlay light"></div>
@@ -279,7 +286,6 @@
         <strong>Нужно проверить каждую комнату.</strong>
       </div>
     </div>
-    <!-- ЗВУК СМЕХА (laugh.mp3) -->
     <audio id="laugh-sound" class="hidden-audio" src="laugh.mp3" preload="auto"></audio>
   </div>
 
@@ -305,7 +311,7 @@
           <span>Система видеонаблюдения</span>
         </button>
       </div>
-      <div id="rooms-hint" style="margin-top:14px;font-size:0.55rem;color:#3a5a5a;line-height:1.6;font-family:'Share Tech Mono',monospace;"></div>
+      <div id="rooms-hint" style="margin-top:16px;font-size:0.6rem;color:#666;line-height:1.6;font-family:'Share Tech Mono',monospace;"></div>
     </div>
   </div>
 
@@ -372,7 +378,7 @@
   <!-- КОМНАТА ОХРАНЫ: ДВЕРЬ -->
   <div class="slide" id="s-cameras-door">
     <img class="bg" src="cameras_door.jpg" alt="дверь в комнату охраны" />
-    <div class="slide-overlay medium"></div>
+    <div class="slide-overlay none"></div>
     <div class="slide-content">
       <div class="badge">🚪 КОМНАТА ОХРАНЫ</div>
       <div class="slide-title">ВЫ У <span class="red">ДВЕРЕЙ</span></div>
@@ -390,7 +396,7 @@
   <!-- КОМНАТА ОХРАНЫ: ВНУТРИ -->
   <div class="slide" id="s-cameras-inside">
     <img class="bg" src="cameras_inside.jpg" alt="внутри комнаты охраны" />
-    <div class="slide-overlay darker"></div>
+    <div class="slide-overlay soft"></div>
     <div class="slide-content">
       <div class="badge">📹 СИСТЕМА ВИДЕОНАБЛЮДЕНИЯ</div>
       <div class="slide-title">ПОСЛЕДНИЕ <span class="red">ЗАПИСИ</span></div>
@@ -409,7 +415,7 @@
         </button>
         <button class="video-btn" onclick="playVideo('cam3.mp4')">
           📹 КАМЕРА 3
-          <span class="diag">🏋️ Рекорд по несмеянию: 19 секунд</span>
+          <span class="diag">🏋️ Рекорд по несмеянию: 19 сек</span>
         </button>
         <button class="video-btn" onclick="playVideo('cam4.mp4')">
           📹 КАМЕРА 4
@@ -417,7 +423,7 @@
         </button>
         <button class="video-btn" onclick="playVideo('cam5.mp4')">
           📹 КАМЕРА 5
-          <span class="diag">💃 Танцует у кровати 😏😏😏</span>
+          <span class="diag">💃 Танцует у кровати 😏</span>
         </button>
         <button class="video-btn" onclick="playVideo('cam6.mp4')">
           📹 КАМЕРА 6
@@ -442,10 +448,10 @@
     </div>
     <div style="position:absolute; bottom:30px; left:50%; transform:translateX(-50%); z-index:100;">
       <button onclick="closeVideo()" style="
-        font-family:'Orbitron',sans-serif; font-size:0.6rem; font-weight:700;
+        font-family:'Oswald',sans-serif; font-size:0.8rem; font-weight:700;
         letter-spacing:0.15em; text-transform:uppercase;
-        color:#8a9a9a; background:rgba(10,20,20,0.6);
-        border:1px solid rgba(58,122,122,0.1); padding:10px 24px;
+        color:#fff; background:rgba(0,0,0,0.6);
+        border:1px solid rgba(192,57,43,0.3); padding:12px 28px;
         cursor:pointer; transition:background 0.3s;
       ">✕ ЗАКРЫТЬ ВИДЕО</button>
     </div>
@@ -454,7 +460,7 @@
 
   <!-- ИТОГ -->
   <div class="slide" id="s-conclusion">
-    <img class="bg" src="corridor1.jpg" alt="коридор" style="filter:brightness(0.15) saturate(0);" />
+    <img class="bg" src="corridor1.jpg" alt="коридор" style="filter:brightness(0.2) saturate(0.2);" />
     <div class="slide-overlay dark"></div>
     <div class="slide-content">
       <div class="badge">📋 РАССЛЕДОВАНИЕ ЗАВЕРШЕНО</div>
@@ -474,7 +480,7 @@
 
   <!-- ЭКСТРЕННОЕ СООБЩЕНИЕ -->
   <div class="slide" id="s10">
-    <img class="bg" src="corridor1.jpg" alt="коридор" style="filter:brightness(0.08) saturate(0);" />
+    <img class="bg" src="corridor1.jpg" alt="коридор" style="filter:brightness(0.1) saturate(0.1);" />
     <div class="slide-overlay dark"></div>
     <div class="slide-content">
       <div class="badge">🚨 ЭКСТРЕННОЕ СООБЩЕНИЕ</div>
@@ -494,17 +500,16 @@
     </div>
   </div>
 
-  <!-- ФИНАЛ — birthday.jpg (ЗДЕСЬ ВКЛЮЧАЕТСЯ birthday_music.mp3) -->
+  <!-- ФИНАЛ — birthday.jpg -->
   <div class="slide" id="s11">
     <img class="bg" src="birthday.jpg" alt="с днём рождения" />
     <div class="slide-overlay none"></div>
-    <!-- МУЗЫКА ДЛЯ ПОЗДРАВЛЕНИЯ -->
     <audio id="birthday-music" class="hidden-audio" src="birthday_music.mp3" preload="auto"></audio>
   </div>
 
 </div>
 
-<!-- ФОНОВАЯ МУЗЫКА (ambient.mp3) -->
+<!-- ФОНОВАЯ МУЗЫКА -->
 <audio id="ambient-music" src="ambient.mp3" loop preload="auto"></audio>
 
 <button id="btn-next" onclick="nextSlide()">Далее</button>
@@ -519,7 +524,9 @@
     let roomQueue = [];
     let afterRoomFn = null;
     let linearNext = null;
-    let typeInterval = null;
+
+    // Хранилище для интервалов печати для каждого слайда
+    const typingIntervals = {};
 
     const flash = document.getElementById('flash');
     const btnNext = document.getElementById('btn-next');
@@ -530,11 +537,12 @@
     const videoPlayer = document.getElementById('video-player');
     const videoSource = document.getElementById('video-source');
 
-    // ЗАПУСК ФОНОВОЙ МУЗЫКИ (тихо)
     let ambientStarted = false;
+
+    // ФОНОВАЯ МУЗЫКА
     function startAmbientMusic() {
       if (!ambientStarted && ambientMusic) {
-        ambientMusic.volume = 0.12;
+        ambientMusic.volume = 0.08;
         ambientMusic.play().catch(() => {});
         ambientStarted = true;
       }
@@ -542,13 +550,27 @@
     document.addEventListener('click', startAmbientMusic, { once: true });
     document.addEventListener('touchstart', startAmbientMusic, { once: true });
 
-    // ФУНКЦИЯ ПЕЧАТАЮЩЕГОСЯ ТЕКСТА
-    function typeText(element) {
-      if (typeInterval) { clearInterval(typeInterval); typeInterval = null; }
+    // ====== ФУНКЦИЯ ПЕЧАТИ ДЛЯ КАЖДОГО СЛАЙДА ======
+    function typeTextForSlide(slideElement) {
+      const textEl = slideElement.querySelector('.slide-text[data-type]');
+      if (!textEl) return;
 
-      const fullHtml = element.innerHTML;
-      element.innerHTML = '';
+      // Останавливаем предыдущий интервал для этого слайда
+      const slideId = slideElement.id;
+      if (typingIntervals[slideId]) {
+        clearInterval(typingIntervals[slideId]);
+        delete typingIntervals[slideId];
+      }
 
+      // Сохраняем оригинальный HTML
+      if (!textEl.getAttribute('data-original')) {
+        textEl.setAttribute('data-original', textEl.innerHTML);
+      }
+
+      const fullHtml = textEl.getAttribute('data-original');
+      textEl.innerHTML = '';
+
+      // Разбираем HTML на токены
       const tokens = [];
       let i = 0;
       while (i < fullHtml.length) {
@@ -570,12 +592,27 @@
         }
       }
 
-      const speed = element.dataset.type === 'fast' ? 12 : 25;
-      let charIndex = 0;
+      // Считаем общее количество символов
+      let totalChars = 0;
+      tokens.forEach(t => { if (t.type === 'text') totalChars += t.value.length; });
+
+      let printedChars = 0;
       let tokenIndex = 0;
+      let charIndex = 0;
       let displayedHtml = '';
 
+      const speed = textEl.dataset.type === 'fast' ? 20 : 40;
+
       function typeNext() {
+        if (printedChars >= totalChars) {
+          textEl.innerHTML = fullHtml;
+          if (typingIntervals[slideId]) {
+            clearInterval(typingIntervals[slideId]);
+            delete typingIntervals[slideId];
+          }
+          return;
+        }
+
         while (tokenIndex < tokens.length) {
           const token = tokens[tokenIndex];
           if (token.type === 'tag') {
@@ -586,7 +623,8 @@
           if (charIndex < token.value.length) {
             displayedHtml += token.value[charIndex];
             charIndex++;
-            element.innerHTML = displayedHtml + '<span class="cursor"></span>';
+            printedChars++;
+            textEl.innerHTML = displayedHtml + '<span class="cursor"></span>';
             return;
           } else {
             charIndex = 0;
@@ -594,65 +632,67 @@
             continue;
           }
         }
-        element.innerHTML = fullHtml;
-        clearInterval(typeInterval);
-        typeInterval = null;
+
+        // Если что-то пошло не так — выводим полный текст
+        textEl.innerHTML = fullHtml;
+        if (typingIntervals[slideId]) {
+          clearInterval(typingIntervals[slideId]);
+          delete typingIntervals[slideId];
+        }
       }
 
       typeNext();
-      typeInterval = setInterval(typeNext, speed);
+      typingIntervals[slideId] = setInterval(typeNext, speed);
     }
 
-    function forceTypingOnActiveSlide() {
+    // Запускаем печать для активного слайда
+    function startTypingForActiveSlide() {
       const activeSlide = document.querySelector('.slide.active');
       if (!activeSlide) return;
-      
-      const textEl = activeSlide.querySelector('.slide-text[data-type]');
-      if (textEl) {
-        const originalHtml = textEl.getAttribute('data-original-html');
-        if (originalHtml) {
-          textEl.innerHTML = originalHtml;
-        } else {
-          textEl.setAttribute('data-original-html', textEl.innerHTML);
+      // Останавливаем все интервалы для других слайдов
+      Object.keys(typingIntervals).forEach(key => {
+        if (key !== activeSlide.id) {
+          clearInterval(typingIntervals[key]);
+          delete typingIntervals[key];
         }
-        setTimeout(() => {
-          typeText(textEl);
-        }, 300);
-      }
+      });
+      typeTextForSlide(activeSlide);
     }
 
+    // Наблюдатель за переключением слайдов
     const observer = new MutationObserver(() => {
-      forceTypingOnActiveSlide();
+      startTypingForActiveSlide();
     });
     document.querySelectorAll('.slide').forEach(s => {
       observer.observe(s, { attributes: true, attributeFilter: ['class'] });
     });
 
-    setTimeout(forceTypingOnActiveSlide, 600);
+    // Запускаем для первого слайда
+    setTimeout(startTypingForActiveSlide, 700);
 
-    // ВКЛЮЧЕНИЕ СМЕХА НА СЛАЙДЕ s3 (corridor2)
-    function playLaughSound() {
+    // СМЕХ
+    function playLaugh() {
       if (laughSound && cur === 's3') {
         laughSound.currentTime = 0;
-        laughSound.volume = 0.4;
+        laughSound.volume = 0.3;
         laughSound.play().catch(() => {});
       }
     }
+    function stopLaugh() {
+      if (laughSound) { laughSound.pause(); laughSound.currentTime = 0; }
+    }
 
-    // ВКЛЮЧЕНИЕ МУЗЫКИ НА ФИНАЛЬНОМ СЛАЙДЕ (birthday.jpg)
-    function playBirthdayMusic() {
+    // МУЗЫКА НА ФИНАЛ
+    function playBirthday() {
       if (birthdayMusic && cur === 's11') {
         birthdayMusic.currentTime = 0;
-        birthdayMusic.volume = 0.6;
+        birthdayMusic.volume = 0.5;
         birthdayMusic.play().catch(() => {});
-        // Убавляем фоновую музыку
-        if (ambientMusic) {
-          ambientMusic.volume = 0.05;
-        }
+        if (ambientMusic) ambientMusic.volume = 0.02;
       }
     }
 
-    // ВИДЕО-ФУНКЦИИ
+    // ВИДЕО
     window.playVideo = function(src) {
       videoSource.src = src;
       videoPlayer.load();
@@ -669,12 +709,12 @@
       allSlides['s-video-player'].classList.remove('active');
       allSlides[cur].classList.add('active');
       btnNext.style.display = 'block';
-      setTimeout(forceTypingOnActiveSlide, 400);
+      setTimeout(startTypingForActiveSlide, 400);
     };
 
     function updateCorridorUI() {
-      if (visited.ward)    document.getElementById('btn-ward').classList.add('visited');
-      if (visited.shorts)  document.getElementById('btn-shorts').classList.add('visited');
+      if (visited.ward) document.getElementById('btn-ward').classList.add('visited');
+      if (visited.shorts) document.getElementById('btn-shorts').classList.add('visited');
       if (visited.cameras) document.getElementById('btn-cameras').classList.add('visited');
 
       const done = [visited.ward, visited.shorts, visited.cameras].filter(Boolean).length;
@@ -682,12 +722,12 @@
       const allVisited = done === 3;
 
       if (allVisited) {
-        hint.innerHTML = '<span style="color:#3a8a5a;">✓ ВСЕ КОМНАТЫ ОСМОТРЕНЫ. НАЖМИТЕ «ДАЛЕЕ» ДЛЯ ВЫВОДА.</span>';
+        hint.innerHTML = '<span style="color:#4cff6a;">✓ ВСЕ КОМНАТЫ ОСМОТРЕНЫ. НАЖМИТЕ «ДАЛЕЕ».</span>';
         linearNext = 's-conclusion';
         document.getElementById('corridor-badge').textContent = '📋 ВСЕ ДАННЫЕ СОБРАНЫ';
         document.querySelector('#s4 .slide-title .red').textContent = 'ВЫВОД';
       } else {
-        hint.innerHTML = `ОСМОТРЕНО: <span style="color:#b87a5a;">${done} ИЗ 3</span> — ВЕРНИТЕСЬ И ПРОВЕРЬТЕ ОСТАЛЬНЫЕ.`;
+        hint.innerHTML = `ОСМОТРЕНО: <span style="color:#f0c040;">${done} ИЗ 3</span> — ПРОВЕРЬТЕ ОСТАЛЬНЫЕ.`;
         linearNext = null;
         document.getElementById('corridor-badge').textContent = '🚪 ВЫБЕРИТЕ НАПРАВЛЕНИЕ';
         document.querySelector('#s4 .slide-title .red').textContent = 'ИДЁМ?';
@@ -695,8 +735,8 @@
     }
 
     const roomSteps = {
-      ward:    ['s-ward1','s-ward2','s-clues'],
-      shorts:  ['s-shorts1'],
+      ward: ['s-ward1','s-ward2','s-clues'],
+      shorts: ['s-shorts1'],
       cameras: ['s-cameras-door','s-cameras-inside']
     };
 
@@ -704,16 +744,15 @@
       if (busy) return;
       roomQueue = [...roomSteps[room]];
       const first = roomQueue.shift();
-      goTo(first, () => {
-        visited[room] = true;
-        updateCorridorUI();
-      });
+      goTo(first, () => { visited[room] = true; updateCorridorUI(); });
     };
 
     function goTo(id, afterFn) {
       if (busy || !allSlides[id]) return;
       busy = true;
       if (afterFn) afterRoomFn = afterFn;
+
+      stopLaugh();
 
       flash.classList.add('go');
       setTimeout(() => {
@@ -722,21 +761,18 @@
         allSlides[cur].classList.add('active');
         flash.classList.remove('go');
 
-        setTimeout(forceTypingOnActiveSlide, 400);
+        setTimeout(startTypingForActiveSlide, 400);
 
-        // ВОСПРОИЗВЕДЕНИЕ ЗВУКОВ
-        if (id === 's3') {
-          setTimeout(playLaughSound, 500);
-        }
-
+        if (id === 's3') setTimeout(playLaugh, 500);
         if (id === 's11') {
-          setTimeout(playBirthdayMusic, 600);
+          setTimeout(playBirthday, 600);
           btnNext.style.display = 'none';
         } else {
           btnNext.style.display = 'block';
+          if (ambientMusic && cur !== 's11') ambientMusic.volume = 0.08;
         }
 
-        setTimeout(()=>{ busy = false; }, 400);
+        setTimeout(() => { busy = false; }, 400);
       }, 220);
     }
 
@@ -747,13 +783,11 @@
         closeVideo();
         return;
       }
-
       if (roomQueue.length > 0) {
         const next = roomQueue.shift();
         goTo(next);
         return;
       }
-
       if (afterRoomFn) {
         const fn = afterRoomFn;
         afterRoomFn = null;
@@ -761,7 +795,6 @@
         setTimeout(fn, 500);
         return;
       }
-
       if (cur === 's1') { goTo('s2'); return; }
       if (cur === 's2') { goTo('s3'); return; }
       if (cur === 's3') { goTo('s4'); updateCorridorUI(); return; }
@@ -774,18 +807,13 @@
 
     document.addEventListener('keydown', e => {
       if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
-      if (e.key === 'Escape') {
-        if (document.getElementById('s-video-player').classList.contains('active')) {
-          closeVideo();
-        }
-      }
+      if (e.key === 'Escape' && document.getElementById('s-video-player').classList.contains('active')) closeVideo();
     });
 
     let tx = 0;
-    document.addEventListener('touchstart', e=>{ tx = e.touches[0].clientX; }, {passive:true});
-    document.addEventListener('touchend', e=>{
-      const dx = e.changedTouches[0].clientX - tx;
-      if (dx < -50) nextSlide();
+    document.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, {passive:true});
+    document.addEventListener('touchend', e => {
+      if (e.changedTouches[0].clientX - tx < -50) nextSlide();
     }, {passive:true});
   })();
 </script>
