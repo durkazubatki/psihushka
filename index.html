@@ -28,7 +28,7 @@
             position:absolute; inset:0;
             width:100%; height:100%;
             display:block;
-            object-fit:contain;  /* ВСЕ фото вписываются без обрезки */
+            object-fit:contain;
             background:#0a0a0a;
         }
 
@@ -44,6 +44,7 @@
         .slide-overlay.dark { background:rgba(0,0,0,0.7); }
         .slide-overlay.medium { background:rgba(0,0,0,0.4); }
         .slide-overlay.light { background:rgba(0,0,0,0.2); }
+        .slide-overlay.darker { background:rgba(0,0,0,0.6); }
 
         .slide-content {
             position:absolute; bottom:80px; left:28px;
@@ -86,6 +87,7 @@
         .slide-text strong { color:#fff; }
         .slide-text .danger { color:#c0392b; text-shadow:0 0 8px #ff3b2b; font-family:'Oswald',sans-serif; font-size:1.1em; font-weight:700; }
         .slide-text .shout { color:#ff6b4a; font-weight:700; font-size:1.2em; }
+        .slide-text .diagnosis { color:#4fc3f7; font-weight:700; }
 
         .door-choice { display:flex; flex-direction:column; gap:10px; margin-top:6px; }
         .door-btn {
@@ -119,7 +121,7 @@
         .clue-item.open .clue-reveal { display:block; }
         .clue-hint { font-size:0.65rem; color:#888; margin-top:6px; font-style:italic; }
 
-        /* Стили для видео-кнопок в комнате охраны */
+        /* Стили для видео-кнопок */
         .video-grid {
             display:grid;
             grid-template-columns: 1fr 1fr;
@@ -129,7 +131,7 @@
         }
         .video-btn {
             font-family:'Oswald',sans-serif;
-            font-size:0.7rem;
+            font-size:0.65rem;
             font-weight:700;
             letter-spacing:0.05em;
             text-transform:uppercase;
@@ -145,6 +147,16 @@
         .video-btn:hover {
             background:rgba(192,57,43,0.2);
             border-color:#c0392b;
+        }
+        .video-btn .diag {
+            display:block;
+            font-size:0.5rem;
+            color:#4fc3f7;
+            font-weight:400;
+            margin-top:2px;
+            letter-spacing:0.02em;
+            text-transform:none;
+            font-family:'Share Tech Mono',monospace;
         }
 
         #btn-next {
@@ -166,7 +178,6 @@
 
         .hidden-audio { display:none; }
 
-        /* Стиль для видео-плеера внутри слайда */
         .video-container {
             position:absolute; inset:0;
             display:flex; align-items:center; justify-content:center;
@@ -183,7 +194,8 @@
             #btn-next { left:16px; bottom:20px; }
             .clue-item { padding:8px 12px; }
             .video-grid { grid-template-columns: 1fr 1fr; gap:6px; }
-            .video-btn { font-size:0.6rem; padding:6px 4px; }
+            .video-btn { font-size:0.55rem; padding:6px 4px; }
+            .video-btn .diag { font-size:0.45rem; }
         }
     </style>
 </head>
@@ -314,10 +326,24 @@
         </div>
     </div>
 
-    <!-- ПАЛАТА №14 -->
+    <!-- ПАЛАТА №14 — с текстом! -->
     <div class="slide" id="s-shorts1">
         <img class="bg" src="shorts.jpg" alt="палата с шортсами" />
-        <div class="slide-overlay none"></div>
+        <div class="slide-overlay medium"></div>
+        <div class="slide-content">
+            <div class="badge">📱 Отдел шортсозависимости</div>
+            <div class="slide-title">Палата №<span class="red">14</span></div>
+            <div class="divider"></div>
+            <div class="slide-text" data-type="slow">
+                <span class="shout">— О, нет…</span><br><br>
+                Вся палата завалена <span class="danger">шортсами</span>.<br>
+                <em>— 600 видео с котами</em><br>
+                <em>— 400 видео с её смехом</em><br>
+                <em>— 200 видео с мемами про психушку</em><br><br>
+                <strong>Диагноз:</strong> острая <span class="danger">шортсозависимость</span>.<br>
+                Прогноз: <em>неблагоприятный для рассудка.</em>
+            </div>
+        </div>
     </div>
 
     <!-- КОМНАТА ОХРАНЫ: шаг 1 — ДВЕРЬ -->
@@ -338,31 +364,52 @@
         </div>
     </div>
 
-    <!-- КОМНАТА ОХРАНЫ: шаг 2 — ВНУТРИ с ВИДЕО -->
+    <!-- КОМНАТА ОХРАНЫ: шаг 2 — ВНУТРИ с ВИДЕО и ДИАГНОЗАМИ -->
     <div class="slide" id="s-cameras-inside">
         <img class="bg" src="cameras_inside.jpg" alt="внутри комнаты охраны" />
-        <div class="slide-overlay soft"></div>
+        <div class="slide-overlay darker"></div>
         <div class="slide-content">
             <div class="badge">📹 Система видеонаблюдения</div>
             <div class="slide-title">Последние <span class="red">записи</span></div>
             <div class="divider"></div>
             <div class="slide-text" data-type="fast" style="margin-bottom:6px;">
-                <span class="shout">— Вот это да…</span> Выберите камеру для просмотра:
+                <span class="shout">— Что за…</span> Диагнозы по камерам:
             </div>
             <div class="video-grid">
-                <button class="video-btn" onclick="playVideo('cam1.mp4')">📹 Камера 1</button>
-                <button class="video-btn" onclick="playVideo('cam2.mp4')">📹 Камера 2</button>
-                <button class="video-btn" onclick="playVideo('cam3.mp4')">📹 Камера 3</button>
-                <button class="video-btn" onclick="playVideo('cam4.mp4')">📹 Камера 4</button>
-                <button class="video-btn" onclick="playVideo('cam5.mp4')">📹 Камера 5</button>
-                <button class="video-btn" onclick="playVideo('cam6.mp4')">📹 Камера 6</button>
-                <button class="video-btn" onclick="playVideo('cam7.mp4')" style="grid-column: span 2;">📹 Камера 7 — последняя запись</button>
+                <button class="video-btn" onclick="playVideo('cam1.mp4')">
+                    📹 Камера 1
+                    <span class="diag">🔴 Острый приступ ржача</span>
+                </button>
+                <button class="video-btn" onclick="playVideo('cam2.mp4')">
+                    📹 Камера 2
+                    <span class="diag">🗣️ Уже разговаривает с туалетом</span>
+                </button>
+                <button class="video-btn" onclick="playVideo('cam3.mp4')">
+                    📹 Камера 3
+                    <span class="diag">🏋️ Ставит рекорд с серьёзным лицом</span>
+                </button>
+                <button class="video-btn" onclick="playVideo('cam4.mp4')">
+                    📹 Камера 4
+                    <span class="diag">💪 Делает рекорд на пресс</span>
+                </button>
+                <button class="video-btn" onclick="playVideo('cam5.mp4')">
+                    📹 Камера 5
+                    <span class="diag">💃 Танцует у кровати 😏😏😏</span>
+                </button>
+                <button class="video-btn" onclick="playVideo('cam6.mp4')">
+                    📹 Камера 6
+                    <span class="diag">📊 Сходство со смехом 91%</span>
+                </button>
+                <button class="video-btn" onclick="playVideo('cam7.mp4')" style="grid-column: span 2;">
+                    📹 Камера 7
+                    <span class="diag">🌚 Просто негр</span>
+                </button>
             </div>
-            <div class="clue-hint" style="margin-top:6px;">🎥 Нажмите на камеру, чтобы посмотреть запись</div>
+            <div class="clue-hint" style="margin-top:6px;">🎥 Нажмите на камеру для просмотра записи</div>
         </div>
     </div>
 
-    <!-- ВИДЕО-ПЛЕЕР (появляется поверх всего) -->
+    <!-- ВИДЕО-ПЛЕЕР -->
     <div class="slide" id="s-video-player">
         <div class="video-container">
             <video id="video-player" controls autoplay>
@@ -551,7 +598,6 @@
             videoPlayer.play().catch(() => {});
             allSlides['s-video-player'].classList.add('active');
             allSlides[cur].classList.remove('active');
-            // прячем кнопку "Далее" пока видео открыто
             btnNext.style.display = 'none';
         };
 
@@ -561,7 +607,6 @@
             videoPlayer.load();
             allSlides['s-video-player'].classList.remove('active');
             allSlides[cur].classList.add('active');
-            // показываем кнопку обратно
             btnNext.style.display = 'block';
         };
 
@@ -590,7 +635,7 @@
         const roomSteps = {
             ward:    ['s-ward1','s-ward2','s-ward3','s-clues'],
             shorts:  ['s-shorts1'],
-            cameras: ['s-cameras-door','s-cameras-inside']  // два шага: дверь + внутри
+            cameras: ['s-cameras-door','s-cameras-inside']
         };
 
         window.enterRoom = function(room) {
@@ -643,7 +688,6 @@
         window.goTo = goTo;
 
         window.nextSlide = function() {
-            // если открыто видео — закрываем его
             if (document.getElementById('s-video-player').classList.contains('active')) {
                 closeVideo();
                 return;
@@ -691,4 +735,4 @@
     })();
 </script>
 </body>
-              </html>
+                </html>
