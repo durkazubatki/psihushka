@@ -6,232 +6,127 @@
 <title>Диспансер №15 — Дело Зубатки</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Oswald:wght@400;700&display=swap');
+  * { margin:0; padding:0; box-sizing:border-box; }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width:100%; height:100%; background:#000; overflow:hidden; font-family:'Share Tech Mono',monospace; }
 
-  html, body {
-    width: 100%; height: 100%;
-    background: #000;
-    overflow: hidden;
-    font-family: 'Share Tech Mono', monospace;
-  }
-
-  /* сканлайны */
   body::before {
-    content: '';
-    position: fixed; inset: 0;
-    background: repeating-linear-gradient(
-      to bottom,
-      transparent 0px, transparent 3px,
-      rgba(0,0,0,0.13) 3px, rgba(0,0,0,0.13) 4px
-    );
-    pointer-events: none;
-    z-index: 9999;
+    content:''; position:fixed; inset:0;
+    background:repeating-linear-gradient(to bottom,transparent 0px,transparent 3px,rgba(0,0,0,0.13) 3px,rgba(0,0,0,0.13) 4px);
+    pointer-events:none; z-index:9999;
   }
 
-  /* ══ СЛАЙДЫ ══ */
-  #stage { position: fixed; inset: 0; }
+  #stage { position:fixed; inset:0; }
 
   .slide {
-    position: absolute; inset: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 1s ease;
+    position:absolute; inset:0;
+    opacity:0; pointer-events:none;
+    transition:opacity 0.8s ease;
+    overflow:hidden;
   }
-  .slide.active {
-    opacity: 1;
-    pointer-events: all;
-  }
+  .slide.active { opacity:1; pointer-events:all; }
 
-  /* фоновое фото */
   .slide-bg {
-    position: absolute; inset: 0;
-    background-size: cover;
-    background-position: center top;
-    transition: transform 8s ease;
-  }
-  .slide.active .slide-bg {
-    transform: scale(1.04);
+    position:absolute; inset:0;
+    background-size:cover;
+    background-position:center center;
+    background-repeat:no-repeat;
   }
 
-  /* затемнение снизу */
+  /* зум только на первом слайде */
+  #s1 .slide-bg { transform:scale(1); transition:transform 0s; }
+  #s1.active .slide-bg { transform:scale(1.5); transition:transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94); }
+
   .slide-overlay {
-    position: absolute; inset: 0;
-    background: linear-gradient(
-      to top,
-      rgba(0,0,0,0.92) 0%,
-      rgba(0,0,0,0.4) 40%,
-      rgba(0,0,0,0.1) 100%
-    );
+    position:absolute; inset:0;
+    background:linear-gradient(to top,rgba(0,0,0,0.92) 0%,rgba(0,0,0,0.35) 45%,rgba(0,0,0,0.05) 100%);
   }
+  .slide-overlay.light { background:rgba(0,0,0,0.08); }
 
-  /* ══ КОНТЕНТ ВНИЗУ СЛЕВА ══ */
+  /* контент слева снизу */
   .slide-content {
-    position: relative;
-    z-index: 10;
-    padding: 0 28px 100px 28px;
-    max-width: 560px;
-    /* появление */
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.7s ease 0.5s, transform 0.7s ease 0.5s;
+    position:absolute; bottom:100px; left:28px;
+    z-index:10; max-width:min(520px,90vw);
+    opacity:0; transform:translateY(18px);
+    transition:opacity 0.7s ease 0.5s, transform 0.7s ease 0.5s;
   }
-  .slide.active .slide-content {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  .slide.active .slide-content { opacity:1; transform:translateY(0); }
 
-  /* бейдж */
   .badge {
-    display: inline-block;
-    font-family: 'Oswald', sans-serif;
-    font-size: 0.58rem;
-    font-weight: 700;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: #c0392b;
-    border: 1px solid #c0392b;
-    border-left: 3px solid #c0392b;
-    padding: 3px 10px;
-    margin-bottom: 12px;
+    display:inline-block;
+    font-family:'Oswald',sans-serif; font-size:0.58rem; font-weight:700;
+    letter-spacing:0.22em; text-transform:uppercase;
+    color:#c0392b; border:1px solid #c0392b; border-left:3px solid #c0392b;
+    padding:3px 10px; margin-bottom:12px;
   }
-
-  /* заголовок */
   .slide-title {
-    font-family: 'Oswald', sans-serif;
-    font-size: clamp(1.4rem, 4vw, 2.2rem);
-    font-weight: 700;
-    text-transform: uppercase;
-    color: #fff;
-    letter-spacing: 0.05em;
-    line-height: 1.15;
-    margin-bottom: 12px;
+    font-family:'Oswald',sans-serif;
+    font-size:clamp(1.4rem,4vw,2.2rem); font-weight:700;
+    text-transform:uppercase; color:#fff;
+    letter-spacing:0.05em; line-height:1.15; margin-bottom:12px;
   }
-  .slide-title .red {
-    color: #c0392b;
-    text-shadow: 0 0 12px #ff3b2b;
-  }
+  .slide-title .red { color:#c0392b; text-shadow:0 0 12px #ff3b2b; }
+  .divider { width:60px; height:2px; background:#c0392b; box-shadow:0 0 8px #ff3b2b; margin-bottom:14px; }
+  .slide-text { font-size:clamp(0.72rem,2vw,0.85rem); line-height:1.9; color:#c8c8b8; }
+  .slide-text em { color:#f0c040; font-style:normal; }
+  .slide-text strong { color:#fff; }
+  .slide-text .danger { color:#c0392b; text-shadow:0 0 8px #ff3b2b; font-family:'Oswald',sans-serif; font-size:1.1em; font-weight:700; }
 
-  /* разделитель */
-  .divider {
-    width: 60px;
-    height: 2px;
-    background: #c0392b;
-    margin-bottom: 14px;
-    box-shadow: 0 0 8px #ff3b2b;
+  /* ══ ВЫБОР ДВЕРИ ══ */
+  .door-choice {
+    display:flex; flex-direction:column; gap:12px; margin-top:6px;
   }
+  .door-btn {
+    font-family:'Oswald',sans-serif; font-size:0.9rem; font-weight:700;
+    letter-spacing:0.12em; text-transform:uppercase;
+    color:#fff; background:rgba(0,0,0,0.6);
+    border:1px solid rgba(192,57,43,0.5); border-left:3px solid #c0392b;
+    padding:12px 20px; cursor:pointer; text-align:left;
+    transition:background 0.2s, border-color 0.2s, box-shadow 0.2s;
+    outline:none; -webkit-tap-highlight-color:transparent;
+    max-width:380px;
+  }
+  .door-btn:hover { background:rgba(192,57,43,0.15); border-color:#c0392b; box-shadow:0 0 16px rgba(192,57,43,0.3); }
+  .door-btn:active { background:rgba(192,57,43,0.3); }
+  .door-btn span { font-size:0.7rem; color:#888; display:block; margin-top:3px; font-family:'Share Tech Mono',monospace; font-weight:400; letter-spacing:0.05em; text-transform:none; }
 
-  /* текст */
-  .slide-text {
-    font-size: clamp(0.72rem, 2vw, 0.85rem);
-    line-height: 1.9;
-    color: #c8c8b8;
+  /* ══ УЛИКИ ══ */
+  .clue-wrap { display:flex; flex-direction:column; gap:8px; margin-top:4px; }
+  .clue-item {
+    border:1px solid rgba(255,255,255,0.12); padding:10px 14px;
+    display:flex; gap:12px; align-items:center; cursor:pointer;
+    transition:background 0.2s, border-color 0.2s; max-width:400px;
   }
-  .slide-text em { color: #f0c040; font-style: normal; }
-  .slide-text strong { color: #fff; }
-  .slide-text .danger {
-    color: #c0392b;
-    text-shadow: 0 0 8px #ff3b2b;
-    font-family: 'Oswald', sans-serif;
-    font-size: 1.1em;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-  }
+  .clue-item:hover { background:rgba(192,57,43,0.1); border-color:rgba(192,57,43,0.6); }
+  .clue-icon { font-size:1.4rem; flex-shrink:0; }
+  .clue-name { font-family:'Oswald',sans-serif; font-size:0.9rem; font-weight:700; color:#fff; }
+  .clue-reveal { font-size:0.72rem; color:#f0c040; margin-top:4px; display:none; }
+  .clue-item.open .clue-reveal { display:block; }
+  .clue-hint { font-size:0.65rem; color:#555; margin-top:6px; }
 
   /* ══ КНОПКА ДАЛЕЕ ══ */
   #btn-next {
-    position: fixed;
-    bottom: 28px;
-    left: 28px;
-    z-index: 500;
-    font-family: 'Oswald', sans-serif;
-    font-size: 0.85rem;
-    font-weight: 700;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: #fff;
-    background: transparent;
-    border: 1px solid rgba(192,57,43,0.7);
-    border-left: 3px solid #c0392b;
-    padding: 10px 24px;
-    cursor: pointer;
-    transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
-    outline: none;
-    -webkit-tap-highlight-color: transparent;
+    position:fixed; bottom:28px; left:28px; z-index:500;
+    font-family:'Oswald',sans-serif; font-size:0.9rem; font-weight:700;
+    letter-spacing:0.2em; text-transform:uppercase;
+    color:#fff; background:transparent;
+    border:1px solid rgba(192,57,43,0.7); border-left:3px solid #c0392b;
+    padding:11px 26px; cursor:pointer; outline:none;
+    transition:background 0.2s, box-shadow 0.2s;
+    -webkit-tap-highlight-color:transparent;
   }
-  #btn-next:hover {
-    background: rgba(192,57,43,0.15);
-    border-color: #c0392b;
-    box-shadow: 0 0 16px rgba(192,57,43,0.3);
-  }
-  #btn-next:active {
-    background: rgba(192,57,43,0.3);
-  }
-  /* мигающая стрелка внутри кнопки */
-  #btn-next::after {
-    content: ' ▶';
-    animation: blink 1.2s step-end infinite;
-  }
+  #btn-next:hover { background:rgba(192,57,43,0.15); box-shadow:0 0 16px rgba(192,57,43,0.3); }
+  #btn-next:active { background:rgba(192,57,43,0.3); }
+  #btn-next::after { content:' ▶'; animation:blink 1.2s step-end infinite; }
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
 
-  /* ══ УЛИКИ — кликабельные зоны ══ */
-  .clue-wrap {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-top: 4px;
-  }
-  .clue-item {
-    border: 1px solid rgba(255,255,255,0.12);
-    padding: 10px 14px;
-    display: flex;
-    gap: 12px;
-    align-items: center;
-    cursor: pointer;
-    transition: background 0.2s, border-color 0.2s;
-    max-width: 400px;
-  }
-  .clue-item:hover {
-    background: rgba(192,57,43,0.1);
-    border-color: rgba(192,57,43,0.6);
-  }
-  .clue-icon { font-size: 1.4rem; flex-shrink: 0; }
-  .clue-name {
-    font-family: 'Oswald', sans-serif;
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: #fff;
-  }
-  .clue-reveal {
-    font-size: 0.72rem;
-    color: #f0c040;
-    margin-top: 4px;
-    display: none;
-  }
-  .clue-item.open .clue-reveal { display: block; }
-  .clue-hint {
-    font-size: 0.65rem;
-    color: #555;
-    margin-top: 6px;
-  }
-
-  /* ══ ФЛЭШ при переходе ══ */
-  #flash {
-    position: fixed; inset: 0;
-    background: #000;
-    opacity: 0;
-    pointer-events: none;
-    z-index: 8000;
-    transition: opacity 0.15s ease;
-  }
-  #flash.go { opacity: 0.6; }
+  /* ══ ФЛЭШ ══ */
+  #flash { position:fixed; inset:0; background:#000; opacity:0; pointer-events:none; z-index:8000; transition:opacity 0.15s ease; }
+  #flash.go { opacity:0.7; }
 
   @media(max-width:500px) {
-    .slide-content { padding: 0 16px 90px 16px; }
-    #btn-next { left: 16px; bottom: 20px; }
+    .slide-content { left:16px; bottom:90px; }
+    #btn-next { left:16px; bottom:20px; }
   }
 </style>
 </head>
@@ -242,7 +137,7 @@
 <div id="stage">
 
   <!-- 1. ВХОД -->
-  <div class="slide active">
+  <div class="slide active" id="s1">
     <div class="slide-bg" style="background-image:url('entrance.jpg')"></div>
     <div class="slide-overlay"></div>
     <div class="slide-content">
@@ -259,7 +154,7 @@
   </div>
 
   <!-- 2. ДВОР -->
-  <div class="slide">
+  <div class="slide" id="s2">
     <div class="slide-bg" style="background-image:url('yard.jpg')"></div>
     <div class="slide-overlay"></div>
     <div class="slide-content">
@@ -273,38 +168,51 @@
     </div>
   </div>
 
-  <!-- 3. ПУСТОЙ КОРИДОР — только фото -->
-  <div class="slide">
+  <!-- 3. КОРИДОР — выбор куда идти -->
+  <div class="slide" id="s3">
     <div class="slide-bg" style="background-image:url('corridor1.jpg')"></div>
-    <div class="slide-overlay" style="background:linear-gradient(to top,rgba(0,0,0,0.5) 0%,transparent 50%)"></div>
+    <div class="slide-overlay"></div>
     <div class="slide-content">
-      <div class="badge">Экран 3 — коридор</div>
-      <div class="slide-title"><span class="red">АХАХАХАХАХАХ</span></div>
+      <div class="badge">🚪 Выберите направление</div>
+      <div class="slide-title">Куда <span class="red">идём?</span></div>
       <div class="divider"></div>
-      <div class="slide-text">Из одной двери что-то доносится...</div>
+      <div class="door-choice">
+        <button class="door-btn" onclick="goTo('s4')">
+          🚪 Палата №15
+          <span>Основная палата — место побега</span>
+        </button>
+        <button class="door-btn" onclick="goTo('s7')">
+          📱 Палата №14
+          <span>Отдел шортсозависимости</span>
+        </button>
+        <button class="door-btn" onclick="goTo('s9')">
+          📹 Комната охраны
+          <span>Система видеонаблюдения</span>
+        </button>
+      </div>
     </div>
   </div>
 
-  <!-- 4. АНАЛИЗ ЗВУКА — фото с текстом уже на нём -->
-  <div class="slide">
-    <div class="slide-bg" style="background-image:url('corridor2.jpg'); background-position:center center;"></div>
-    <div class="slide-overlay" style="background:rgba(0,0,0,0.1)"></div>
+  <!-- 4. АНАЛИЗ ЗВУКА (коридор 2) -->
+  <div class="slide" id="s4">
+    <div class="slide-bg" style="background-image:url('corridor2.jpg')"></div>
+    <div class="slide-overlay light"></div>
   </div>
 
   <!-- 5. ПАЛАТА С ДЫРОЙ -->
-  <div class="slide">
+  <div class="slide" id="s5">
     <div class="slide-bg" style="background-image:url('ward.jpg')"></div>
-    <div class="slide-overlay" style="background:rgba(0,0,0,0.15)"></div>
+    <div class="slide-overlay light"></div>
   </div>
 
-  <!-- 6. ЛИЧНОЕ ДЕЛО — фото с текстом -->
-  <div class="slide">
-    <div class="slide-bg" style="background-image:url('report.jpg'); background-position:center center;"></div>
-    <div class="slide-overlay" style="background:rgba(0,0,0,0.1)"></div>
+  <!-- 6. ЛИЧНОЕ ДЕЛО -->
+  <div class="slide" id="s6">
+    <div class="slide-bg" style="background-image:url('report.jpg')"></div>
+    <div class="slide-overlay light"></div>
   </div>
 
-  <!-- 7. УЛИКИ — кликабельные -->
-  <div class="slide">
+  <!-- 7. УЛИКИ -->
+  <div class="slide" id="s7">
     <div class="slide-bg" style="background-image:url('clues.jpg')"></div>
     <div class="slide-overlay"></div>
     <div class="slide-content">
@@ -338,12 +246,12 @@
     </div>
   </div>
 
-  <!-- 8. ПАЛАТА С ШОРТСАМИ -->
-  <div class="slide">
+  <!-- 8. ПАЛАТА №14 — ШОРТСЫ -->
+  <div class="slide" id="s8">
     <div class="slide-bg" style="background-image:url('shorts.jpg')"></div>
     <div class="slide-overlay"></div>
     <div class="slide-content">
-      <div class="badge">🚪 Палата №15 — осмотр</div>
+      <div class="badge">🚪 Палата №14 — шортсозависимость</div>
       <div class="slide-title">На кровати — <span class="red">никого</span></div>
       <div class="divider"></div>
       <div class="slide-text">
@@ -354,106 +262,130 @@
     </div>
   </div>
 
-  <!-- 9. СТАТИСТИКА — фото с текстом -->
-  <div class="slide">
-    <div class="slide-bg" style="background-image:url('stats.jpg'); background-position:center center;"></div>
-    <div class="slide-overlay" style="background:rgba(0,0,0,0.1)"></div>
+  <!-- 9. КАМЕРЫ — cameras.jpg -->
+  <div class="slide" id="s9">
+    <div class="slide-bg" style="background-image:url('cameras.jpg')"></div>
+    <div class="slide-overlay light"></div>
   </div>
 
-  <!-- 10. КАМЕРЫ — фото с текстом -->
-  <div class="slide">
-    <div class="slide-bg" style="background-image:url('cameras.jpg'); background-position:center center;"></div>
-    <div class="slide-overlay" style="background:rgba(0,0,0,0.1)"></div>
-  </div>
-
-  <!-- 11. ЭКСТРЕННОЕ СООБЩЕНИЕ -->
-  <div class="slide">
-    <div class="slide-bg" style="background-image:url('alert.jpg')"></div>
-    <div class="slide-overlay"></div>
+  <!-- 10. ЭКСТРЕННОЕ СООБЩЕНИЕ — только текст -->
+  <div class="slide" id="s10">
+    <div class="slide-bg" style="background-image:url('corridor1.jpg'); filter:brightness(0.2) saturate(0);"></div>
+    <div class="slide-overlay" style="background:rgba(0,0,0,0.7);"></div>
     <div class="slide-content">
-      <div class="badge">🚨 Экстренное сообщение</div>
-      <div class="slide-title">Объект <span class="red">покинул</span> палату</div>
+      <div class="badge" style="animation:pulse-red 1s infinite;">🚨 Экстренное сообщение</div>
+      <div class="slide-title">Объект <span class="red">ЗУБАТКА</span><br>покинула учреждение</div>
       <div class="divider"></div>
       <div class="slide-text">
+        Зафиксировано в <em>02:19</em>.<br><br>
         Предполагаемое местонахождение:<br>
         <em>— интернет</em><br>
         <em>— чат друзей</em><br>
         <em>— комментарии</em><br>
-        <em>— ближайший источник мемов</em>
+        <em>— ближайший источник мемов</em><br><br>
+        <strong style="color:#c0392b;text-shadow:0 0 10px #ff3b2b;">
+          Степень опасности: КРИТИЧЕСКАЯ.
+        </strong>
       </div>
     </div>
   </div>
 
-  <!-- 12. ФИНАЛ -->
-  <div class="slide" id="slide-birthday">
-    <div class="slide-bg" style="background-image:url('birthday.jpg'); background-position:center center;"></div>
-    <div class="slide-overlay" style="background:rgba(0,0,0,0.1)"></div>
+  <!-- 11. ФИНАЛ -->
+  <div class="slide" id="s11">
+    <div class="slide-bg" style="background-image:url('birthday.jpg')"></div>
+    <div class="slide-overlay light"></div>
     <audio id="bday-music" src="music.mp3" loop preload="auto"></audio>
   </div>
 
 </div>
 
-<!-- КНОПКА ДАЛЕЕ -->
-<button id="btn-next" onclick="next()">Далее</button>
+<button id="btn-next" onclick="nextSlide()">Далее</button>
 
 <script>
-  const slides = [...document.querySelectorAll('.slide')];
-  const total  = slides.length;
-  let cur = 0, busy = false;
-  const flash  = document.getElementById('flash');
-  const btnNext = document.getElementById('btn-next');
-  const music  = document.getElementById('bday-music');
-  const birthdayIdx = slides.indexOf(document.getElementById('slide-birthday'));
+  // Порядок слайдов по умолчанию (линейный, кроме развилки)
+  const order = ['s1','s2','s3', /* тут развилка */ 's10','s11'];
+  // После развилки каждая ветка ведёт в s10 → s11
+  const afterBranch = ['s10','s11'];
 
-  function goTo(idx) {
-    if (busy || idx < 0 || idx >= total) return;
+  // Все слайды по id
+  const allSlides = {};
+  document.querySelectorAll('.slide').forEach(s => { allSlides[s.id] = s; });
+
+  // История для кнопки "далее"
+  const history = ['s1'];
+  let cur = 's1';
+  let busy = false;
+
+  // Линейный следующий (для кнопки Далее)
+  const linearNext = {
+    's1':  's2',
+    's2':  's3',
+    // s3 — развилка, кнопка Далее ведёт в палату 15
+    's3':  's4',
+    's4':  's5',
+    's5':  's6',
+    's6':  's10',
+    // палата 14
+    's7':  's8',
+    's8':  's10',
+    // камеры
+    's9':  's10',
+    // финал
+    's10': 's11',
+    's11': null,
+  };
+
+  const flash   = document.getElementById('flash');
+  const btnNext = document.getElementById('btn-next');
+  const music   = document.getElementById('bday-music');
+
+  function goTo(id) {
+    if (busy || id === cur || !allSlides[id]) return;
     busy = true;
 
-    // чёрный флэш
     flash.classList.add('go');
     setTimeout(() => {
-      slides[cur].classList.remove('active');
-      cur = idx;
-      slides[cur].classList.add('active');
+      allSlides[cur].classList.remove('active');
+      cur = id;
+      allSlides[cur].classList.add('active');
       flash.classList.remove('go');
 
-      // скрыть кнопку на финале
-      if (cur === birthdayIdx) {
+      if (cur === 's11') {
         btnNext.style.display = 'none';
-        // музыка
         if (music) {
           music.volume = 0;
-          music.play().catch(() => {});
+          music.play().catch(()=>{});
           let v = 0;
-          const fade = setInterval(() => {
-            v = Math.min(v + 0.04, 1);
+          const fade = setInterval(()=>{
+            v = Math.min(v+0.04,1);
             music.volume = v;
-            if (v >= 1) clearInterval(fade);
-          }, 150);
+            if(v>=1) clearInterval(fade);
+          },150);
         }
       }
-
-      setTimeout(() => { busy = false; }, 400);
-    }, 200);
+      setTimeout(()=>{ busy=false; },400);
+    }, 220);
   }
 
-  function next() { if (cur < total - 1) goTo(cur + 1); }
-  function prev() { if (cur > 0) goTo(cur - 1); }
+  function nextSlide() {
+    const n = linearNext[cur];
+    if (n) goTo(n);
+  }
 
-  // клавиши
+  // Кнопки развилки уже вызывают goTo напрямую через onclick
+
+  // Клавиши
   document.addEventListener('keydown', e => {
-    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
-    if (e.key === 'ArrowLeft') prev();
+    if (e.key==='ArrowRight'||e.key===' ') { e.preventDefault(); nextSlide(); }
   });
 
-  // свайп
+  // Свайп
   let tx = 0;
-  document.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
-  document.addEventListener('touchend', e => {
+  document.addEventListener('touchstart', e=>{ tx=e.touches[0].clientX; },{passive:true});
+  document.addEventListener('touchend', e=>{
     const dx = e.changedTouches[0].clientX - tx;
-    if (dx < -50) next();
-    if (dx >  50) prev();
-  }, { passive: true });
+    if (dx < -50) nextSlide();
+  },{passive:true});
 </script>
 </body>
-    </html>
+          </html>
