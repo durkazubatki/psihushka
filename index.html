@@ -512,6 +512,9 @@
 <!-- ФОНОВАЯ МУЗЫКА -->
 <audio id="ambient-music" src="ambient.mp3" loop preload="auto"></audio>
 
+<!-- ЗВУК ПЕЧАТИ -->
+<audio id="type-sound" class="hidden-audio" src="type.mp3" preload="auto"></audio>
+
 <button id="btn-next" onclick="nextSlide()">Далее</button>
 
 <script>
@@ -525,7 +528,6 @@
     let afterRoomFn = null;
     let linearNext = null;
 
-    // Хранилище для интервалов печати для каждого слайда
     const typingIntervals = {};
 
     const flash = document.getElementById('flash');
@@ -533,6 +535,7 @@
     const ambientMusic = document.getElementById('ambient-music');
     const laughSound = document.getElementById('laugh-sound');
     const birthdayMusic = document.getElementById('birthday-music');
+    const typeSound = document.getElementById('type-sound');
     const videoPlayerSlide = document.getElementById('s-video-player');
     const videoPlayer = document.getElementById('video-player');
     const videoSource = document.getElementById('video-source');
@@ -550,19 +553,32 @@
     document.addEventListener('click', startAmbientMusic, { once: true });
     document.addEventListener('touchstart', startAmbientMusic, { once: true });
 
-    // ====== ФУНКЦИЯ ПЕЧАТИ ДЛЯ КАЖДОГО СЛАЙДА ======
+    // ЗВУК ПЕЧАТИ
+    let lastTypeTime = 0;
+    function playTypeSound() {
+      if (!typeSound) return;
+      const now = Date.now();
+      // Не даём звуку играть чаще чем раз в 30 мс
+      if (now - lastTypeTime < 30) return;
+      lastTypeTime = now;
+      try {
+        typeSound.currentTime = 0;
+        typeSound.volume = 0.12;
+        typeSound.play().catch(() => {});
+      } catch(e) {}
+    }
+
+    // ====== ФУНКЦИЯ ПЕЧАТИ ======
     function typeTextForSlide(slideElement) {
       const textEl = slideElement.querySelector('.slide-text[data-type]');
       if (!textEl) return;
 
-      // Останавливаем предыдущий интервал для этого слайда
       const slideId = slideElement.id;
       if (typingIntervals[slideId]) {
         clearInterval(typingIntervals[slideId]);
         delete typingIntervals[slideId];
       }
 
-      // Сохраняем оригинальный HTML
       if (!textEl.getAttribute('data-original')) {
         textEl.setAttribute('data-original', textEl.innerHTML);
       }
@@ -570,7 +586,6 @@
       const fullHtml = textEl.getAttribute('data-original');
       textEl.innerHTML = '';
 
-      // Разбираем HTML на токены
       const tokens = [];
       let i = 0;
       while (i < fullHtml.length) {
@@ -592,7 +607,6 @@
         }
       }
 
-      // Считаем общее количество символов
       let totalChars = 0;
       tokens.forEach(t => { if (t.type === 'text') totalChars += t.value.length; });
 
@@ -621,10 +635,15 @@
             continue;
           }
           if (charIndex < token.value.length) {
-            displayedHtml += token.value[charIndex];
+            const char = token.value[charIndex];
+            displayedHtml += char;
             charIndex++;
             printedChars++;
             textEl.innerHTML = displayedHtml + '<span class="cursor"></span>';
+            // Воспроизводим звук печати (кроме пробелов и переносов строк)
+            if (char !== ' ' && char !== '\n' && char !== '\r') {
+              playTypeSound();
+            }
             return;
           } else {
             charIndex = 0;
@@ -633,7 +652,6 @@
           }
         }
 
-        // Если что-то пошло не так — выводим полный текст
         textEl.innerHTML = fullHtml;
         if (typingIntervals[slideId]) {
           clearInterval(typingIntervals[slideId]);
@@ -645,11 +663,9 @@
       typingIntervals[slideId] = setInterval(typeNext, speed);
     }
 
-    // Запускаем печать для активного слайда
     function startTypingForActiveSlide() {
       const activeSlide = document.querySelector('.slide.active');
       if (!activeSlide) return;
-      // Останавливаем все интервалы для других слайдов
       Object.keys(typingIntervals).forEach(key => {
         if (key !== activeSlide.id) {
           clearInterval(typingIntervals[key]);
@@ -659,7 +675,6 @@
       typeTextForSlide(activeSlide);
     }
 
-    // Наблюдатель за переключением слайдов
     const observer = new MutationObserver(() => {
       startTypingForActiveSlide();
     });
@@ -667,7 +682,6 @@
       observer.observe(s, { attributes: true, attributeFilter: ['class'] });
     });
 
-    // Запускаем для первого слайда
     setTimeout(startTypingForActiveSlide, 700);
 
     // СМЕХ
@@ -818,4 +832,4 @@
   })();
 </script>
 </body>
-  </html>
+</html>
