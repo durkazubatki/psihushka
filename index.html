@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Диспансер №15 — Дело Зубатки</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Oswald:wght@400;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap');
     * { margin:0; padding:0; box-sizing:border-box; }
     html, body {
       width:100%; height:100%; background:#000; overflow:hidden;
@@ -13,7 +13,7 @@
     }
     body::before {
       content:''; position:fixed; inset:0;
-      background:repeating-linear-gradient(to bottom,transparent 0px,transparent 3px,rgba(0,0,0,0.13) 3px,rgba(0,0,0,0.13) 4px);
+      background:repeating-linear-gradient(to bottom,transparent 0px,transparent 3px,rgba(0,255,200,0.04) 3px,rgba(0,255,200,0.04) 4px);
       pointer-events:none; z-index:9999;
     }
     #stage { position:fixed; inset:0; }
@@ -25,40 +25,17 @@
     }
     .slide.active { opacity:1; pointer-events:all; }
 
-    /* ВСЕ ФОТО — БЕЗ УВЕЛИЧЕНИЯ, КАК ЕСТЬ */
+    /* ВСЕ ФОТО — БЕЗ ОБРЕЗКИ, КАК ЕСТЬ */
     .slide img.bg {
       position:absolute; inset:0;
       width:100%; height:100%;
       display:block;
       object-fit:contain;
       background:#0a0a0a;
-      transform:scale(1); /* БЕЗ ЗУМА */
+      transform:scale(1);
     }
 
-    /* Убираем зум даже с первого слайда */
-    #s1 img.bg { transform:scale(1); transition:transform 0s; }
-    #s1.active img.bg { transform:scale(1); }
-
-    /* Разные эффекты переходов */
-    #s1.active { transition: opacity 0.1s ease; }
-    #s2.active { transition: opacity 0.8s ease, transform 0.8s ease; transform: scale(1) translateX(0); }
-    #s2 { transform: scale(0.95) translateX(20px); }
-    #s3.active { transition: opacity 1s ease, transform 1s ease; transform: scale(1) rotate(0deg); }
-    #s3 { transform: scale(0.98) rotate(-1deg); }
-    .slide:not(#s1):not(#s2):not(#s3) { transition: opacity 0.9s ease; }
-    .slide:not(#s1):not(#s2):not(#s3).active { transition: opacity 0.9s ease; }
-
-    .slide-overlay {
-      position:absolute; inset:0;
-      background:linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.0) 100%);
-    }
-    .slide-overlay.none { display:none; }
-    .slide-overlay.soft { background:rgba(0,0,0,0.15); }
-    .slide-overlay.dark { background:rgba(0,0,0,0.7); }
-    .slide-overlay.medium { background:rgba(0,0,0,0.4); }
-    .slide-overlay.light { background:rgba(0,0,0,0.2); }
-    .slide-overlay.darker { background:rgba(0,0,0,0.6); }
-
+    /* Стиль "будущего" — неоновое свечение */
     .slide-content {
       position:absolute; bottom:80px; left:28px;
       z-index:10; max-width:min(520px,90vw);
@@ -68,71 +45,141 @@
     .slide.active .slide-content { opacity:1; transform:translateY(0); }
 
     .badge {
-      display:inline-block; font-family:'Oswald',sans-serif; font-size:0.58rem; font-weight:700;
-      letter-spacing:0.22em; text-transform:uppercase; color:#c0392b;
-      border:1px solid #c0392b; border-left:3px solid #c0392b;
+      display:inline-block; font-family:'Orbitron',sans-serif; font-size:0.55rem; font-weight:700;
+      letter-spacing:0.25em; text-transform:uppercase;
+      color:#0ff; border:1px solid rgba(0,255,255,0.3); border-left:3px solid #0ff;
       padding:3px 10px; margin-bottom:12px;
+      text-shadow:0 0 10px rgba(0,255,255,0.3);
+      box-shadow:0 0 20px rgba(0,255,255,0.05);
     }
     .slide-title {
-      font-family:'Oswald',sans-serif; font-size:clamp(1.4rem,4vw,2.2rem); font-weight:700;
-      text-transform:uppercase; color:#fff; letter-spacing:0.05em; line-height:1.15;
+      font-family:'Orbitron',sans-serif; font-size:clamp(1.4rem,4vw,2.2rem); font-weight:900;
+      text-transform:uppercase; color:#fff; letter-spacing:0.08em; line-height:1.15;
       margin-bottom:12px;
+      text-shadow:0 0 20px rgba(0,255,255,0.15);
     }
-    .slide-title .red { color:#c0392b; text-shadow:0 0 12px #ff3b2b; }
-    .divider { width:60px; height:2px; background:#c0392b; box-shadow:0 0 8px #ff3b2b; margin-bottom:14px; }
+    .slide-title .red {
+      color:#ff0040;
+      text-shadow:0 0 20px #ff0040, 0 0 40px rgba(255,0,64,0.3);
+    }
+    .divider {
+      width:60px; height:2px;
+      background:linear-gradient(to right,#0ff,transparent);
+      box-shadow:0 0 15px rgba(0,255,255,0.4);
+      margin-bottom:14px;
+    }
 
     .slide-text {
-      font-size:clamp(0.72rem,2vw,0.85rem); line-height:1.9; color:#c8c8b8;
+      font-family:'Share Tech Mono',monospace;
+      font-size:clamp(0.72rem,2vw,0.85rem);
+      line-height:1.9;
+      color:#b0e0e0;
       min-height:1.9em;
     }
     .slide-text .cursor {
       display:inline-block;
       width:2px;
       height:1.1em;
-      background:#f0c040;
+      background:#0ff;
       margin-left:2px;
       vertical-align:text-bottom;
       animation:blink-cursor 0.8s step-end infinite;
+      box-shadow:0 0 10px #0ff;
     }
     @keyframes blink-cursor { 0%,100%{opacity:1} 50%{opacity:0} }
 
-    .slide-text em { color:#f0c040; font-style:normal; }
+    .slide-text em {
+      color:#0ff;
+      font-style:normal;
+      text-shadow:0 0 15px rgba(0,255,255,0.2);
+    }
     .slide-text strong { color:#fff; }
-    .slide-text .danger { color:#c0392b; text-shadow:0 0 8px #ff3b2b; font-family:'Oswald',sans-serif; font-size:1.1em; font-weight:700; }
-    .slide-text .shout { color:#ff6b4a; font-weight:700; font-size:1.2em; }
-    .slide-text .diagnosis { color:#4fc3f7; font-weight:700; }
+    .slide-text .danger {
+      color:#ff0040;
+      text-shadow:0 0 15px #ff0040, 0 0 30px rgba(255,0,64,0.2);
+      font-family:'Orbitron',sans-serif;
+      font-size:1.05em;
+      font-weight:700;
+    }
+    .slide-text .shout {
+      color:#ff6b4a;
+      font-weight:700;
+      font-size:1.2em;
+      text-shadow:0 0 20px rgba(255,107,74,0.3);
+    }
+    .slide-text .diagnosis {
+      color:#4fc3f7;
+      font-weight:700;
+      text-shadow:0 0 15px rgba(79,195,247,0.2);
+    }
+
+    /* Глитч-эффект для заголовков */
+    .slide-title .red::after {
+      content: attr(data-text);
+      position:absolute;
+      left:0;
+      top:0;
+      opacity:0.3;
+      color:#ff0040;
+      transform:translate(2px,-2px);
+      text-shadow:0 0 30px #ff0040;
+      filter:blur(1px);
+    }
 
     .door-choice { display:flex; flex-direction:column; gap:10px; margin-top:6px; }
     .door-btn {
-      font-family:'Oswald',sans-serif; font-size:0.85rem; font-weight:700;
-      letter-spacing:0.1em; text-transform:uppercase;
-      color:#fff; background:rgba(0,0,0,0.7);
-      border:1px solid rgba(192,57,43,0.5); border-left:3px solid #c0392b;
+      font-family:'Orbitron',sans-serif; font-size:0.7rem; font-weight:700;
+      letter-spacing:0.15em; text-transform:uppercase;
+      color:#b0e0e0; background:rgba(0,10,20,0.7);
+      border:1px solid rgba(0,255,255,0.15); border-left:3px solid rgba(0,255,255,0.4);
       padding:11px 18px; cursor:pointer; text-align:left;
-      transition:background 0.2s, border-color 0.2s, box-shadow 0.2s, opacity 0.3s;
+      transition:background 0.3s, border-color 0.3s, box-shadow 0.3s, opacity 0.3s;
       outline:none; max-width:380px; position:relative;
       -webkit-tap-highlight-color:transparent;
+      text-shadow:0 0 10px rgba(0,255,255,0.05);
     }
-    .door-btn:hover { background:rgba(192,57,43,0.15); border-color:#c0392b; box-shadow:0 0 16px rgba(192,57,43,0.3); }
-    .door-btn span { font-size:0.68rem; color:#888; display:block; margin-top:3px; font-family:'Share Tech Mono',monospace; font-weight:400; letter-spacing:0.05em; text-transform:none; }
-    .door-btn.visited { border-color:rgba(76,255,106,0.5); border-left-color:#4cff6a; }
-    .door-btn.visited::after { content:'✓'; position:absolute; right:14px; top:50%; transform:translateY(-50%); color:#4cff6a; font-size:1.1rem; text-shadow:0 0 8px #4cff6a; }
-    .door-btn.visited span { color:#4cff6a; opacity:0.7; }
+    .door-btn:hover {
+      background:rgba(0,255,255,0.05);
+      border-color:rgba(0,255,255,0.4);
+      box-shadow:0 0 30px rgba(0,255,255,0.05);
+    }
+    .door-btn span {
+      font-size:0.55rem; color:#446666; display:block; margin-top:3px;
+      font-family:'Share Tech Mono',monospace; font-weight:400;
+      letter-spacing:0.05em; text-transform:none;
+    }
+    .door-btn.visited {
+      border-color:rgba(76,255,106,0.3);
+      border-left-color:#4cff6a;
+    }
+    .door-btn.visited::after {
+      content:'✓';
+      position:absolute; right:14px; top:50%; transform:translateY(-50%);
+      color:#4cff6a; font-size:1.1rem;
+      text-shadow:0 0 20px #4cff6a;
+    }
+    .door-btn.visited span { color:#4cff6a; opacity:0.5; }
 
     .clue-wrap { display:flex; flex-direction:column; gap:8px; margin-top:4px; }
     .clue-item {
-      border:1px solid rgba(255,255,255,0.12); padding:10px 14px;
+      border:1px solid rgba(0,255,255,0.08); padding:10px 14px;
       display:flex; gap:12px; align-items:center;
-      cursor:pointer; transition:background 0.2s, border-color 0.2s;
-      max-width:400px; background:rgba(0,0,0,0.5);
-      backdrop-filter:blur(4px);
+      cursor:pointer; transition:background 0.3s, border-color 0.3s;
+      max-width:400px; background:rgba(0,10,20,0.5);
+      backdrop-filter:blur(8px);
     }
-    .clue-item:hover { background:rgba(192,57,43,0.15); border-color:rgba(192,57,43,0.6); }
+    .clue-item:hover {
+      background:rgba(0,255,255,0.03);
+      border-color:rgba(0,255,255,0.2);
+    }
     .clue-icon { font-size:1.6rem; flex-shrink:0; }
-    .clue-name { font-family:'Oswald',sans-serif; font-size:0.9rem; font-weight:700; color:#fff; }
-    .clue-reveal { font-size:0.72rem; color:#f0c040; margin-top:4px; display:none; }
+    .clue-name { font-family:'Orbitron',sans-serif; font-size:0.75rem; font-weight:700; color:#b0e0e0; }
+    .clue-reveal {
+      font-size:0.65rem; color:#0ff; margin-top:4px; display:none;
+      text-shadow:0 0 15px rgba(0,255,255,0.1);
+    }
     .clue-item.open .clue-reveal { display:block; }
-    .clue-hint { font-size:0.65rem; color:#888; margin-top:6px; font-style:italic; }
+    .clue-hint { font-size:0.55rem; color:#446666; margin-top:6px; font-style:italic; }
 
     .video-grid {
       display:grid;
@@ -142,27 +189,27 @@
       max-width:400px;
     }
     .video-btn {
-      font-family:'Oswald',sans-serif;
-      font-size:0.65rem;
+      font-family:'Orbitron',sans-serif;
+      font-size:0.55rem;
       font-weight:700;
-      letter-spacing:0.05em;
+      letter-spacing:0.08em;
       text-transform:uppercase;
-      color:#fff;
-      background:rgba(0,0,0,0.6);
-      border:1px solid rgba(192,57,43,0.4);
+      color:#b0e0e0;
+      background:rgba(0,10,20,0.6);
+      border:1px solid rgba(0,255,255,0.1);
       padding:8px 6px;
       cursor:pointer;
-      transition:background 0.2s, border-color 0.2s;
+      transition:background 0.3s, border-color 0.3s;
       text-align:center;
       border-radius:2px;
     }
     .video-btn:hover {
-      background:rgba(192,57,43,0.2);
-      border-color:#c0392b;
+      background:rgba(0,255,255,0.05);
+      border-color:rgba(0,255,255,0.3);
     }
     .video-btn .diag {
       display:block;
-      font-size:0.5rem;
+      font-size:0.45rem;
       color:#4fc3f7;
       font-weight:400;
       margin-top:2px;
@@ -173,15 +220,19 @@
 
     #btn-next {
       position:fixed; bottom:28px; left:28px; z-index:500;
-      font-family:'Oswald',sans-serif; font-size:0.9rem; font-weight:700;
-      letter-spacing:0.2em; text-transform:uppercase;
-      color:#fff; background:transparent;
-      border:1px solid rgba(192,57,43,0.7); border-left:3px solid #c0392b;
+      font-family:'Orbitron',sans-serif; font-size:0.7rem; font-weight:700;
+      letter-spacing:0.25em; text-transform:uppercase;
+      color:#b0e0e0; background:transparent;
+      border:1px solid rgba(0,255,255,0.15); border-left:3px solid rgba(0,255,255,0.3);
       padding:11px 26px; cursor:pointer; outline:none;
-      transition:background 0.2s, box-shadow 0.2s;
+      transition:background 0.3s, box-shadow 0.3s;
       -webkit-tap-highlight-color:transparent;
+      text-shadow:0 0 10px rgba(0,255,255,0.05);
     }
-    #btn-next:hover { background:rgba(192,57,43,0.15); box-shadow:0 0 16px rgba(192,57,43,0.3); }
+    #btn-next:hover {
+      background:rgba(0,255,255,0.03);
+      box-shadow:0 0 30px rgba(0,255,255,0.05);
+    }
     #btn-next::after { content:' ▶'; animation:blink 1.2s step-end infinite; }
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
 
@@ -206,8 +257,8 @@
       #btn-next { left:16px; bottom:20px; }
       .clue-item { padding:8px 12px; }
       .video-grid { grid-template-columns: 1fr 1fr; gap:6px; }
-      .video-btn { font-size:0.55rem; padding:6px 4px; }
-      .video-btn .diag { font-size:0.45rem; }
+      .video-btn { font-size:0.45rem; padding:6px 4px; }
+      .video-btn .diag { font-size:0.4rem; }
     }
   </style>
 </head>
@@ -220,8 +271,8 @@
     <img class="bg" src="entrance.jpg" alt="вход" />
     <div class="slide-overlay"></div>
     <div class="slide-content">
-      <div class="badge">⚠ Активный розыск</div>
-      <div class="slide-title">Объект <span class="red">ЗУБАТКА</span><br>сбежал из учреждения</div>
+      <div class="badge">⚠ АКТИВНЫЙ РОЗЫСК</div>
+      <div class="slide-title">ОБЪЕКТ <span class="red">ЗУБАТКА</span><br>СБЕЖАЛ ИЗ УЧРЕЖДЕНИЯ</div>
       <div class="divider"></div>
       <div class="slide-text" data-type="slow">
         <span class="shout">— Ой, боже!</span> Это случилось сегодня ночью.<br><br>
@@ -238,8 +289,8 @@
     <img class="bg" src="yard.jpg" alt="двор" />
     <div class="slide-overlay"></div>
     <div class="slide-content">
-      <div class="badge">📄 Отчёт врача — рассекречено</div>
-      <div class="slide-title">Двор <span class="red">учреждения</span></div>
+      <div class="badge">📄 ОТЧЁТ ВРАЧА — РАССЕКРЕЧЕНО</div>
+      <div class="slide-title">ДВОР <span class="red">УЧРЕЖДЕНИЯ</span></div>
       <div class="divider"></div>
       <div class="slide-text" data-type="slow">
         <span class="shout">— Да что ж такое!</span><br><br>
@@ -255,8 +306,8 @@
     <img class="bg" src="corridor2.jpg" alt="коридор после анализа" />
     <div class="slide-overlay light"></div>
     <div class="slide-content">
-      <div class="badge">🎧 Акустический анализ</div>
-      <div class="slide-title">В коридоре <span class="red">что-то не так</span></div>
+      <div class="badge">🎧 АКУСТИЧЕСКИЙ АНАЛИЗ</div>
+      <div class="slide-title">В КОРИДОРЕ <span class="red">ЧТО-ТО НЕ ТАК</span></div>
       <div class="divider"></div>
       <div class="slide-text" data-type="slow">
         <span class="shout">— Тихо… Вы слышите?</span><br><br>
@@ -274,33 +325,33 @@
     <img class="bg" src="corridor1.jpg" alt="коридор" />
     <div class="slide-overlay"></div>
     <div class="slide-content">
-      <div class="badge" id="corridor-badge">🚪 Выберите направление</div>
-      <div class="slide-title" id="corridor-title">Куда <span class="red">идём?</span></div>
+      <div class="badge" id="corridor-badge">🚪 ВЫБЕРИТЕ НАПРАВЛЕНИЕ</div>
+      <div class="slide-title" id="corridor-title">КУДА <span class="red">ИДЁМ?</span></div>
       <div class="divider"></div>
       <div class="door-choice">
         <button class="door-btn" id="btn-ward" onclick="enterRoom('ward')">
-          🚪 Палата №15
+          🚪 ПАЛАТА №15
           <span>Основная палата — место побега</span>
         </button>
         <button class="door-btn" id="btn-shorts" onclick="enterRoom('shorts')">
-          📱 Палата №14
+          📱 ПАЛАТА №14
           <span>Отдел шортсозависимости</span>
         </button>
         <button class="door-btn" id="btn-cameras" onclick="enterRoom('cameras')">
-          📹 Комната охраны
+          📹 КОМНАТА ОХРАНЫ
           <span>Система видеонаблюдения</span>
         </button>
       </div>
-      <div id="rooms-hint" style="margin-top:14px;font-size:0.68rem;color:#666;line-height:1.6;"></div>
+      <div id="rooms-hint" style="margin-top:14px;font-size:0.55rem;color:#446666;line-height:1.6;font-family:'Share Tech Mono',monospace;"></div>
     </div>
   </div>
 
-  <!-- ПАЛАТА №15: ward.jpg -->
+  <!-- ПАЛАТА №15: ward.jpg — БЕЗ ОБРЕЗКИ -->
   <div class="slide" id="s-ward1">
     <img class="bg" src="ward.jpg" alt="палата с дырой" />
     <div class="slide-overlay none"></div>
   </div>
-  <!-- ПАЛАТА №15: report.jpg -->
+  <!-- ПАЛАТА №15: report.jpg — БЕЗ ОБРЕЗКИ -->
   <div class="slide" id="s-ward2">
     <img class="bg" src="report.jpg" alt="личное дело" />
     <div class="slide-overlay none"></div>
@@ -311,8 +362,8 @@
     <img class="bg" src="clues.jpg" alt="улики" />
     <div class="slide-overlay soft"></div>
     <div class="slide-content">
-      <div class="badge">🔍 Улики на тумбочке</div>
-      <div class="slide-title">Вещественные <span class="red">доказательства</span></div>
+      <div class="badge">🔍 УЛИКИ НА ТУМБОЧКЕ</div>
+      <div class="slide-title">ВЕЩЕСТВЕННЫЕ <span class="red">ДОКАЗАТЕЛЬСТВА</span></div>
       <div class="divider"></div>
       <div class="slide-text" data-type="fast" style="margin-bottom:8px;">
         <span class="shout">— Ого…</span> Вот что она оставила после себя.
@@ -320,15 +371,15 @@
       <div class="clue-wrap">
         <div class="clue-item" onclick="this.classList.toggle('open')">
           <div class="clue-icon">🦷</div>
-          <div><div class="clue-name">Брекет</div><div class="clue-reveal">«Этот брекет видал больше мемов, чем весь интернет. Он светится в темноте.»</div></div>
+          <div><div class="clue-name">БРЕКЕТ</div><div class="clue-reveal">«Этот брекет видал больше мемов, чем весь интернет. Он светится в темноте.»</div></div>
         </div>
         <div class="clue-item" onclick="this.classList.toggle('open')">
           <div class="clue-icon">📱</div>
-          <div><div class="clue-name">Телефон</div><div class="clue-reveal">«На экране — 600 непросмотренных шортсов. Все с её смехом и мемами.»</div></div>
+          <div><div class="clue-name">ТЕЛЕФОН</div><div class="clue-reveal">«На экране — 600 непросмотренных шортсов. Все с её смехом и мемами.»</div></div>
         </div>
         <div class="clue-item" onclick="this.classList.toggle('open')">
           <div class="clue-icon">👓</div>
-          <div><div class="clue-name">Очки</div><div class="clue-reveal">«С ними она видит мир в формате «лол». Даже стены кажутся смешными.»</div></div>
+          <div><div class="clue-name">ОЧКИ</div><div class="clue-reveal">«С ними она видит мир в формате «лол». Даже стены кажутся смешными.»</div></div>
         </div>
       </div>
       <div class="clue-hint">👆 нажмите на предмет, чтобы узнать детали</div>
@@ -340,8 +391,8 @@
     <img class="bg" src="shorts.jpg" alt="палата с шортсами" />
     <div class="slide-overlay medium"></div>
     <div class="slide-content">
-      <div class="badge">📱 Отдел шортсозависимости</div>
-      <div class="slide-title">Палата №<span class="red">14</span></div>
+      <div class="badge">📱 ОТДЕЛ ШОРТСОЗАВИСИМОСТИ</div>
+      <div class="slide-title">ПАЛАТА №<span class="red">14</span></div>
       <div class="divider"></div>
       <div class="slide-text" data-type="slow">
         <span class="shout">— О, нет…</span><br><br>
@@ -360,8 +411,8 @@
     <img class="bg" src="cameras_door.jpg" alt="дверь в комнату охраны" />
     <div class="slide-overlay medium"></div>
     <div class="slide-content">
-      <div class="badge">🚪 Комната охраны</div>
-      <div class="slide-title">Вы у <span class="red">дверей</span></div>
+      <div class="badge">🚪 КОМНАТА ОХРАНЫ</div>
+      <div class="slide-title">ВЫ У <span class="red">ДВЕРЕЙ</span></div>
       <div class="divider"></div>
       <div class="slide-text" data-type="slow">
         <span class="shout">— Так, мы на месте.</span><br><br>
@@ -378,39 +429,39 @@
     <img class="bg" src="cameras_inside.jpg" alt="внутри комнаты охраны" />
     <div class="slide-overlay darker"></div>
     <div class="slide-content">
-      <div class="badge">📹 Система видеонаблюдения</div>
-      <div class="slide-title">Последние <span class="red">записи</span></div>
+      <div class="badge">📹 СИСТЕМА ВИДЕОНАБЛЮДЕНИЯ</div>
+      <div class="slide-title">ПОСЛЕДНИЕ <span class="red">ЗАПИСИ</span></div>
       <div class="divider"></div>
       <div class="slide-text" data-type="fast" style="margin-bottom:6px;">
         <span class="shout">— Что за…</span> Диагнозы по камерам:
       </div>
       <div class="video-grid">
         <button class="video-btn" onclick="playVideo('cam1.mp4')">
-          📹 Камера 1
+          📹 КАМЕРА 1
           <span class="diag">🔴 Острый приступ ржача</span>
         </button>
         <button class="video-btn" onclick="playVideo('cam2.mp4')">
-          📹 Камера 2
+          📹 КАМЕРА 2
           <span class="diag">🗣️ Уже разговаривает с туалетом</span>
         </button>
         <button class="video-btn" onclick="playVideo('cam3.mp4')">
-          📹 Камера 3
+          📹 КАМЕРА 3
           <span class="diag">🏋️ Рекорд по несмеянию: 19 секунд</span>
         </button>
         <button class="video-btn" onclick="playVideo('cam4.mp4')">
-          📹 Камера 4
+          📹 КАМЕРА 4
           <span class="diag">💪 Делает рекорд на пресс</span>
         </button>
         <button class="video-btn" onclick="playVideo('cam5.mp4')">
-          📹 Камера 5
+          📹 КАМЕРА 5
           <span class="diag">💃 Танцует у кровати 😏😏😏</span>
         </button>
         <button class="video-btn" onclick="playVideo('cam6.mp4')">
-          📹 Камера 6
+          📹 КАМЕРА 6
           <span class="diag">📊 Сходство со смехом 91%</span>
         </button>
         <button class="video-btn" onclick="playVideo('cam7.mp4')" style="grid-column: span 2;">
-          📹 Камера 7
+          📹 КАМЕРА 7
           <span class="diag">🌚 Просто негр</span>
         </button>
       </div>
@@ -428,23 +479,23 @@
     </div>
     <div style="position:absolute; bottom:30px; left:50%; transform:translateX(-50%); z-index:100;">
       <button onclick="closeVideo()" style="
-        font-family:'Oswald',sans-serif; font-size:0.8rem; font-weight:700;
-        letter-spacing:0.1em; text-transform:uppercase;
-        color:#fff; background:rgba(0,0,0,0.7);
-        border:1px solid #c0392b; padding:10px 24px;
-        cursor:pointer; transition:background 0.2s;
-      ">✕ Закрыть видео</button>
+        font-family:'Orbitron',sans-serif; font-size:0.7rem; font-weight:700;
+        letter-spacing:0.15em; text-transform:uppercase;
+        color:#b0e0e0; background:rgba(0,10,20,0.7);
+        border:1px solid rgba(0,255,255,0.15); padding:10px 24px;
+        cursor:pointer; transition:background 0.3s;
+      ">✕ ЗАКРЫТЬ ВИДЕО</button>
     </div>
     <div class="slide-overlay none"></div>
   </div>
 
   <!-- ИТОГ -->
   <div class="slide" id="s-conclusion">
-    <img class="bg" src="corridor1.jpg" alt="коридор" style="filter:brightness(0.2) saturate(0);" />
+    <img class="bg" src="corridor1.jpg" alt="коридор" style="filter:brightness(0.15) saturate(0);" />
     <div class="slide-overlay dark"></div>
     <div class="slide-content">
-      <div class="badge">📋 Расследование завершено</div>
-      <div class="slide-title">Вывод по всем <span class="red">объектам</span></div>
+      <div class="badge">📋 РАССЛЕДОВАНИЕ ЗАВЕРШЕНО</div>
+      <div class="slide-title">ВЫВОД ПО ВСЕМ <span class="red">ОБЪЕКТАМ</span></div>
       <div class="divider"></div>
       <div class="slide-text" data-type="slow">
         <span class="shout">— Ну всё, приплыли…</span><br><br>
@@ -460,11 +511,11 @@
 
   <!-- ЭКСТРЕННОЕ СООБЩЕНИЕ -->
   <div class="slide" id="s10">
-    <img class="bg" src="corridor1.jpg" alt="коридор" style="filter:brightness(0.1) saturate(0);" />
+    <img class="bg" src="corridor1.jpg" alt="коридор" style="filter:brightness(0.08) saturate(0);" />
     <div class="slide-overlay dark"></div>
     <div class="slide-content">
-      <div class="badge">🚨 Экстренное сообщение</div>
-      <div class="slide-title">Объект <span class="red">ЗУБАТКА</span><br>покинула учреждение</div>
+      <div class="badge">🚨 ЭКСТРЕННОЕ СООБЩЕНИЕ</div>
+      <div class="slide-title">ОБЪЕКТ <span class="red">ЗУБАТКА</span><br>ПОКИНУЛА УЧРЕЖДЕНИЕ</div>
       <div class="divider"></div>
       <div class="slide-text" data-type="slow">
         <span class="shout">— АААА! Она сбежала!</span><br><br>
@@ -518,6 +569,7 @@
       const fullHtml = element.innerHTML;
       element.innerHTML = '';
 
+      // Разбиваем на токены (текст и HTML-теги)
       const tokens = [];
       let i = 0;
       while (i < fullHtml.length) {
@@ -539,7 +591,7 @@
         }
       }
 
-      const speed = element.dataset.type === 'fast' ? 12 : 30;
+      const speed = element.dataset.type === 'fast' ? 15 : 35;
       let charIndex = 0;
       let tokenIndex = 0;
       let displayedHtml = '';
@@ -578,13 +630,14 @@
       const textEl = activeSlide.querySelector('.slide-text[data-type]');
       if (textEl && !textEl.dataset.typed) {
         textEl.dataset.typed = 'true';
+        // Сохраняем исходный HTML
         const fullText = textEl.innerHTML;
         textEl.innerHTML = '';
-        setTimeout(() => { typeText(textEl); }, 300);
+        setTimeout(() => { typeText(textEl); }, 400);
       }
     }
 
-    // Запускаем для всех слайдов при переключении
+    // Наблюдатель за активацией слайдов
     const observer = new MutationObserver(() => {
       startTypingOnActiveSlide();
     });
@@ -593,7 +646,7 @@
     });
 
     // Запускаем для первого слайда
-    setTimeout(startTypingOnActiveSlide, 500);
+    setTimeout(startTypingOnActiveSlide, 600);
 
     function playAnalyzerSound() {
       if (analyzerSound && cur === 's3') {
@@ -631,15 +684,15 @@
       const allVisited = done === 3;
 
       if (allVisited) {
-        hint.innerHTML = '<span style="color:#4cff6a">✓ Все комнаты осмотрены. Нажмите «Далее» для вывода.</span>';
+        hint.innerHTML = '<span style="color:#4cff6a;text-shadow:0 0 20px rgba(76,255,106,0.2);">✓ ВСЕ КОМНАТЫ ОСМОТРЕНЫ. НАЖМИТЕ «ДАЛЕЕ» ДЛЯ ВЫВОДА.</span>';
         linearNext = 's-conclusion';
-        document.getElementById('corridor-badge').textContent = '📋 Все данные собраны';
+        document.getElementById('corridor-badge').textContent = '📋 ВСЕ ДАННЫЕ СОБРАНЫ';
         document.querySelector('#s4 .slide-title .red').textContent = 'ВЫВОД';
       } else {
-        hint.innerHTML = `Осмотрено: <span style="color:#f0c040">${done} из 3</span> — вернитесь и проверьте остальные.`;
+        hint.innerHTML = `ОСМОТРЕНО: <span style="color:#f0c040;">${done} ИЗ 3</span> — ВЕРНИТЕСЬ И ПРОВЕРЬТЕ ОСТАЛЬНЫЕ.`;
         linearNext = null;
-        document.getElementById('corridor-badge').textContent = '🚪 Выберите направление';
-        document.querySelector('#s4 .slide-title .red').textContent = 'идём?';
+        document.getElementById('corridor-badge').textContent = '🚪 ВЫБЕРИТЕ НАПРАВЛЕНИЕ';
+        document.querySelector('#s4 .slide-title .red').textContent = 'ИДЁМ?';
       }
     }
 
@@ -671,6 +724,7 @@
         allSlides[cur].classList.add('active');
         flash.classList.remove('go');
 
+        // Сбрасываем флаг typed для нового слайда
         const newTextEl = allSlides[cur].querySelector('.slide-text[data-type]');
         if (newTextEl) {
           newTextEl.dataset.typed = 'false';
@@ -746,4 +800,4 @@
   })();
 </script>
 </body>
-                                       </html>
+  </html>
