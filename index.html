@@ -831,7 +831,7 @@
     .notification .notif-icon { margin-right: 8px; }
 
     /* ============================================ */
-    /* САЛЮТ — ЯРКИЙ, КАК НАСТОЯЩИЙ */
+    /* САЛЮТ */
     /* ============================================ */
     @keyframes firework-boom {
       0% { transform: scale(0) rotate(0deg); opacity: 1; }
@@ -884,6 +884,29 @@
       100% { transform: translate(3px, -2px) rotate(0.4deg); }
     }
 
+    /* ============================================ */
+    /* СТИЛЬ ЗАПИСКИ ОТ САВВЫ (уродские прописи) */
+    /* ============================================ */
+    .savva-note-text {
+      font-family: 'Caveat', cursive;
+      font-weight: 700;
+      font-size: 2.6rem;
+      color: #2a241a;
+      line-height: 1.3;
+      letter-spacing: 5px;
+      transform: none;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+      opacity: 0.8;
+      filter: blur(0.5px);
+    }
+    .savva-note-text .sub {
+      font-size: 1.4rem;
+      color: #4fc3f7;
+      opacity: 1;
+      filter: none;
+      letter-spacing: 2px;
+    }
+
     @media(max-width:500px) {
       .slide-content { left:14px; bottom:60px; max-width:95vw; }
       #btn-next { left:14px; bottom:16px; padding:10px 16px; font-size:0.65rem; }
@@ -912,6 +935,7 @@
       .cake-game-canvas-wrap canvas { max-height:160px; }
       .pickup-btn { font-size:0.5rem; padding:6px 14px; }
       .notification { bottom:75px; font-size:0.6rem; padding:8px 16px; white-space:normal; }
+      .savva-note-text { font-size:1.8rem; letter-spacing:3px; }
     }
   </style>
 </head>
@@ -1092,10 +1116,14 @@
       <div class="badge">💌 ЗАПИСКА ОТ <span class="red">САВВЫ</span></div>
       <div class="slide-title">«КИРА, <span class="savva">ТЫ МНЕ НРАВИШЬСЯ</span>»</div>
       <div class="divider"></div>
-      <div class="slide-text" data-type="slow">
+      <div class="slide-text found" data-type="slow" style="text-align:center; padding:10px 0;">
         <span class="found">✓ Записка поднята!</span><br><br>
-        <em>«Кира, я давно хотел тебе сказать что ты мне нравишься ❤️❤️❤️, очень скучаю по тебе»</em><br><br>
-        <em style="color:#4fc3f7;">— Савва</em>
+        <div class="savva-note-text">
+          Кира, я давно хотел тебе сказать<br>
+          что ты мне нравишься ❤️❤️❤️,<br>
+          очень скучаю по тебе
+          <div class="sub">— Савва</div>
+        </div>
       </div>
     </div>
   </div>
@@ -1359,12 +1387,11 @@
   <div class="modal-window">
     <button class="close-btn" onclick="closeModal('savvaModal')">✕</button>
     <div class="modal-title">💌 ЗАПИСКА ОТ <span class="red">САВВЫ</span></div>
-    <div style="font-family:'Caveat', cursive; font-size:1.4rem; color:#2a241a; background:linear-gradient(180deg, #f5efe0 0%, #e8ddc8 100%); border-radius:8px; padding:24px 20px; line-height:1.8; text-align:center; box-shadow:inset 0 0 30px rgba(0,0,0,0.05);">
-      <div style="font-size:1.6rem; color:#8a3a3a; font-weight:700; margin-bottom:8px;">💌</div>
-      <div style="font-size:1.4rem; margin:8px 0; color:#2a241a;">
-        «Кира, я давно хотел тебе сказать что ты мне нравишься ❤️❤️❤️, очень скучаю по тебе»
-      </div>
-      <div style="font-size:1.2rem; margin-top:12px; color:#4fc3f7; font-weight:700;">— Савва</div>
+    <div style="font-family:'Caveat', cursive; font-weight:700; font-size:2.6rem; color:#2a241a; line-height:1.3; letter-spacing:5px; opacity:0.8; filter:blur(0.5px); text-align:center; padding:30px; background:linear-gradient(180deg, #f5efe0, #e8ddc8); border-radius:10px; box-shadow:0 0 30px rgba(0,0,0,0.3);">
+      Кира, я давно хотел тебе сказать<br>
+      что ты мне нравишься ❤️❤️❤️,<br>
+      очень скучаю по тебе
+      <div style="font-size:1.4rem; color:#4fc3f7; margin-top:10px; opacity:1; filter:none; letter-spacing:2px;">— Савва</div>
     </div>
   </div>
 </div>
@@ -1528,11 +1555,22 @@
     });
     setTimeout(startTypingForActiveSlide, 700);
 
-    // ===== УВЕДОМЛЕНИЕ О ЗАПИСИ В ДНЕВНИКЕ (по сценам) =====
-    let diaryNotifySent = false;
+    // ===== УВЕДОМЛЕНИЕ О НОВОЙ ЗАПИСИ (ТОЛЬКО КЛЮЧЕВЫЕ СЛАЙДЫ) =====
+    const diaryNotificationSlides = {
+      's1': true,
+      's2': true,
+      's3': true,
+      's-ward1': true,
+      's-shorts1': true,
+      's-cameras-door': true,
+      's-conclusion': true,
+      's10': true,
+      's11': true
+    };
+
+    let shownDiaryNotifs = {};
 
     function showDiaryNotification() {
-      // Показываем уведомление о новой записи в дневнике
       const notif = document.createElement('div');
       notif.className = 'notification';
       notif.innerHTML = `<span class="notif-icon">📜</span> Новая запись в дневнике`;
@@ -1544,8 +1582,17 @@
       }, 2500);
     }
 
-    // Отслеживаем переходы на новые слайды (кроме первого)
-    let prevSlide = 's1';
+    function showNotification(text, icon) {
+      const notif = document.createElement('div');
+      notif.className = 'notification';
+      notif.innerHTML = `<span class="notif-icon">${icon}</span> ${text}`;
+      document.body.appendChild(notif);
+      setTimeout(() => { notif.classList.add('show'); }, 50);
+      setTimeout(() => {
+        notif.classList.remove('show');
+        setTimeout(() => { notif.remove(); }, 500);
+      }, 3000);
+    }
 
     // ===== ТРЯСКА ЭКРАНА =====
     function updateShake() {
@@ -1568,7 +1615,7 @@
       if (laughSound) { laughSound.pause(); laughSound.currentTime = 0; }
     }
 
-    // ===== САЛЮТ (ЯРКИЙ) =====
+    // ===== САЛЮТ =====
     function startFireworks() {
       if (cur !== 's11') return;
       const container = document.createElement('div');
@@ -1578,14 +1625,12 @@
 
       const colors = ['#ff1744', '#ffea00', '#00e676', '#2979ff', '#d500f9', '#ff9100', '#00e5ff', '#ff4081', '#76ff03'];
 
-      // Несколько залпов
       for (let burst = 0; burst < 4; burst++) {
         setTimeout(() => {
           const cx = 15 + Math.random() * 70;
           const cy = 15 + Math.random() * 60;
           const color = colors[Math.floor(Math.random() * colors.length)];
 
-          // Центральная вспышка
           const boom = document.createElement('div');
           boom.className = 'firework-boom';
           boom.style.left = cx + '%';
@@ -1594,7 +1639,6 @@
           boom.style.boxShadow = `0 0 40px ${color}`;
           container.appendChild(boom);
 
-          // Искры
           const sparkCount = 30 + Math.floor(Math.random() * 25);
           for (let i = 0; i < sparkCount; i++) {
             const s = document.createElement('div');
@@ -1614,7 +1658,6 @@
             container.appendChild(s);
           }
 
-          // Убираем через 2 секунды после последнего залпа
           if (burst === 3) {
             setTimeout(() => {
               if (container) container.remove();
@@ -1636,10 +1679,12 @@
         birthdayMusic.play().catch(() => {});
         if (ambientMusic) ambientMusic.volume = 0.02;
         setTimeout(startFireworks, 400);
-        // Показываем уведомление о финальной записи
-        setTimeout(() => {
-          showDiaryNotification();
-        }, 600);
+        if (!shownDiaryNotifs['s11']) {
+          shownDiaryNotifs['s11'] = true;
+          setTimeout(() => {
+            showDiaryNotification();
+          }, 600);
+        }
       }
     }
 
@@ -1661,19 +1706,6 @@
       btnNext.style.display = 'block';
       setTimeout(startTypingForActiveSlide, 400);
     };
-
-    // ===== УВЕДОМЛЕНИЯ ПРИ ПОДНЯТИИ =====
-    function showNotification(text, icon) {
-      const notif = document.createElement('div');
-      notif.className = 'notification';
-      notif.innerHTML = `<span class="notif-icon">${icon}</span> ${text}`;
-      document.body.appendChild(notif);
-      setTimeout(() => { notif.classList.add('show'); }, 50);
-      setTimeout(() => {
-        notif.classList.remove('show');
-        setTimeout(() => { notif.remove(); }, 500);
-      }, 3000);
-    }
 
     window.pickupDoctorNote = function() {
       if (doctorPickedUp) return;
@@ -1741,18 +1773,6 @@
       busy = true;
       if (afterFn) afterRoomFn = afterFn;
 
-      // Уведомление о новой записи в дневнике при переключении слайда (кроме первого)
-      if (id !== 's1' && id !== cur) {
-        // Показываем не чаще раза в секунду
-        if (!window._diaryNotifTimer) {
-          setTimeout(() => {
-            showDiaryNotification();
-            window._diaryNotifTimer = null;
-          }, 300);
-          window._diaryNotifTimer = true;
-        }
-      }
-
       stopLaugh();
       flash.classList.add('go');
       setTimeout(() => {
@@ -1762,7 +1782,17 @@
         flash.classList.remove('go');
         setTimeout(startTypingForActiveSlide, 400);
         updateShake();
+
         if (id === 's3') setTimeout(playLaugh, 500);
+
+        // Уведомление о новой записи — только ключевые слайды!
+        if (diaryNotificationSlides[id] && !shownDiaryNotifs[id]) {
+          shownDiaryNotifs[id] = true;
+          setTimeout(() => {
+            showDiaryNotification();
+          }, 600);
+        }
+
         if (id === 's11') {
           setTimeout(playBirthday, 600);
           btnNext.style.display = 'none';
@@ -2676,4 +2706,4 @@
   observerDiary.observe(document.getElementById('diaryModal'), { attributes: true, attributeFilter: ['class'] });
 </script>
 </body>
-      </html>
+        </html>
