@@ -114,6 +114,14 @@
       font-size:1.05em;
       text-shadow:0 0 15px rgba(79,195,247,0.2);
     }
+    .slide-text .hint {
+      color:#888;
+      font-size:0.7rem;
+      font-style:italic;
+      border-top:1px solid rgba(255,255,255,0.05);
+      padding-top:8px;
+      margin-top:8px;
+    }
 
     .door-choice { display:flex; flex-direction:column; gap:10px; margin-top:6px; }
     .door-btn {
@@ -823,7 +831,7 @@
 <div id="flash"></div>
 <div id="stage">
 
-  <!-- 1. ВХОД -->
+  <!-- 1. ВХОД (с подсказкой про плеер) -->
   <div class="slide active" id="s1">
     <img class="bg" src="entrance.jpg" alt="вход" />
     <div class="slide-overlay"></div>
@@ -837,6 +845,7 @@
         <em>— смеющейся как безумная чайка</em><br>
         <em>— сверкающей брекетами в темноте</em><br>
         <em>— разбрасывающей мемы по всему коридору</em>
+        <div class="hint">🎵 Возьмите плеер и включите первый трек для полного погружения.</div>
       </div>
     </div>
   </div>
@@ -987,7 +996,7 @@
     </div>
   </div>
 
-  <!-- ПАЛАТА №14: ЗАПИСКА ОТ САВВЫ (дополнительный слайд) -->
+  <!-- ПАЛАТА №14: ЗАПИСКА ОТ САВВЫ -->
   <div class="slide" id="s-shorts2">
     <img class="bg" src="shorts.jpg" alt="палата с шортсами" />
     <div class="slide-overlay medium"></div>
@@ -1326,14 +1335,18 @@
       } catch(e) {}
     }
 
+    // ---- Функция печати текста (с защитой от двойного запуска) ----
     function typeTextForSlide(slideElement) {
       const textEl = slideElement.querySelector('.slide-text[data-type]');
       if (!textEl) return;
       const slideId = slideElement.id;
+      // Если текст уже напечатан на этом слайде, не запускаем повторно
+      if (textEl.getAttribute('data-typed') === 'true') return;
       if (typingIntervals[slideId]) {
         clearInterval(typingIntervals[slideId]);
         delete typingIntervals[slideId];
       }
+      // Сохраняем оригинал
       if (!textEl.getAttribute('data-original')) {
         textEl.setAttribute('data-original', textEl.innerHTML);
       }
@@ -1373,6 +1386,7 @@
       function typeNext() {
         if (printedChars >= totalChars) {
           textEl.innerHTML = fullHtml;
+          textEl.setAttribute('data-typed', 'true');
           if (typingIntervals[slideId]) {
             clearInterval(typingIntervals[slideId]);
             delete typingIntervals[slideId];
@@ -1403,6 +1417,7 @@
           }
         }
         textEl.innerHTML = fullHtml;
+        textEl.setAttribute('data-typed', 'true');
         if (typingIntervals[slideId]) {
           clearInterval(typingIntervals[slideId]);
           delete typingIntervals[slideId];
@@ -1415,6 +1430,7 @@
     function startTypingForActiveSlide() {
       const activeSlide = document.querySelector('.slide.active');
       if (!activeSlide) return;
+      // Останавливаем все интервалы для других слайдов
       Object.keys(typingIntervals).forEach(key => {
         if (key !== activeSlide.id) {
           clearInterval(typingIntervals[key]);
@@ -1469,25 +1485,23 @@
       setTimeout(startTypingForActiveSlide, 400);
     };
 
-    // ===== ПОДНЯТЬ ЗАКЛЮЧЕНИЕ ВРАЧА (переход на s-ward2) =====
+    // ===== ПОДНЯТЬ ЗАКЛЮЧЕНИЕ ВРАЧА =====
     window.pickupDoctorNote = function() {
       if (doctorPickedUp) return;
       doctorPickedUp = true;
       document.getElementById('pickup-doctor').disabled = true;
       document.getElementById('pickup-doctor').textContent = '✅ ПОДНЯТО';
       document.getElementById('doctor-slot').style.display = 'flex';
-      // Переход на следующий слайд (s-ward2)
       goTo('s-ward2');
     };
 
-    // ===== ПОДНЯТЬ ЗАПИСКУ САВВЫ (переход на s-shorts2) =====
+    // ===== ПОДНЯТЬ ЗАПИСКУ САВВЫ =====
     window.pickupSavvaNote = function() {
       if (savvaPickedUp) return;
       savvaPickedUp = true;
       document.getElementById('pickup-savva').disabled = true;
       document.getElementById('pickup-savva').textContent = '✅ ПОДНЯТО';
       document.getElementById('savva-slot').style.display = 'flex';
-      // Переход на следующий слайд (s-shorts2)
       goTo('s-shorts2');
     };
 
@@ -1727,7 +1741,7 @@
   setInterval(updatePhoneTime, 1000);
   updatePhoneTime();
 
-  // --- ИГРА "ТОРТ В ВЫСЬ" ---
+  // --- ИГРА "ТОРТ В ВЫСЬ" (ИСПРАВЛЕНА) ---
   let cakeGame = null;
   let gameAnimationId = null;
 
@@ -2069,6 +2083,10 @@
     });
 
     updateCakeScore();
+    // Запускаем игровой цикл, если он ещё не запущен
+    if (!gameAnimationId) {
+      gameLoop();
+    }
   }
 
   // --- ПРИЛОЖЕНИЯ ТЕЛЕФОНА ---
@@ -2149,7 +2167,7 @@
     }
   }
 
-  // --- СООБЩЕНИЯ (с Саввой!) ---
+  // --- СООБЩЕНИЯ ---
   const chatMessages = [
     { from: 'zubatka', text: 'Ха-ха! Ты меня ищешь? 😏' },
     { from: 'zubatka', text: 'Я уже в интернете! Там так весело!' },
@@ -2280,7 +2298,7 @@
     return html;
   }
 
-  // --- ЗАМЕТКИ (без спойлеров) ---
+  // --- ЗАМЕТКИ ---
   function getNotesApp() {
     const notes = [
       { title: 'Объект Зубатка', text: 'Сбежала из палаты №15. Смех заразен. Веселье гарантировано.' },
@@ -2335,7 +2353,7 @@
   }
 
   // ============================================
-  // ДНЕВНИК (с Саввой)
+  // ДНЕВНИК
   // ============================================
   const diaryEntries = [
     { id: 'start', text: 'Объект <span class="highlight">Зубатка</span> замечен в коридоре. Поведение: <span class="danger-text">неадекватное</span>.' },
@@ -2453,4 +2471,4 @@
   observerDiary.observe(document.getElementById('diaryModal'), { attributes: true, attributeFilter: ['class'] });
 </script>
 </body>
-      </html>
+  </html>
