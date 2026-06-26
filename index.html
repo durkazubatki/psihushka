@@ -17,20 +17,16 @@
     .slide { position:absolute; inset:0; opacity:0; pointer-events:none; transition:opacity 0.8s ease; overflow:hidden; }
     .slide.active { opacity:1; pointer-events:all; }
 
+    /* ВСЕ ФОТО — БЕЗ ОБРЕЗКИ, КАК ЕСТЬ */
     .slide img.bg {
       position:absolute; inset:0;
       width:100%; height:100%;
       display:block;
-    }
-    .slide img.bg.landscape {
-      object-fit:cover;
-      object-position:center center;
-    }
-    .slide img.bg.vertical {
-      object-fit:contain;
+      object-fit:contain;  /* теперь ВСЕ фото вписываются без обрезки */
       background:#0a0a0a;
     }
 
+    /* лёгкий зум только на первом слайде */
     #s1 img.bg { transform:scale(1); transition:transform 0s; }
     #s1.active img.bg { transform:scale(1.5); transition:transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94); }
 
@@ -120,7 +116,7 @@
 
   <!-- 1. ВХОД -->
   <div class="slide active" id="s1">
-    <img class="bg landscape" src="entrance.jpg" alt="вход" />
+    <img class="bg" src="entrance.jpg" alt="вход" />
     <div class="slide-overlay"></div>
     <div class="slide-content">
       <div class="badge">⚠ Активный розыск</div>
@@ -138,7 +134,7 @@
 
   <!-- 2. ДВОР -->
   <div class="slide" id="s2">
-    <img class="bg landscape" src="yard.jpg" alt="двор" />
+    <img class="bg" src="yard.jpg" alt="двор" />
     <div class="slide-overlay"></div>
     <div class="slide-content">
       <div class="badge">📄 Отчёт врача — рассекречено</div>
@@ -153,9 +149,29 @@
     </div>
   </div>
 
-  <!-- 3. КОРИДОР — ВЫБОР -->
+  <!-- 3. КОРИДОР — анализ звука (corridor2.jpg) -->
   <div class="slide" id="s3">
-    <img class="bg landscape" src="corridor1.jpg" alt="коридор" />
+    <img class="bg" src="corridor2.jpg" alt="коридор после анализа" />
+    <div class="slide-overlay"></div>
+    <div class="slide-content">
+      <div class="badge">🎧 Акустический анализ</div>
+      <div class="slide-title">В коридоре <span class="red">что-то не так</span></div>
+      <div class="divider"></div>
+      <div class="slide-text">
+        <span class="shout">— Тихо… Вы слышите?</span><br><br>
+        Мы провели статистику звуков в коридоре.<br>
+        <strong>Результат:</strong> за последний час зафиксировано:<br>
+        <em>— 47 всплесков смеха</em><br>
+        <em>— 23 звука падающих мемов</em><br>
+        <em>— 1 неопознанный звук — <span class="danger">"ЗУБАТКА"</span></em><br><br>
+        Это явно неспроста. Нам нужно <strong>выбрать направление</strong>.
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. КОРИДОР — ВЫБОР (corridor1.jpg) -->
+  <div class="slide" id="s4">
+    <img class="bg" src="corridor1.jpg" alt="коридор" />
     <div class="slide-overlay"></div>
     <div class="slide-content">
       <div class="badge" id="corridor-badge">🚪 Выберите направление</div>
@@ -179,25 +195,25 @@
     </div>
   </div>
 
-  <!-- ПАЛАТА №15: шаг 1 — corridor2.jpg -->
+  <!-- ПАЛАТА №15: шаг 1 — corridor2.jpg (повторно, но без текста) -->
   <div class="slide" id="s-ward1">
-    <img class="bg landscape" src="corridor2.jpg" alt="коридор после анализа" />
+    <img class="bg" src="corridor2.jpg" alt="коридор" />
     <div class="slide-overlay none"></div>
   </div>
   <!-- ПАЛАТА №15: шаг 2 — ward.jpg -->
   <div class="slide" id="s-ward2">
-    <img class="bg vertical" src="ward.jpg" alt="палата с дырой" />
+    <img class="bg" src="ward.jpg" alt="палата с дырой" />
     <div class="slide-overlay none"></div>
   </div>
   <!-- ПАЛАТА №15: шаг 3 — report.jpg -->
   <div class="slide" id="s-ward3">
-    <img class="bg vertical" src="report.jpg" alt="личное дело" />
+    <img class="bg" src="report.jpg" alt="личное дело" />
     <div class="slide-overlay none"></div>
   </div>
 
   <!-- УЛИКИ — clues.jpg -->
   <div class="slide" id="s-clues">
-    <img class="bg vertical" src="clues.jpg" alt="улики" />
+    <img class="bg" src="clues.jpg" alt="улики" />
     <div class="slide-overlay soft"></div>
     <div class="slide-content">
       <div class="badge">🔍 Улики на тумбочке</div>
@@ -226,13 +242,13 @@
 
   <!-- ПАЛАТА №14: shorts.jpg -->
   <div class="slide" id="s-shorts1">
-    <img class="bg vertical" src="shorts.jpg" alt="палата с шортсами" />
+    <img class="bg" src="shorts.jpg" alt="палата с шортсами" />
     <div class="slide-overlay none"></div>
   </div>
 
-  <!-- КОМНАТА ВИДЕОНАБЛЮДЕНИЯ — cameras.jpg (ТЕПЕРЬ С ТЕКСТОМ!) -->
+  <!-- КОМНАТА ВИДЕОНАБЛЮДЕНИЯ — cameras.jpg -->
   <div class="slide" id="s-cameras">
-    <img class="bg landscape" src="cameras.jpg" alt="комната видеонаблюдения" />
+    <img class="bg" src="cameras.jpg" alt="комната видеонаблюдения" />
     <div class="slide-overlay medium"></div>
     <div class="slide-content">
       <div class="badge">📹 Система видеонаблюдения</div>
@@ -251,7 +267,7 @@
 
   <!-- ИТОГ -->
   <div class="slide" id="s-conclusion">
-    <img class="bg landscape" src="corridor1.jpg" alt="коридор" style="filter:brightness(0.2) saturate(0);" />
+    <img class="bg" src="corridor1.jpg" alt="коридор" style="filter:brightness(0.2) saturate(0);" />
     <div class="slide-overlay dark"></div>
     <div class="slide-content">
       <div class="badge">📋 Расследование завершено</div>
@@ -271,7 +287,7 @@
 
   <!-- ЭКСТРЕННОЕ СООБЩЕНИЕ -->
   <div class="slide" id="s10">
-    <img class="bg landscape" src="corridor1.jpg" alt="коридор" style="filter:brightness(0.1) saturate(0);" />
+    <img class="bg" src="corridor1.jpg" alt="коридор" style="filter:brightness(0.1) saturate(0);" />
     <div class="slide-overlay dark"></div>
     <div class="slide-content">
       <div class="badge">🚨 Экстренное сообщение</div>
@@ -293,7 +309,7 @@
 
   <!-- ФИНАЛ — birthday.jpg -->
   <div class="slide" id="s11">
-    <img class="bg vertical" src="birthday.jpg" alt="с днём рождения" />
+    <img class="bg" src="birthday.jpg" alt="с днём рождения" />
     <div class="slide-overlay none"></div>
     <audio id="bday-music" src="music.mp3" loop preload="auto"></audio>
   </div>
@@ -320,7 +336,7 @@
     const roomSteps = {
       ward:    ['s-ward1','s-ward2','s-ward3','s-clues'],
       shorts:  ['s-shorts1'],
-      cameras: ['s-cameras']  // теперь это полноценный слайд с контентом
+      cameras: ['s-cameras']
     };
 
     function updateCorridorUI() {
@@ -336,12 +352,12 @@
         hint.innerHTML = '<span style="color:#4cff6a">✓ Все комнаты осмотрены. Нажмите «Далее» для вывода.</span>';
         linearNext = 's-conclusion';
         document.getElementById('corridor-badge').textContent = '📋 Все данные собраны';
-        document.querySelector('#s3 .slide-title .red').textContent = 'ВЫВОД';
+        document.querySelector('#s4 .slide-title .red').textContent = 'ВЫВОД';
       } else {
         hint.innerHTML = `Осмотрено: <span style="color:#f0c040">${done} из 3</span> — вернитесь и проверьте остальные.`;
         linearNext = null;
         document.getElementById('corridor-badge').textContent = '🚪 Выберите направление';
-        document.querySelector('#s3 .slide-title .red').textContent = 'идём?';
+        document.querySelector('#s4 .slide-title .red').textContent = 'идём?';
       }
     }
 
@@ -391,14 +407,15 @@
       if (afterRoomFn) {
         const fn = afterRoomFn;
         afterRoomFn = null;
-        goTo('s3');
+        goTo('s4');
         setTimeout(fn, 500);
         return;
       }
 
       if (cur === 's1') { goTo('s2'); return; }
-      if (cur === 's2') { goTo('s3'); updateCorridorUI(); return; }
-      if (cur === 's3' && linearNext) { goTo(linearNext); return; }
+      if (cur === 's2') { goTo('s3'); return; }
+      if (cur === 's3') { goTo('s4'); updateCorridorUI(); return; }
+      if (cur === 's4' && linearNext) { goTo(linearNext); return; }
       if (cur === 's-conclusion') { goTo('s10'); return; }
       if (cur === 's10') { goTo('s11'); return; }
     };
@@ -418,4 +435,4 @@
   })();
 </script>
 </body>
-</html>
+                                 </html>
