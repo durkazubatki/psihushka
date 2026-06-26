@@ -18,7 +18,6 @@
     }
     #stage { position:fixed; inset:0; }
 
-    /* === СЛАЙДЫ === */
     .slide {
       position:absolute; inset:0; opacity:0; pointer-events:none;
       transition: opacity 0.8s ease;
@@ -46,43 +45,43 @@
     .slide-overlay.darker { background:rgba(0,0,0,0.5); }
 
     .slide-content {
-      position:absolute; bottom:100px; left:32px;
-      z-index:10; max-width:min(560px,92vw);
+      position:absolute; bottom:70px; left:28px;
+      z-index:10; max-width:min(520px,90vw);
       opacity:0; transform:translateY(18px);
       transition:opacity 0.7s ease 0.5s, transform 0.7s ease 0.5s;
     }
     .slide.active .slide-content { opacity:1; transform:translateY(0); }
 
     .badge {
-      display:inline-block; font-family:'Oswald',sans-serif; font-size:0.6rem; font-weight:700;
+      display:inline-block; font-family:'Oswald',sans-serif; font-size:0.5rem; font-weight:700;
       letter-spacing:0.2em; text-transform:uppercase;
       color:#c0392b; border:1px solid rgba(192,57,43,0.3); border-left:3px solid #c0392b;
-      padding:4px 12px; margin-bottom:12px;
+      padding:3px 10px; margin-bottom:8px;
     }
     .slide-title {
-      font-family:'Oswald',sans-serif; font-size:clamp(1.6rem,4.5vw,2.4rem); font-weight:700;
-      text-transform:uppercase; color:#fff; letter-spacing:0.05em; line-height:1.15;
-      margin-bottom:12px;
+      font-family:'Oswald',sans-serif; font-size:clamp(1.3rem,3.8vw,2rem); font-weight:700;
+      text-transform:uppercase; color:#fff; letter-spacing:0.05em; line-height:1.1;
+      margin-bottom:8px;
     }
     .slide-title .red { color:#c0392b; text-shadow:0 0 15px rgba(192,57,43,0.2); }
     .divider {
-      width:60px; height:2px;
+      width:50px; height:2px;
       background:#c0392b;
-      margin-bottom:14px;
+      margin-bottom:10px;
     }
 
     .slide-text {
       font-family:'Share Tech Mono',monospace;
-      font-size:clamp(0.85rem,2vw,1rem);
-      line-height:2;
+      font-size:clamp(0.7rem,1.6vw,0.85rem);
+      line-height:1.7;
       color:#b8b8a8;
-      min-height:2em;
+      min-height:1.7em;
       white-space:pre-wrap;
     }
     .slide-text .cursor {
       display:inline-block;
       width:2px;
-      height:1.1em;
+      height:1em;
       background:#c0392b;
       margin-left:2px;
       vertical-align:text-bottom;
@@ -95,29 +94,29 @@
     .slide-text .danger {
       color:#c0392b;
       font-family:'Oswald',sans-serif;
-      font-size:1.1em;
+      font-size:1.05em;
       font-weight:700;
     }
     .slide-text .shout {
       color:#ff6b4a;
       font-weight:700;
-      font-size:1.15em;
+      font-size:1.1em;
     }
 
-    .door-choice { display:flex; flex-direction:column; gap:12px; margin-top:8px; }
+    .door-choice { display:flex; flex-direction:column; gap:10px; margin-top:6px; }
     .door-btn {
-      font-family:'Oswald',sans-serif; font-size:0.9rem; font-weight:700;
+      font-family:'Oswald',sans-serif; font-size:0.8rem; font-weight:700;
       letter-spacing:0.1em; text-transform:uppercase;
       color:#fff; background:rgba(0,0,0,0.6);
       border:1px solid rgba(192,57,43,0.3); border-left:3px solid #c0392b;
-      padding:14px 22px; cursor:pointer; text-align:left;
+      padding:12px 18px; cursor:pointer; text-align:left;
       transition:background 0.3s, border-color 0.3s;
-      outline:none; max-width:420px; position:relative;
+      outline:none; max-width:400px; position:relative;
       -webkit-tap-highlight-color:transparent;
     }
     .door-btn:hover { background:rgba(192,57,43,0.08); border-color:rgba(192,57,43,0.5); }
     .door-btn span {
-      font-size:0.6rem; color:#888; display:block; margin-top:4px;
+      font-size:0.5rem; color:#888; display:block; margin-top:3px;
       font-family:'Share Tech Mono',monospace; font-weight:400;
       letter-spacing:0.05em; text-transform:none;
     }
@@ -127,42 +126,42 @@
     }
     .door-btn.visited::after {
       content:'✓';
-      position:absolute; right:16px; top:50%; transform:translateY(-50%);
-      color:#4cff6a; font-size:1.2rem;
+      position:absolute; right:14px; top:50%; transform:translateY(-50%);
+      color:#4cff6a; font-size:1.1rem;
     }
     .door-btn.visited span { color:#4cff6a; opacity:0.4; }
 
-    .clue-wrap { display:flex; flex-direction:column; gap:10px; margin-top:6px; }
+    .clue-wrap { display:flex; flex-direction:column; gap:8px; margin-top:4px; }
     .clue-item {
-      border:1px solid rgba(255,255,255,0.08); padding:12px 16px;
-      display:flex; gap:14px; align-items:center;
+      border:1px solid rgba(255,255,255,0.08); padding:10px 14px;
+      display:flex; gap:12px; align-items:center;
       cursor:pointer; transition:background 0.3s, border-color 0.3s;
-      max-width:440px; background:rgba(0,0,0,0.4);
+      max-width:420px; background:rgba(0,0,0,0.4);
     }
     .clue-item:hover { background:rgba(192,57,43,0.05); border-color:rgba(192,57,43,0.15); }
-    .clue-icon { font-size:1.8rem; flex-shrink:0; }
-    .clue-name { font-family:'Oswald',sans-serif; font-size:0.9rem; font-weight:700; color:#fff; }
-    .clue-reveal { font-size:0.75rem; color:#f0c040; margin-top:4px; display:none; }
+    .clue-icon { font-size:1.6rem; flex-shrink:0; }
+    .clue-name { font-family:'Oswald',sans-serif; font-size:0.8rem; font-weight:700; color:#fff; }
+    .clue-reveal { font-size:0.65rem; color:#f0c040; margin-top:4px; display:none; }
     .clue-item.open .clue-reveal { display:block; }
-    .clue-hint { font-size:0.6rem; color:#666; margin-top:6px; font-style:italic; }
+    .clue-hint { font-size:0.5rem; color:#666; margin-top:6px; font-style:italic; }
 
     .video-grid {
       display:grid;
       grid-template-columns: 1fr 1fr;
-      gap:10px;
-      margin-top:10px;
-      max-width:480px;
+      gap:8px;
+      margin-top:8px;
+      max-width:460px;
     }
     .video-btn {
       font-family:'Oswald',sans-serif;
-      font-size:0.7rem;
+      font-size:0.6rem;
       font-weight:700;
       letter-spacing:0.08em;
       text-transform:uppercase;
       color:#fff;
       background:rgba(0,0,0,0.5);
       border:1px solid rgba(192,57,43,0.15);
-      padding:12px 10px;
+      padding:10px 8px;
       cursor:pointer;
       transition:background 0.3s, border-color 0.3s;
       text-align:center;
@@ -172,22 +171,22 @@
     .video-btn:hover { background:rgba(192,57,43,0.08); border-color:rgba(192,57,43,0.3); }
     .video-btn .diag {
       display:block;
-      font-size:0.5rem;
+      font-size:0.45rem;
       color:#4fc3f7;
       font-weight:400;
-      margin-top:3px;
+      margin-top:2px;
       letter-spacing:0.02em;
       text-transform:none;
       font-family:'Share Tech Mono',monospace;
     }
 
     #btn-next {
-      position:fixed; bottom:32px; left:32px; z-index:500;
-      font-family:'Oswald',sans-serif; font-size:0.9rem; font-weight:700;
+      position:fixed; bottom:24px; left:28px; z-index:500;
+      font-family:'Oswald',sans-serif; font-size:0.8rem; font-weight:700;
       letter-spacing:0.2em; text-transform:uppercase;
       color:#fff; background:transparent;
       border:1px solid rgba(192,57,43,0.3); border-left:3px solid #c0392b;
-      padding:14px 30px; cursor:pointer; outline:none;
+      padding:12px 26px; cursor:pointer; outline:none;
       transition:background 0.3s;
       -webkit-tap-highlight-color:transparent;
     }
@@ -208,15 +207,15 @@
     .video-container video { max-width:100%; max-height:100%; object-fit:contain; }
 
     /* ============================================ */
-    /* КНОПКА ОТКРЫТИЯ ИНВЕНТАРЯ */
+    /* ИНВЕНТАРЬ */
     /* ============================================ */
     #inventory-toggle {
-      position:fixed; bottom:32px; right:32px; z-index:1500;
-      font-family:'Oswald',sans-serif; font-size:0.7rem; font-weight:700;
+      position:fixed; bottom:24px; right:28px; z-index:1500;
+      font-family:'Oswald',sans-serif; font-size:0.6rem; font-weight:700;
       letter-spacing:0.15em; text-transform:uppercase;
       color:#fff; background:rgba(0,0,0,0.7);
       border:1px solid rgba(192,57,43,0.3); border-left:3px solid #c0392b;
-      padding:12px 20px; cursor:pointer; outline:none;
+      padding:10px 18px; cursor:pointer; outline:none;
       transition:background 0.3s, transform 0.3s;
       -webkit-tap-highlight-color:transparent;
       backdrop-filter:blur(4px);
@@ -224,28 +223,25 @@
     }
     #inventory-toggle:hover { background:rgba(192,57,43,0.1); transform:scale(1.02); }
 
-    /* ============================================ */
-    /* ИНВЕНТАРЬ (выезжает снизу) */
-    /* ============================================ */
     #inventory {
-      position:fixed; bottom:-120px; left:0; right:0;
+      position:fixed; bottom:-110px; left:0; right:0;
       z-index:1400;
       background:rgba(0,0,0,0.92);
       border-top:1px solid rgba(192,57,43,0.2);
-      padding:12px 16px;
+      padding:10px 16px;
       display:flex;
       justify-content:center;
-      gap:16px;
+      gap:14px;
       backdrop-filter:blur(8px);
-      height:100px;
+      height:90px;
       align-items:center;
       transition:bottom 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
     }
     #inventory.open { bottom:0; }
 
     .inv-slot {
-      width:72px;
-      height:72px;
+      width:64px;
+      height:64px;
       background:rgba(20,20,20,0.9);
       border:1px solid rgba(255,255,255,0.05);
       border-radius:10px;
@@ -254,7 +250,7 @@
       display:flex;
       align-items:center;
       justify-content:center;
-      font-size:2.2rem;
+      font-size:2rem;
       position:relative;
       overflow:hidden;
     }
@@ -264,15 +260,15 @@
       transform:scale(1.05);
     }
     .inv-slot img {
-      width:56px;
-      height:56px;
+      width:48px;
+      height:48px;
       object-fit:contain;
       border-radius:4px;
     }
     .inv-slot .label {
       position:absolute;
       bottom:2px;
-      font-size:0.4rem;
+      font-size:0.35rem;
       color:#666;
       font-family:'Share Tech Mono',monospace;
       letter-spacing:0.05em;
@@ -301,9 +297,9 @@
     .modal-window {
       background:rgba(10,10,10,0.95);
       border:1px solid rgba(192,57,43,0.2);
-      border-radius:16px;
-      padding:24px;
-      max-width:440px;
+      border-radius:14px;
+      padding:20px;
+      max-width:420px;
       width:90%;
       max-height:80vh;
       overflow-y:auto;
@@ -311,9 +307,9 @@
       position:relative;
     }
     .modal-window .close-btn {
-      position:absolute; top:12px; right:16px;
+      position:absolute; top:10px; right:14px;
       background:none; border:none;
-      color:#666; font-size:1.8rem;
+      color:#666; font-size:1.6rem;
       cursor:pointer;
       transition:color 0.3s;
       font-family:'Share Tech Mono',monospace;
@@ -321,12 +317,12 @@
     .modal-window .close-btn:hover { color:#c0392b; }
     .modal-title {
       font-family:'Oswald',sans-serif;
-      font-size:1.2rem;
+      font-size:1rem;
       font-weight:700;
       text-transform:uppercase;
       color:#fff;
       letter-spacing:0.1em;
-      margin-bottom:16px;
+      margin-bottom:14px;
       text-align:center;
     }
     .modal-title .red { color:#c0392b; }
@@ -336,11 +332,11 @@
     /* ============================================ */
     .player-display {
       text-align:center;
-      margin:12px 0;
+      margin:10px 0;
     }
     .player-display .track-name {
       color:#fff;
-      font-size:1rem;
+      font-size:0.9rem;
       font-family:'Oswald',sans-serif;
       font-weight:700;
       letter-spacing:0.05em;
@@ -348,23 +344,23 @@
     }
     .player-display .track-artist {
       color:#666;
-      font-size:0.7rem;
+      font-size:0.6rem;
       font-family:'Share Tech Mono',monospace;
     }
     .player-controls {
       display:flex;
       justify-content:center;
-      gap:16px;
-      margin:16px 0;
+      gap:14px;
+      margin:14px 0;
     }
     .player-controls button {
       background:rgba(192,57,43,0.1);
       border:1px solid rgba(192,57,43,0.2);
       color:#fff;
-      width:48px;
-      height:48px;
+      width:42px;
+      height:42px;
       border-radius:50%;
-      font-size:1.2rem;
+      font-size:1rem;
       cursor:pointer;
       transition:all 0.3s;
       display:flex;
@@ -379,13 +375,13 @@
     .player-tracks {
       display:flex;
       flex-direction:column;
-      gap:6px;
-      margin-top:12px;
+      gap:5px;
+      margin-top:10px;
       border-top:1px solid rgba(255,255,255,0.05);
-      padding-top:12px;
+      padding-top:10px;
     }
     .player-tracks .track-item {
-      padding:8px 12px;
+      padding:6px 10px;
       background:rgba(255,255,255,0.03);
       border-radius:6px;
       cursor:pointer;
@@ -394,7 +390,7 @@
       justify-content:space-between;
       align-items:center;
       color:#888;
-      font-size:0.75rem;
+      font-size:0.7rem;
       font-family:'Share Tech Mono',monospace;
     }
     .player-tracks .track-item:hover {
@@ -408,109 +404,275 @@
     }
     .player-tracks .track-item .track-num {
       color:#444;
-      margin-right:12px;
-      font-size:0.6rem;
+      margin-right:10px;
+      font-size:0.55rem;
+      min-width:24px;
+      display:inline-block;
     }
 
     /* ============================================ */
-    /* ТЕЛЕФОН — ЧАТ */
+    /* ТЕЛЕФОН — КАК НАСТОЯЩИЙ */
     /* ============================================ */
-    .chat-container {
-      max-height:300px;
+    .phone-frame {
+      background:linear-gradient(145deg, #1a1a1a, #0d0d0d);
+      border-radius:30px;
+      padding:12px 12px 8px 12px;
+      box-shadow:0 0 40px rgba(0,0,0,0.8), inset 0 0 20px rgba(255,255,255,0.02);
+      max-width:340px;
+      margin:0 auto;
+      position:relative;
+    }
+    .phone-frame .phone-notch {
+      position:absolute;
+      top:6px;
+      left:50%;
+      transform:translateX(-50%);
+      width:120px;
+      height:22px;
+      background:#0d0d0d;
+      border-radius:0 0 14px 14px;
+      z-index:10;
+    }
+    .phone-frame .phone-notch::after {
+      content:''; position:absolute;
+      top:4px; left:50%; transform:translateX(-50%);
+      width:50px; height:6px;
+      background:#1a1a1a;
+      border-radius:10px;
+    }
+    .phone-screen {
+      background:linear-gradient(180deg, #0a0a0a, #111);
+      border-radius:20px;
+      padding:30px 12px 16px 12px;
+      min-height:420px;
+      position:relative;
+      overflow:hidden;
+    }
+    .phone-screen .phone-time {
+      position:absolute;
+      top:8px;
+      left:50%;
+      transform:translateX(-50%);
+      color:#888;
+      font-size:0.6rem;
+      font-family:'Share Tech Mono',monospace;
+      letter-spacing:0.1em;
+    }
+    .phone-screen .phone-battery {
+      position:absolute;
+      top:8px;
+      right:14px;
+      color:#4cff6a;
+      font-size:0.5rem;
+    }
+    .phone-screen .phone-wifi {
+      position:absolute;
+      top:8px;
+      right:50px;
+      color:#888;
+      font-size:0.5rem;
+    }
+
+    .phone-apps {
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:12px;
+      margin-top:16px;
+    }
+    .phone-app {
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:4px;
+      cursor:pointer;
+      transition:transform 0.2s;
+      padding:6px;
+      border-radius:12px;
+    }
+    .phone-app:hover { transform:scale(1.05); background:rgba(255,255,255,0.02); }
+    .phone-app .app-icon {
+      width:52px;
+      height:52px;
+      border-radius:14px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:1.8rem;
+      box-shadow:0 4px 15px rgba(0,0,0,0.3);
+    }
+    .phone-app .app-icon.green { background:linear-gradient(135deg, #34c759, #28a745); }
+    .phone-app .app-icon.blue { background:linear-gradient(135deg, #007aff, #0055cc); }
+    .phone-app .app-icon.purple { background:linear-gradient(135deg, #af52de, #8944b8); }
+    .phone-app .app-icon.red { background:linear-gradient(135deg, #ff3b30, #cc2a20); }
+    .phone-app .app-icon.orange { background:linear-gradient(135deg, #ff9500, #cc7700); }
+    .phone-app .app-icon.pink { background:linear-gradient(135deg, #ff2d55, #cc1a3a); }
+    .phone-app .app-name {
+      color:#888;
+      font-size:0.45rem;
+      font-family:'Share Tech Mono',monospace;
+      text-align:center;
+      line-height:1.2;
+      max-width:56px;
+    }
+
+    .phone-home-indicator {
+      width:120px;
+      height:4px;
+      background:rgba(255,255,255,0.1);
+      border-radius:4px;
+      margin:12px auto 0;
+    }
+
+    .phone-app-content {
+      margin-top:4px;
+      max-height:320px;
       overflow-y:auto;
       padding-right:4px;
-      margin-bottom:12px;
     }
-    .chat-container::-webkit-scrollbar { width:4px; }
-    .chat-container::-webkit-scrollbar-track { background:rgba(255,255,255,0.02); }
-    .chat-container::-webkit-scrollbar-thumb { background:#c0392b; border-radius:2px; }
+    .phone-app-content::-webkit-scrollbar { width:3px; }
+    .phone-app-content::-webkit-scrollbar-track { background:rgba(255,255,255,0.02); }
+    .phone-app-content::-webkit-scrollbar-thumb { background:#c0392b; border-radius:2px; }
 
-    .chat-msg {
-      padding:8px 12px;
-      margin-bottom:6px;
-      border-radius:8px;
-      max-width:85%;
-      font-size:0.8rem;
-      line-height:1.6;
+    /* Сообщения в телефоне */
+    .phone-msg {
+      padding:6px 10px;
+      margin-bottom:4px;
+      border-radius:10px;
+      max-width:80%;
+      font-size:0.6rem;
+      line-height:1.4;
       font-family:'Share Tech Mono',monospace;
       animation:msgAppear 0.3s ease;
     }
-    @keyframes msgAppear { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
-
-    .chat-msg.left {
+    .phone-msg.left {
       background:rgba(255,255,255,0.05);
       color:#b8b8a8;
       align-self:flex-start;
       border-left:2px solid rgba(192,57,43,0.3);
+      margin-right:auto;
     }
-    .chat-msg.right {
+    .phone-msg.right {
       background:rgba(192,57,43,0.08);
       color:#e8d8d8;
       align-self:flex-end;
       margin-left:auto;
       border-right:2px solid rgba(192,57,43,0.2);
     }
-    .chat-msg .msg-time {
-      font-size:0.45rem;
+    .phone-msg .msg-time {
+      font-size:0.35rem;
       color:#444;
       display:block;
-      margin-top:4px;
+      margin-top:2px;
     }
-    .chat-msg .meme-text {
-      color:#f0c040;
-      font-weight:700;
-      font-size:1.1em;
-    }
-    .chat-msg .em { color:#f0c040; font-style:normal; }
+    .phone-msg .meme-text { color:#f0c040; font-weight:700; }
+    .phone-msg .em { color:#f0c040; font-style:normal; }
 
-    .chat-input-area {
+    .phone-input-area {
       display:flex;
-      gap:8px;
+      gap:6px;
       margin-top:8px;
       border-top:1px solid rgba(255,255,255,0.05);
-      padding-top:12px;
+      padding-top:8px;
     }
-    .chat-input-area input {
+    .phone-input-area input {
       flex:1;
       background:rgba(255,255,255,0.03);
       border:1px solid rgba(255,255,255,0.05);
-      border-radius:6px;
-      padding:8px 12px;
+      border-radius:8px;
+      padding:6px 10px;
       color:#fff;
       font-family:'Share Tech Mono',monospace;
-      font-size:0.7rem;
+      font-size:0.5rem;
       outline:none;
       transition:border-color 0.3s;
     }
-    .chat-input-area input:focus { border-color:rgba(192,57,43,0.3); }
-    .chat-input-area input::placeholder { color:#444; }
-    .chat-input-area button {
+    .phone-input-area input:focus { border-color:rgba(192,57,43,0.3); }
+    .phone-input-area input::placeholder { color:#444; }
+    .phone-input-area button {
       background:rgba(192,57,43,0.1);
       border:1px solid rgba(192,57,43,0.2);
       color:#fff;
-      padding:8px 16px;
-      border-radius:6px;
+      padding:6px 12px;
+      border-radius:8px;
       cursor:pointer;
       font-family:'Oswald',sans-serif;
-      font-size:0.6rem;
+      font-size:0.45rem;
       letter-spacing:0.05em;
       transition:all 0.3s;
     }
-    .chat-input-area button:hover {
+    .phone-input-area button:hover {
       background:rgba(192,57,43,0.2);
       border-color:#c0392b;
     }
 
     /* ============================================ */
-    /* ДНЕВНИК — СТИЛЬ БУМАГИ */
+    /* ИГРА "ТОРТ В ВЫСЬ" */
+    /* ============================================ */
+    .cake-game-container {
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:6px;
+      padding:4px 0;
+    }
+    .cake-game-canvas-wrap {
+      background:rgba(0,0,0,0.3);
+      border-radius:10px;
+      padding:4px;
+      border:1px solid rgba(255,255,255,0.05);
+      width:100%;
+      display:flex;
+      justify-content:center;
+    }
+    .cake-game-canvas-wrap canvas {
+      width:100%;
+      height:auto;
+      max-height:220px;
+      border-radius:6px;
+      background:rgba(10,10,10,0.5);
+      display:block;
+    }
+    .cake-game-stats {
+      display:flex;
+      gap:16px;
+      font-size:0.5rem;
+      color:#888;
+      font-family:'Share Tech Mono',monospace;
+    }
+    .cake-game-stats span { color:#f0c040; }
+    .cake-game-controls {
+      display:flex;
+      gap:8px;
+    }
+    .cake-game-controls button {
+      font-family:'Oswald',sans-serif;
+      font-size:0.5rem;
+      font-weight:700;
+      letter-spacing:0.05em;
+      text-transform:uppercase;
+      color:#fff;
+      background:rgba(192,57,43,0.1);
+      border:1px solid rgba(192,57,43,0.2);
+      padding:4px 14px;
+      border-radius:6px;
+      cursor:pointer;
+      transition:all 0.3s;
+    }
+    .cake-game-controls button:hover {
+      background:rgba(192,57,43,0.2);
+      border-color:#c0392b;
+    }
+
+    /* ============================================ */
+    /* ДНЕВНИК */
     /* ============================================ */
     .diary-page {
       background:linear-gradient(180deg, #f5efe0 0%, #e8ddc8 100%);
       border-radius:8px;
-      padding:24px 20px;
+      padding:20px 18px;
       box-shadow:0 0 40px rgba(0,0,0,0.5), inset 0 0 30px rgba(0,0,0,0.05);
       position:relative;
-      min-height:300px;
+      min-height:250px;
       color:#2a241a;
     }
     .diary-page::before {
@@ -523,18 +685,18 @@
     }
     .diary-page .diary-date {
       font-family:'Caveat', cursive;
-      font-size:1.2rem;
+      font-size:1.1rem;
       color:#8a3a3a;
       text-align:right;
-      margin-bottom:8px;
+      margin-bottom:2px;
       font-weight:700;
     }
     .diary-page .diary-entry-text {
       font-family:'Caveat', cursive;
-      font-size:1.2rem;
-      line-height:2.2;
+      font-size:1.1rem;
+      line-height:2;
       color:#2a241a;
-      margin-bottom:12px;
+      margin-bottom:10px;
       opacity:0;
       transform:translateY(10px);
       transition:opacity 0.6s ease, transform 0.6s ease;
@@ -547,25 +709,18 @@
     .diary-page .diary-entry-text .danger-text { color:#b22222; font-weight:700; }
     .diary-page .diary-entry-text .em { color:#8a6a3a; font-style:italic; }
 
-    .diary-page .diary-divider {
-      border:none;
-      height:1px;
-      background:linear-gradient(to right, transparent, rgba(0,0,0,0.1), transparent);
-      margin:12px 0;
-    }
-
     .diary-unlock-btn {
       display:block;
-      margin:12px auto 0;
+      margin:10px auto 0;
       font-family:'Oswald',sans-serif;
-      font-size:0.6rem;
+      font-size:0.5rem;
       font-weight:700;
       letter-spacing:0.1em;
       text-transform:uppercase;
       color:#fff;
       background:rgba(192,57,43,0.15);
       border:1px solid rgba(192,57,43,0.2);
-      padding:8px 20px;
+      padding:6px 16px;
       border-radius:6px;
       cursor:pointer;
       transition:all 0.3s;
@@ -577,28 +732,32 @@
 
     #btn-next { z-index:900; }
 
-    /* ============================================ */
-    /* АДАПТИВ */
-    /* ============================================ */
     @media(max-width:500px) {
-      .slide-content { left:16px; bottom:80px; max-width:95vw; }
-      #btn-next { left:16px; bottom:20px; padding:12px 20px; font-size:0.75rem; }
-      #inventory-toggle { bottom:20px; right:16px; padding:10px 16px; font-size:0.6rem; }
-      .slide-title { font-size:clamp(1.3rem,3.5vw,1.8rem); }
-      .slide-text { font-size:clamp(0.7rem,1.6vw,0.85rem); }
-      .door-btn { font-size:0.7rem; padding:12px 16px; max-width:100%; }
-      .door-btn span { font-size:0.5rem; }
-      #inventory { height:80px; padding:8px 12px; gap:12px; }
+      .slide-content { left:14px; bottom:60px; max-width:95vw; }
+      #btn-next { left:14px; bottom:16px; padding:10px 16px; font-size:0.65rem; }
+      #inventory-toggle { bottom:16px; right:14px; padding:8px 14px; font-size:0.5rem; }
+      .slide-title { font-size:clamp(1.1rem,3vw,1.5rem); }
+      .slide-text { font-size:clamp(0.6rem,1.4vw,0.75rem); line-height:1.5; }
+      .door-btn { font-size:0.6rem; padding:10px 14px; max-width:100%; }
+      .door-btn span { font-size:0.4rem; }
+      #inventory { height:72px; padding:6px 10px; gap:10px; }
       #inventory.open { bottom:0; }
-      .inv-slot { width:56px; height:56px; font-size:1.8rem; }
-      .inv-slot img { width:42px; height:42px; }
-      .modal-window { padding:16px; max-width:95%; }
-      .player-controls button { width:40px; height:40px; font-size:1rem; }
-      .video-grid { grid-template-columns: 1fr 1fr; gap:8px; max-width:100%; }
-      .video-btn { font-size:0.55rem; padding:10px 6px; }
-      .video-btn .diag { font-size:0.4rem; }
-      .diary-page { padding:16px; }
-      .diary-page .diary-entry-text { font-size:1rem; }
+      .inv-slot { width:48px; height:48px; font-size:1.6rem; }
+      .inv-slot img { width:36px; height:36px; }
+      .modal-window { padding:14px; max-width:95%; }
+      .player-controls button { width:36px; height:36px; font-size:0.9rem; }
+      .video-grid { grid-template-columns: 1fr 1fr; gap:6px; max-width:100%; }
+      .video-btn { font-size:0.45rem; padding:8px 4px; }
+      .video-btn .diag { font-size:0.35rem; }
+      .diary-page { padding:14px; }
+      .diary-page .diary-entry-text { font-size:0.95rem; line-height:1.8; }
+      .phone-frame { max-width:280px; padding:8px 8px 4px 8px; border-radius:20px; }
+      .phone-screen { padding:24px 8px 12px 8px; min-height:350px; border-radius:14px; }
+      .phone-apps { gap:8px; }
+      .phone-app .app-icon { width:40px; height:40px; font-size:1.2rem; }
+      .phone-app .app-name { font-size:0.35rem; }
+      .phone-msg { font-size:0.5rem; padding:4px 8px; }
+      .cake-game-canvas-wrap canvas { max-height:160px; }
     }
   </style>
 </head>
@@ -615,7 +774,7 @@
       <div class="slide-title">ОБЪЕКТ <span class="red">ЗУБАТКА</span><br>СБЕЖАЛ ИЗ УЧРЕЖДЕНИЯ</div>
       <div class="divider"></div>
       <div class="slide-text" data-type="slow">
-        <span class="shout">— Ой, боже!</span> Это случилось сегодня ночью.<br><br>
+        <span class="shout">— Ой, боже!</span> Это случилось сегодня ночью.<br>
         Последний раз её видели:<br>
         <em>— смеющейся как безумная чайка</em><br>
         <em>— сверкающей брекетами в темноте</em><br>
@@ -633,8 +792,8 @@
       <div class="slide-title">ДВОР <span class="red">УЧРЕЖДЕНИЯ</span></div>
       <div class="divider"></div>
       <div class="slide-text" data-type="slow">
-        <span class="shout">— Да что ж такое!</span><br><br>
-        <strong>«Пациентка вела себя спокойно<br>примерно <em>7 секунд</em>. А потом…»</strong><br><br>
+        <span class="shout">— Да что ж такое!</span><br>
+        <strong>«Пациентка вела себя спокойно<br>примерно <em>7 секунд</em>. А потом…»</strong><br>
         После получения доступа к интернету произошёл <span class="danger">инцидент</span>.<br>
         <em>— Она смеялась так, что стены дрожали.</em>
       </div>
@@ -650,10 +809,10 @@
       <div class="slide-title">В КОРИДОРЕ <span class="red">ЧТО-ТО НЕ ТАК</span></div>
       <div class="divider"></div>
       <div class="slide-text" data-type="slow">
-        <span class="shout">— Тихо… Вы слышите?</span><br><br>
+        <span class="shout">— Тихо… Вы слышите?</span><br>
         Из одной из палат доносится <span class="danger">странный звук</span>.<br>
         <em>— Это похоже на подавленный смех.</em><br>
-        <em>— Или на звук падающих мемов.</em><br><br>
+        <em>— Или на звук падающих мемов.</em><br>
         <strong>Нужно проверить каждую комнату.</strong>
       </div>
     </div>
@@ -682,7 +841,7 @@
           <span>Система видеонаблюдения</span>
         </button>
       </div>
-      <div id="rooms-hint" style="margin-top:16px;font-size:0.6rem;color:#666;line-height:1.6;font-family:'Share Tech Mono',monospace;"></div>
+      <div id="rooms-hint" style="margin-top:12px;font-size:0.5rem;color:#666;line-height:1.6;font-family:'Share Tech Mono',monospace;"></div>
     </div>
   </div>
 
@@ -698,7 +857,7 @@
       <div class="badge">🔍 УЛИКИ НА ТУМБОЧКЕ</div>
       <div class="slide-title">ВЕЩЕСТВЕННЫЕ <span class="red">ДОКАЗАТЕЛЬСТВА</span></div>
       <div class="divider"></div>
-      <div class="slide-text" data-type="fast" style="margin-bottom:8px;">
+      <div class="slide-text" data-type="fast" style="margin-bottom:6px;">
         <span class="shout">— Ого…</span> Вот что она оставила после себя.
       </div>
       <div class="clue-wrap">
@@ -728,11 +887,11 @@
       <div class="slide-title">ПАЛАТА №<span class="red">14</span></div>
       <div class="divider"></div>
       <div class="slide-text" data-type="slow">
-        <span class="shout">— О, нет…</span><br><br>
+        <span class="shout">— О, нет…</span><br>
         Вся палата завалена <span class="danger">шортсами</span>.<br>
         <em>— 600 видео с её смехом</em><br>
         <em>— 400 видео с мемами</em><br>
-        <em>— 200 видео с реакциями на мемы</em><br><br>
+        <em>— 200 видео с реакциями на мемы</em><br>
         <strong>Диагноз:</strong> острая <span class="danger">шортсозависимость</span>.<br>
         Прогноз: <em>неблагоприятный для рассудка.</em>
       </div>
@@ -748,10 +907,10 @@
       <div class="slide-title">ВЫ У <span class="red">ДВЕРЕЙ</span></div>
       <div class="divider"></div>
       <div class="slide-text" data-type="slow">
-        <span class="shout">— Так, мы на месте.</span><br><br>
+        <span class="shout">— Так, мы на месте.</span><br>
         Дверь в комнату охраны приоткрыта.<br>
         <em>— Оттуда доносится странный писк.</em><br>
-        <em>— Похоже, камеры всё ещё работают.</em><br><br>
+        <em>— Похоже, камеры всё ещё работают.</em><br>
         <strong>Нужно войти и проверить записи.</strong>
       </div>
     </div>
@@ -790,7 +949,7 @@
       </video>
     </div>
     <div style="position:absolute; bottom:30px; left:50%; transform:translateX(-50%); z-index:100;">
-      <button onclick="closeVideo()" style="font-family:'Oswald',sans-serif; font-size:0.8rem; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:#fff; background:rgba(0,0,0,0.6); border:1px solid rgba(192,57,43,0.3); padding:12px 28px; cursor:pointer; transition:background 0.3s;">✕ ЗАКРЫТЬ ВИДЕО</button>
+      <button onclick="closeVideo()" style="font-family:'Oswald',sans-serif; font-size:0.7rem; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:#fff; background:rgba(0,0,0,0.6); border:1px solid rgba(192,57,43,0.3); padding:10px 24px; cursor:pointer; transition:background 0.3s;">✕ ЗАКРЫТЬ ВИДЕО</button>
     </div>
     <div class="slide-overlay none"></div>
   </div>
@@ -804,12 +963,12 @@
       <div class="slide-title">ВЫВОД ПО ВСЕМ <span class="red">ОБЪЕКТАМ</span></div>
       <div class="divider"></div>
       <div class="slide-text" data-type="slow">
-        <span class="shout">— Ну всё, приплыли…</span><br><br>
+        <span class="shout">— Ну всё, приплыли…</span><br>
         Палата №15 — <em>пуста. Дыра в стене размером с улыбку.</em><br>
         Палата №14 — <em>пуста. 600 шортсов с её смехом.</em><br>
-        Камеры — <em>камера №5 буквально расплавилась от смеха.</em><br><br>
+        Камеры — <em>камера №5 буквально расплавилась от смеха.</em><br>
         <strong>Вывод:</strong> Зубатка покинула объект.<br>
-        Местонахождение — <span class="danger">неизвестно.</span><br><br>
+        Местонахождение — <span class="danger">неизвестно.</span><br>
         <span class="danger">ОБЪЯВЛЯЕТСЯ ЭВАКУАЦИЯ РАССУДКА.</span>
       </div>
     </div>
@@ -824,13 +983,13 @@
       <div class="slide-title">ОБЪЕКТ <span class="red">ЗУБАТКА</span><br>ПОКИНУЛА УЧРЕЖДЕНИЕ</div>
       <div class="divider"></div>
       <div class="slide-text" data-type="slow">
-        <span class="shout">— АААА! Она сбежала!</span><br><br>
-        Зафиксировано в <em>02:19</em>.<br><br>
+        <span class="shout">— АААА! Она сбежала!</span><br>
+        Зафиксировано в <em>02:19</em>.<br>
         Предполагаемое местонахождение:<br>
         <em>— интернет</em><br>
         <em>— чат друзей</em><br>
         <em>— комментарии под мемами</em><br>
-        <em>— ближайший источник хаоса</em><br><br>
+        <em>— ближайший источник хаоса</em><br>
         <span class="danger">Степень опасности: КРИТИЧЕСКАЯ.</span><br>
         <span class="shout">СПАСАЙТЕСЬ, КТО МОЖЕТ!</span>
       </div>
@@ -860,22 +1019,17 @@
 <button id="inventory-toggle" onclick="toggleInventory()">🎒 ИНВЕНТАРЬ</button>
 
 <!-- ============================================ -->
-<!-- ИНВЕНТАРЬ (выезжает снизу) -->
+<!-- ИНВЕНТАРЬ -->
 <!-- ============================================ -->
 <div id="inventory">
-  <!-- Слот 1: Плеер -->
   <div class="inv-slot" onclick="openModal('playerModal')" title="Музыкальный плеер">
     <img src="player_icon.jpg" alt="плеер" onerror="this.style.display='none';this.parentElement.textContent='🎵'" />
     <span class="label">Плеер</span>
   </div>
-
-  <!-- Слот 2: Телефон -->
-  <div class="inv-slot" onclick="openModal('phoneModal')" title="Сообщения от Зубатки">
+  <div class="inv-slot" onclick="openModal('phoneModal')" title="Телефон">
     <span style="font-size:2rem;">📱</span>
     <span class="label">Телефон</span>
   </div>
-
-  <!-- Слот 3: Дневник -->
   <div class="inv-slot" onclick="openModal('diaryModal')" title="Дневник расследования">
     <span style="font-size:2rem;">📜</span>
     <span class="label">Дневник</span>
@@ -886,7 +1040,7 @@
 <!-- МОДАЛЬНЫЕ ОКНА -->
 <!-- ============================================ -->
 
-<!-- === ПЛЕЕР === -->
+<!-- === ПЛЕЕР (только 3 трека) === -->
 <div class="modal-overlay" id="playerModal">
   <div class="modal-window">
     <button class="close-btn" onclick="closeModal('playerModal')">✕</button>
@@ -905,27 +1059,58 @@
   </div>
 </div>
 
-<!-- === ТЕЛЕФОН (ЧАТ) === -->
+<!-- === ТЕЛЕФОН === -->
 <div class="modal-overlay" id="phoneModal">
-  <div class="modal-window">
+  <div class="modal-window" style="max-width:420px; padding:16px;">
     <button class="close-btn" onclick="closeModal('phoneModal')">✕</button>
-    <div class="modal-title">📱 ПЕРЕПИСКА С <span class="red">ЗУБАТКОЙ</span></div>
-    <div class="chat-container" id="chat-container"></div>
-    <div class="chat-input-area">
-      <input type="text" id="chat-input" placeholder="Напишите что-нибудь..." />
-      <button onclick="sendMessage()">Отправить</button>
+    <div class="phone-frame">
+      <div class="phone-notch"></div>
+      <div class="phone-screen" id="phone-screen">
+        <div class="phone-time" id="phone-time">00:00</div>
+        <div class="phone-wifi">📶</div>
+        <div class="phone-battery">🔋 87%</div>
+
+        <div id="phone-home">
+          <div class="phone-apps">
+            <div class="phone-app" onclick="openPhoneApp('messages')">
+              <div class="app-icon green">💬</div>
+              <span class="app-name">Сообщения</span>
+            </div>
+            <div class="phone-app" onclick="openPhoneApp('game')">
+              <div class="app-icon blue">🎮</div>
+              <span class="app-name">Игры</span>
+            </div>
+            <div class="phone-app" onclick="openPhoneApp('gallery')">
+              <div class="app-icon purple">📸</div>
+              <span class="app-name">Галерея</span>
+            </div>
+            <!-- Музыка убрана из телефона -->
+            <div class="phone-app" onclick="openPhoneApp('notes')">
+              <div class="app-icon orange">📋</div>
+              <span class="app-name">Заметки</span>
+            </div>
+            <div class="phone-app" onclick="openPhoneApp('settings')">
+              <div class="app-icon pink">⚙️</div>
+              <span class="app-name">Настройки</span>
+            </div>
+            <!-- Пустая ячейка для баланса -->
+            <div style="visibility:hidden;"></div>
+          </div>
+          <div class="phone-home-indicator"></div>
+        </div>
+
+        <div id="phone-app-content" style="display:none;"></div>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- === ДНЕВНИК (стиль бумаги, записи открываются постепенно) === -->
+<!-- === ДНЕВНИК === -->
 <div class="modal-overlay" id="diaryModal">
   <div class="modal-window" style="max-width:480px;">
     <button class="close-btn" onclick="closeModal('diaryModal')">✕</button>
     <div class="modal-title">📜 ДНЕВНИК <span class="red">РАССЛЕДОВАНИЯ</span></div>
-    <div class="diary-page" id="diary-page">
-      <!-- Записи будут добавлены JS -->
-    </div>
+    <div class="diary-page" id="diary-page"></div>
   </div>
 </div>
 
@@ -950,7 +1135,6 @@
     const laughSound = document.getElementById('laugh-sound');
     const birthdayMusic = document.getElementById('birthday-music');
     const typeSound = document.getElementById('type-sound');
-    const videoPlayerSlide = document.getElementById('s-video-player');
     const videoPlayer = document.getElementById('video-player');
     const videoSource = document.getElementById('video-source');
 
@@ -1107,8 +1291,8 @@
       videoSource.src = src;
       videoPlayer.load();
       videoPlayer.play().catch(() => {});
-      allSlides['s-video-player'].classList.add('active');
-      allSlides[cur].classList.remove('active');
+      document.getElementById('s-video-player').classList.add('active');
+      document.getElementById(cur).classList.remove('active');
       btnNext.style.display = 'none';
     };
 
@@ -1116,8 +1300,8 @@
       videoPlayer.pause();
       videoSource.src = '';
       videoPlayer.load();
-      allSlides['s-video-player'].classList.remove('active');
-      allSlides[cur].classList.add('active');
+      document.getElementById('s-video-player').classList.remove('active');
+      document.getElementById(cur).classList.add('active');
       btnNext.style.display = 'block';
       setTimeout(startTypingForActiveSlide, 400);
     };
@@ -1178,6 +1362,7 @@
           btnNext.style.display = 'block';
           if (ambientMusic && cur !== 's11') ambientMusic.volume = 0.08;
         }
+        updateDiaryBySlide(id);
         setTimeout(() => { busy = false; }, 400);
       }, 220);
     }
@@ -1224,7 +1409,7 @@
   })();
 
   // ============================================
-  // ИНВЕНТАРЬ — ОТКРЫТИЕ/ЗАКРЫТИЕ
+  // ИНВЕНТАРЬ
   // ============================================
   let inventoryOpen = false;
 
@@ -1234,7 +1419,6 @@
     document.getElementById('inventory-toggle').textContent = inventoryOpen ? '✕ ЗАКРЫТЬ' : '🎒 ИНВЕНТАРЬ';
   }
 
-  // Закрытие инвентаря при клике вне его
   document.addEventListener('click', function(e) {
     const inventory = document.getElementById('inventory');
     const toggle = document.getElementById('inventory-toggle');
@@ -1263,12 +1447,12 @@
   });
 
   // ============================================
-  // ПЛЕЕР
+  // ПЛЕЕР — ТОЛЬКО 3 ТРЕКА
   // ============================================
   const tracks = [
-    { name: 'Зубатка — Смех в темноте', file: 'track1.mp3' },
-    { name: 'Зубатка — Мемный дождь', file: 'track2.mp3' },
-    { name: 'Зубатка — Эвакуация рассудка', file: 'track3.mp3' },
+    { name: 'ДЕЛО №15', file: 'track1.mp3' },
+    { name: 'Зубатка смеётся', file: 'track2.mp3' },
+    { name: 'Зубатке пятнадцать', file: 'track3.mp3' },
   ];
 
   let currentTrack = 0;
@@ -1340,138 +1524,613 @@
   }
 
   function updateTrackDisplay() {
-    document.getElementById('current-track-name').textContent = tracks[currentTrack].name;
+    const track = tracks[currentTrack];
+    document.getElementById('current-track-name').textContent = `#${String(currentTrack+1).padStart(2,'0')} ${track.name}`;
   }
 
   initPlayer();
 
   // ============================================
-  // ТЕЛЕФОН — ЧАТ
+  // ТЕЛЕФОН
   // ============================================
+  function updatePhoneTime() {
+    const now = new Date();
+    const time = now.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+    const el = document.getElementById('phone-time');
+    if (el) el.textContent = time;
+  }
+  setInterval(updatePhoneTime, 1000);
+  updatePhoneTime();
+
+  // --- ИГРА "ТОРТ В ВЫСЬ" ---
+  let cakeGame = null;
+
+  function initCakeGame() {
+    const canvas = document.getElementById('cake-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const rect = canvas.parentElement.getBoundingClientRect();
+    const w = Math.min(rect.width - 8, 300);
+    const h = Math.min(220, w * 0.7);
+    canvas.width = w;
+    canvas.height = h;
+
+    const game = {
+      ctx, w, h,
+      blocks: [],
+      currentX: w/2,
+      currentWidth: 40,
+      speed: 1.2,
+      direction: 1,
+      score: 0,
+      gameOver: false,
+      blockHeight: 16,
+      lastX: w/2,
+      lastWidth: 40,
+      fallOffset: 0,
+      falling: false,
+      fallSpeed: 0
+    };
+
+    game.blocks.push({
+      x: w/2 - 20,
+      y: h - 20,
+      width: 40,
+      height: game.blockHeight
+    });
+
+    cakeGame = game;
+    updateCakeScore();
+    gameLoop();
+  }
+
+  function gameLoop() {
+    if (!cakeGame || cakeGame.gameOver) return;
+    const g = cakeGame;
+    const ctx = g.ctx;
+    const w = g.w, h = g.h;
+
+    ctx.fillStyle = 'rgba(10,10,10,0.5)';
+    ctx.fillRect(0, 0, w, h);
+
+    g.blocks.forEach((block, index) => {
+      const y = block.y;
+      const x = block.x;
+      const width = block.width;
+      const colors = ['#f5a623', '#e8c84a', '#f7d44a', '#f0c040', '#e8b830', '#f5c842'];
+      const color = colors[index % colors.length];
+      ctx.fillStyle = color;
+      ctx.shadowColor = 'rgba(255,200,50,0.2)';
+      ctx.shadowBlur = 10;
+      const r = 4;
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.lineTo(x + width - r, y);
+      ctx.quadraticCurveTo(x + width, y, x + width, y + r);
+      ctx.lineTo(x + width, y + g.blockHeight - r);
+      ctx.quadraticCurveTo(x + width, y + g.blockHeight, x + width - r, y + g.blockHeight);
+      ctx.lineTo(x + r, y + g.blockHeight);
+      ctx.quadraticCurveTo(x, y + g.blockHeight, x, y + g.blockHeight - r);
+      ctx.lineTo(x, y + r);
+      ctx.quadraticCurveTo(x, y, x + r, y);
+      ctx.closePath();
+      ctx.fill();
+      ctx.shadowBlur = 0;
+      if (index > 0) {
+        ctx.fillStyle = 'rgba(255,255,255,0.15)';
+        ctx.fillRect(x + 4, y + 2, width - 8, 4);
+      }
+    });
+
+    if (!g.falling) {
+      const currentY = g.blocks[g.blocks.length-1].y - g.blockHeight;
+      ctx.fillStyle = '#f5a623';
+      ctx.shadowColor = 'rgba(255,200,50,0.3)';
+      ctx.shadowBlur = 15;
+      const r = 4;
+      ctx.beginPath();
+      ctx.moveTo(g.currentX + r, currentY);
+      ctx.lineTo(g.currentX + g.currentWidth - r, currentY);
+      ctx.quadraticCurveTo(g.currentX + g.currentWidth, currentY, g.currentX + g.currentWidth, currentY + r);
+      ctx.lineTo(g.currentX + g.currentWidth, currentY + g.blockHeight - r);
+      ctx.quadraticCurveTo(g.currentX + g.currentWidth, currentY + g.blockHeight, g.currentX + g.currentWidth - r, currentY + g.blockHeight);
+      ctx.lineTo(g.currentX + r, currentY + g.blockHeight);
+      ctx.quadraticCurveTo(g.currentX, currentY + g.blockHeight, g.currentX, currentY + g.blockHeight - r);
+      ctx.lineTo(g.currentX, y + r);
+      ctx.quadraticCurveTo(g.currentX, currentY, g.currentX + r, currentY);
+      ctx.closePath();
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    }
+
+    if (!g.falling && !g.gameOver) {
+      g.currentX += g.speed * g.direction;
+      if (g.currentX + g.currentWidth > w) { g.direction = -1; }
+      if (g.currentX < 0) { g.direction = 1; }
+    }
+
+    requestAnimationFrame(gameLoop);
+  }
+
+  function dropCakePiece() {
+    if (!cakeGame || cakeGame.gameOver) return;
+    const g = cakeGame;
+    if (g.falling) return;
+
+    const lastBlock = g.blocks[g.blocks.length - 1];
+    const newX = g.currentX;
+    const newWidth = g.currentWidth;
+
+    const overlapLeft = Math.max(lastBlock.x, newX);
+    const overlapRight = Math.min(lastBlock.x + lastBlock.width, newX + newWidth);
+    const overlap = overlapRight - overlapLeft;
+
+    if (overlap > 5) {
+      const newBlockX = overlapLeft;
+      const newBlockWidth = overlap;
+      g.blocks.push({
+        x: newBlockX,
+        y: lastBlock.y - g.blockHeight,
+        width: newBlockWidth,
+        height: g.blockHeight
+      });
+      g.score++;
+      g.currentWidth = Math.max(20, newBlockWidth - 2);
+      g.lastX = newBlockX;
+      g.lastWidth = newBlockWidth;
+      updateCakeScore();
+
+      if (g.score >= 20) {
+        g.gameOver = true;
+        setTimeout(() => {
+          alert('🎉 Ты построил башню из 20 кусков торта! Зубатка гордится тобой! 😏');
+        }, 300);
+      }
+    } else {
+      g.falling = true;
+      g.fallOffset = 0;
+      g.fallSpeed = 2;
+      const fallInterval = setInterval(() => {
+        g.fallOffset += g.fallSpeed;
+        g.fallSpeed += 0.3;
+        if (g.fallOffset > g.h) {
+          clearInterval(fallInterval);
+          g.falling = false;
+          if (g.blocks.length > 1) {
+            g.blocks.pop();
+            g.score = Math.max(0, g.score - 1);
+            updateCakeScore();
+            if (g.blocks.length === 1) {
+              g.currentWidth = 40;
+            } else {
+              const last = g.blocks[g.blocks.length - 1];
+              g.currentWidth = Math.max(20, last.width - 2);
+            }
+          }
+        }
+      }, 16);
+    }
+
+    g.currentX = g.currentWidth / 2 + Math.random() * (g.w - g.currentWidth - 10);
+    if (g.currentX < 0) g.currentX = 10;
+    if (g.currentX + g.currentWidth > g.w) g.currentX = g.w - g.currentWidth - 10;
+  }
+
+  function updateCakeScore() {
+    const el = document.getElementById('cake-score');
+    if (el && cakeGame) el.textContent = cakeGame.score;
+  }
+
+  function resetCakeGame() {
+    const canvas = document.getElementById('cake-canvas');
+    if (!canvas) return;
+    const rect = canvas.parentElement.getBoundingClientRect();
+    const w = Math.min(rect.width - 8, 300);
+    const h = Math.min(220, w * 0.7);
+    canvas.width = w;
+    canvas.height = h;
+
+    cakeGame = {
+      ctx: canvas.getContext('2d'),
+      w, h,
+      blocks: [],
+      currentX: w/2,
+      currentWidth: 40,
+      speed: 1.2,
+      direction: 1,
+      score: 0,
+      gameOver: false,
+      blockHeight: 16,
+      lastX: w/2,
+      lastWidth: 40,
+      fallOffset: 0,
+      falling: false,
+      fallSpeed: 0
+    };
+
+    cakeGame.blocks.push({
+      x: w/2 - 20,
+      y: h - 20,
+      width: 40,
+      height: cakeGame.blockHeight
+    });
+
+    updateCakeScore();
+  }
+
+  // --- ПРИЛОЖЕНИЯ ТЕЛЕФОНА ---
+  function openPhoneApp(app) {
+    const home = document.getElementById('phone-home');
+    const content = document.getElementById('phone-app-content');
+    home.style.display = 'none';
+    content.style.display = 'block';
+
+    let html = '';
+
+    switch(app) {
+      case 'messages':
+        html = getMessagesApp();
+        break;
+      case 'game':
+        html = getGameApp();
+        break;
+      case 'gallery':
+        html = getGalleryApp();
+        break;
+      case 'notes':
+        html = getNotesApp();
+        break;
+      case 'settings':
+        html = getSettingsApp();
+        break;
+      default:
+        html = '<div style="color:#888;text-align:center;padding:40px 0;font-size:0.7rem;">Приложение в разработке</div>';
+    }
+
+    content.innerHTML = html;
+
+    const backBtn = document.createElement('div');
+    backBtn.style.cssText = 'text-align:center;margin-top:10px;cursor:pointer;color:#666;font-size:0.5rem;font-family:"Share Tech Mono",monospace;letter-spacing:0.1em;';
+    backBtn.textContent = '← НА ГЛАВНЫЙ ЭКРАН';
+    backBtn.onclick = function() {
+      home.style.display = 'block';
+      content.style.display = 'none';
+      content.innerHTML = '';
+    };
+    content.appendChild(backBtn);
+
+    if (app === 'game') {
+      setTimeout(() => {
+        resetCakeGame();
+        document.addEventListener('keydown', gameKeyHandler);
+        document.addEventListener('click', gameClickHandler);
+      }, 100);
+    } else {
+      document.removeEventListener('keydown', gameKeyHandler);
+      document.removeEventListener('click', gameClickHandler);
+    }
+
+    if (app === 'messages') {
+      setTimeout(() => {
+        const input = document.getElementById('phone-chat-input');
+        if (input) {
+          input.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') sendPhoneMessage();
+          });
+        }
+      }, 50);
+    }
+  }
+
+  function gameKeyHandler(e) {
+    if (e.key === ' ' || e.key === 'Space') {
+      e.preventDefault();
+      dropCakePiece();
+    }
+  }
+
+  function gameClickHandler(e) {
+    const canvas = document.getElementById('cake-canvas');
+    if (canvas && (e.target === canvas || canvas.contains(e.target))) {
+      dropCakePiece();
+    }
+  }
+
+  // --- СООБЩЕНИЯ (ДИАЛОГ: ТЫ ПИШЕШЬ — ОНА ОТВЕЧАЕТ) ---
   const chatMessages = [
     { from: 'zubatka', text: 'Ха-ха! Ты меня ищешь? 😏' },
     { from: 'zubatka', text: 'Я уже в интернете! Там так весело!' },
-    { from: 'zubatka', text: 'Смотри, какой мем я нашла:' },
-    { from: 'zubatka', text: '🧠 <span class="meme-text">«Когда думаешь, что всё под контролем, а ты в психушке»</span>' },
+    { from: 'zubatka', text: 'Смотри, какой мем я нашла: 🧠 <span class="meme-text">«Когда думаешь, что всё под контролем, а ты в психушке»</span>' },
     { from: 'zubatka', text: 'А ещё я танцевала у кровати! 💃' },
-    { from: 'zubatka', text: 'Ты тоже так можешь? 😂' },
-    { from: 'zubatka', text: 'Ладно, я побежала. У меня там <span class="em">рекорд по несмеянию</span> висит!' },
+    { from: 'zubatka', text: 'В палате №15 я оставила <span class="meme-text">дыру размером с улыбку</span>!' },
+    { from: 'zubatka', text: 'А в палате №14 — 600 шортсов с моим смехом 😂' },
+    { from: 'zubatka', text: 'Камера №5 вообще расплавилась! Представляешь?' },
+    { from: 'zubatka', text: 'Я теперь <span class="em">легенда</span> этого диспансера!' },
+    { from: 'zubatka', text: 'Тогда <span class="meme-text">эвакуируй рассудок</span> и беги за мной!' },
+    { from: 'zubatka', text: 'P.S. Я в комментариях под мемами. Найди меня!' },
   ];
 
   let chatIndex = 0;
-  let chatContainer = document.getElementById('chat-container');
+  let chatInitialized = false;
 
-  function addChatMessage(text, from = 'zubatka') {
-    const div = document.createElement('div');
-    div.className = 'chat-msg ' + (from === 'zubatka' ? 'left' : 'right');
-    const time = new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
-    div.innerHTML = text + `<span class="msg-time">${time}</span>`;
-    chatContainer.appendChild(div);
-    chatContainer.scrollTop = chatContainer.scrollHeight;
-  }
-
-  function initChat() {
-    chatContainer.innerHTML = '';
+  function getMessagesApp() {
+    chatInitialized = false;
     chatIndex = 0;
-    setTimeout(() => {
-      addChatMessage(chatMessages[0].text);
-      chatIndex = 1;
-    }, 500);
+
+    let html = '<div style="display:flex;flex-direction:column;gap:3px;" id="chat-container">';
+    // Показываем только первое сообщение от Зубатки
+    html += `<div class="phone-msg left">${chatMessages[0].text}<span class="msg-time">${new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}</span></div>`;
+    html += '</div>';
+
+    html += `
+      <div class="phone-input-area">
+        <input type="text" id="phone-chat-input" placeholder="Написать..." />
+        <button onclick="sendPhoneMessage()">Отправить</button>
+      </div>
+    `;
+
+    chatIndex = 1;
+    chatInitialized = true;
+
+    return html;
   }
 
-  window.sendMessage = function() {
-    const input = document.getElementById('chat-input');
+  window.sendPhoneMessage = function() {
+    const input = document.getElementById('phone-chat-input');
+    if (!input || !input.value.trim()) return;
     const text = input.value.trim();
-    if (!text) return;
-    addChatMessage(text, 'user');
+    const container = document.getElementById('chat-container');
+    if (container) {
+      const time = new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+      const div = document.createElement('div');
+      div.className = 'phone-msg right';
+      div.innerHTML = text + `<span class="msg-time">${time}</span>`;
+      container.appendChild(div);
+      container.scrollTop = container.scrollHeight;
+    }
     input.value = '';
+
+    // Ответ от Зубатки
     setTimeout(() => {
       if (chatIndex < chatMessages.length) {
-        addChatMessage(chatMessages[chatIndex].text);
+        const msg = chatMessages[chatIndex];
+        const div = document.createElement('div');
+        div.className = 'phone-msg left';
+        const time = new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+        div.innerHTML = msg.text + `<span class="msg-time">${time}</span>`;
+        if (container) {
+          container.appendChild(div);
+          container.scrollTop = container.scrollHeight;
+        }
         chatIndex++;
       } else {
-        addChatMessage('😜 Ха-ха! Ты слишком серьёзный! Давай лучше посмотрим мемы!');
+        // Если все сообщения закончились — случайный ответ
+        const responses = [
+          'Ха-ха! Ты меня раскусил! 😂',
+          'Ого, ты серьёзно? 😏',
+          'Давай, продолжай! Я слушаю!',
+          'Мемы — это моя жизнь!',
+          'Ты тоже смешной! 🤣',
+          'Зубатка одобряет! 👍',
+          'Ты лучший сыщик! 😎',
+          'Ха-ха! Я в шоке! 🤯',
+        ];
+        const reply = responses[Math.floor(Math.random() * responses.length)];
+        const div = document.createElement('div');
+        div.className = 'phone-msg left';
+        const time = new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+        div.innerHTML = reply + `<span class="msg-time">${time}</span>`;
+        if (container) {
+          container.appendChild(div);
+          container.scrollTop = container.scrollHeight;
+        }
       }
-      chatContainer.scrollTop = chatContainer.scrollHeight;
-    }, 600 + Math.random() * 800);
+    }, 800 + Math.random() * 1000);
   };
 
-  document.getElementById('chat-input').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') sendMessage();
-  });
+  // --- ИГРЫ ---
+  function getGameApp() {
+    return `
+      <div class="cake-game-container">
+        <div style="color:#888;font-size:0.5rem;text-align:center;font-family:'Share Tech Mono',monospace;">
+          🎂 Строй башню из торта! Нажимай пробел или кликай по экрану
+        </div>
+        <div class="cake-game-canvas-wrap">
+          <canvas id="cake-canvas"></canvas>
+        </div>
+        <div class="cake-game-stats">
+          🎂 <span id="cake-score">0</span> кусков
+        </div>
+        <div class="cake-game-controls">
+          <button onclick="dropCakePiece()">⬇️ ПОСТАВИТЬ</button>
+          <button onclick="resetCakeGame()">🔄 НОВАЯ ИГРА</button>
+        </div>
+      </div>
+    `;
+  }
 
-  let chatInitialized = false;
-  const observerPhone = new MutationObserver(() => {
-    const modal = document.getElementById('phoneModal');
-    if (modal.classList.contains('active') && !chatInitialized) {
-      chatInitialized = true;
-      initChat();
-    }
-  });
-  observerPhone.observe(document.getElementById('phoneModal'), { attributes: true, attributeFilter: ['class'] });
+  // --- ГАЛЕРЕЯ ---
+  function getGalleryApp() {
+    const items = ['🦷', '📱', '👓', '🎧', '🎵', '📸', '💃', '😂', '🤣'];
+    const labels = ['Брекет', 'Телефон', 'Очки', 'Наушники', 'Плеер', 'Камера', 'Танец', 'Смех', 'Мем'];
+    let html = `<div class="gallery-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:6px;">`;
+    items.forEach((item, i) => {
+      html += `<div class="gallery-item" onclick="this.style.borderColor='#c0392b'" style="aspect-ratio:1;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;transition:all 0.3s;cursor:pointer;flex-direction:column;gap:2px;">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
+          <span style="font-size:1.6rem;">${item}</span>
+          <span style="font-size:0.4rem;color:#666;font-family:'Share Tech Mono',monospace;text-align:center;">${labels[i]}</span>
+        </div>
+      </div>`;
+    });
+    html += `</div>
+      <div style="text-align:center;color:#444;font-size:0.4rem;margin-top:6px;font-family:'Share Tech Mono',monospace;">
+        📸 Нажми на фото, чтобы выделить
+      </div>
+    `;
+    return html;
+  }
+
+  // --- ЗАМЕТКИ ---
+  function getNotesApp() {
+    const notes = [
+      { title: 'Объект Зубатка', text: 'Сбежала из палаты №15. Смех заразен.' },
+      { title: 'Дыра в стене', text: 'Размером с улыбку. Возможно, она смеялась слишком сильно.' },
+      { title: '600 шортсов', text: 'В палате №14. Все с её смехом. Диагноз: шортсозависимость.' },
+      { title: 'Камера №5', text: 'Расплавилась от смеха. 91% сходства с голосом Зубатки.' },
+      { title: 'Эвакуация', text: 'Рассудок эвакуирован. Зубатка в интернете. Мемы повсюду.' },
+    ];
+
+    let html = '';
+    notes.forEach((note) => {
+      html += `
+        <div class="note-item" style="padding:6px 10px;border-bottom:1px solid rgba(255,255,255,0.03);font-size:0.6rem;color:#888;font-family:'Share Tech Mono',monospace;line-height:1.5;">
+          <span style="color:#f0c040;font-weight:700;display:block;">📌 ${note.title}</span>
+          ${note.text}
+        </div>
+      `;
+    });
+    return html;
+  }
+
+  // --- НАСТРОЙКИ ---
+  function getSettingsApp() {
+    return `
+      <div style="padding:10px 0;">
+        <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.03);color:#888;font-size:0.55rem;font-family:'Share Tech Mono',monospace;">
+          <span>🔊 Звук</span>
+          <span style="color:#4cff6a;">Включён</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.03);color:#888;font-size:0.55rem;font-family:'Share Tech Mono',monospace;">
+          <span>📱 Режим полёта</span>
+          <span style="color:#666;">Выкл</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.03);color:#888;font-size:0.55rem;font-family:'Share Tech Mono',monospace;">
+          <span>🌙 Тёмная тема</span>
+          <span style="color:#4cff6a;">Включена</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.03);color:#888;font-size:0.55rem;font-family:'Share Tech Mono',monospace;">
+          <span>🎒 Инвентарь</span>
+          <span style="color:#4cff6a;">Доступен</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:8px 0;color:#888;font-size:0.55rem;font-family:'Share Tech Mono',monospace;">
+          <span>📜 Дневник</span>
+          <span style="color:#f0c040;">7 записей</span>
+        </div>
+        <div style="margin-top:16px;text-align:center;color:#444;font-size:0.4rem;font-family:'Share Tech Mono',monospace;">
+          Версия 2.0 • Дело Зубатки
+        </div>
+      </div>
+    `;
+  }
 
   // ============================================
-  // ДНЕВНИК — СТИЛЬ БУМАГИ, ЗАПИСИ ПОСТЕПЕННО
+  // ДНЕВНИК
   // ============================================
   const diaryEntries = [
-    { date: '02:15', text: 'Объект <span class="highlight">Зубатка</span> замечен в коридоре. Поведение: <span class="danger-text">неадекватное</span>.' },
-    { date: '02:19', text: 'Объект сбежал из палаты №15. В стене обнаружена <span class="highlight">дыра размером с улыбку</span>.' },
-    { date: '02:25', text: 'В палате №14 найдено <span class="highlight">600 шортсов</span> с её смехом. Диагноз: <span class="danger-text">шортсозависимость</span>.' },
-    { date: '02:33', text: 'Камера №5 зафиксировала смех. Камера <span class="danger-text">расплавилась</span>.' },
-    { date: '02:40', text: 'Объект покинул учреждение. Местонахождение: <span class="highlight">интернет</span>. Эвакуация рассудка — <span class="danger-text">КРИТИЧЕСКАЯ</span>.' },
+    { id: 'start', text: 'Объект <span class="highlight">Зубатка</span> замечен в коридоре. Поведение: <span class="danger-text">неадекватное</span>.' },
+    { id: 'yard', text: 'Пациентка смеялась так, что стены дрожали. Акустический анализ зафиксировал <span class="highlight">7 секунд тишины</span>, а затем — <span class="danger-text">взрыв смеха</span>.' },
+    { id: 'corridor', text: 'Акустический анализ зафиксировал <span class="highlight">странный звук</span> в коридоре. Похоже на <span class="em">подавленный смех</span> и звук падающих мемов.' },
+    { id: 'ward15', text: 'Палата №15: <span class="highlight">пуста</span>. В стене обнаружена <span class="danger-text">дыра размером с улыбку</span>.' },
+    { id: 'ward14', text: 'Палата №14: <span class="highlight">600 шортсов</span> с её смехом. Диагноз: <span class="danger-text">шортсозависимость</span>.' },
+    { id: 'cameras', text: 'Комната охраны: камера №5 <span class="danger-text">расплавилась</span> от смеха. Зафиксировано <span class="highlight">91% сходства</span> со звуком Зубатки.' },
+    { id: 'final', text: 'Объект покинул учреждение. Местонахождение: <span class="highlight">интернет</span>. Эвакуация рассудка — <span class="danger-text">КРИТИЧЕСКАЯ</span>.' },
   ];
 
   let diaryUnlocked = 0;
+  let diaryInitialized = false;
+  let diaryEntryElements = [];
 
   function initDiary() {
     const container = document.getElementById('diary-page');
     container.innerHTML = '';
+    diaryEntryElements = [];
     diaryUnlocked = 0;
 
-    // Показываем первую запись сразу
     diaryEntries.forEach((entry, index) => {
       const div = document.createElement('div');
       div.className = 'diary-entry-text';
-      div.style.transitionDelay = (index * 0.3) + 's';
-      div.innerHTML = `<span class="diary-date">${entry.date}</span> ${entry.text}`;
+      div.dataset.id = entry.id;
+      div.style.transitionDelay = (index * 0.2) + 's';
+      div.innerHTML = `<span class="diary-date">${getTimeForEntry(index)}</span> ${entry.text}`;
       container.appendChild(div);
+      diaryEntryElements.push(div);
     });
 
-    // Кнопка "Разблокировать следующую запись"
     const btn = document.createElement('button');
     btn.className = 'diary-unlock-btn';
+    btn.id = 'diary-unlock-btn';
     btn.textContent = '📖 РАЗБЛОКИРОВАТЬ СЛЕДУЮЩУЮ ЗАПИСЬ';
     btn.onclick = function() {
-      if (diaryUnlocked < diaryEntries.length - 1) {
+      if (diaryUnlocked < diaryEntryElements.length - 1) {
         diaryUnlocked++;
-        const entries = container.querySelectorAll('.diary-entry-text');
-        if (entries[diaryUnlocked]) {
-          entries[diaryUnlocked].classList.add('visible');
+        if (diaryEntryElements[diaryUnlocked]) {
+          diaryEntryElements[diaryUnlocked].classList.add('visible');
         }
-        if (diaryUnlocked >= diaryEntries.length - 1) {
-          this.textContent = '✅ ВСЕ ЗАПИСИ РАЗБЛОКИРОВАНЫ';
-          this.disabled = true;
-          this.style.opacity = '0.5';
-        } else {
-          this.textContent = `📖 РАЗБЛОКИРОВАТЬ СЛЕДУЮЩУЮ ЗАПИСЬ (${diaryUnlocked+1}/${diaryEntries.length})`;
-        }
+        updateDiaryButton();
       }
     };
+    container.appendChild(btn);
 
-    // Показываем первую запись
     setTimeout(() => {
-      const firstEntry = container.querySelector('.diary-entry-text');
-      if (firstEntry) {
-        firstEntry.classList.add('visible');
+      if (diaryEntryElements[0]) {
+        diaryEntryElements[0].classList.add('visible');
         diaryUnlocked = 0;
-        btn.textContent = `📖 РАЗБЛОКИРОВАТЬ СЛЕДУЮЩУЮ ЗАПИСЬ (1/${diaryEntries.length})`;
+        updateDiaryButton();
       }
     }, 300);
 
-    container.appendChild(btn);
+    const currentSlide = document.querySelector('.slide.active');
+    if (currentSlide) {
+      updateDiaryBySlide(currentSlide.id);
+    }
   }
 
-  let diaryInitialized = false;
+  function getTimeForEntry(index) {
+    const times = ['02:00', '02:10', '02:15', '02:19', '02:25', '02:33', '02:40'];
+    return times[index] || '02:00';
+  }
+
+  function updateDiaryButton() {
+    const btn = document.getElementById('diary-unlock-btn');
+    if (!btn) return;
+    if (diaryUnlocked >= diaryEntryElements.length - 1) {
+      btn.textContent = '✅ ВСЕ ЗАПИСИ РАЗБЛОКИРОВАНЫ';
+      btn.disabled = true;
+      btn.style.opacity = '0.5';
+    } else {
+      btn.textContent = `📖 РАЗБЛОКИРОВАТЬ СЛЕДУЮЩУЮ ЗАПИСЬ (${diaryUnlocked+1}/${diaryEntryElements.length})`;
+    }
+  }
+
+  function updateDiaryBySlide(slideId) {
+    if (!diaryInitialized || diaryEntryElements.length === 0) return;
+
+    let entriesToShow = 0;
+
+    switch(slideId) {
+      case 's1': entriesToShow = 1; break;
+      case 's2': entriesToShow = 2; break;
+      case 's3': entriesToShow = 3; break;
+      case 's-ward1':
+      case 's-ward2':
+      case 's-clues': entriesToShow = 4; break;
+      case 's-shorts1': entriesToShow = 5; break;
+      case 's-cameras-door':
+      case 's-cameras-inside': entriesToShow = 6; break;
+      case 's-conclusion':
+      case 's10':
+      case 's11': entriesToShow = 7; break;
+      default: entriesToShow = 1;
+    }
+
+    for (let i = 0; i < diaryEntryElements.length && i < entriesToShow; i++) {
+      diaryEntryElements[i].classList.add('visible');
+    }
+
+    diaryUnlocked = Math.min(entriesToShow - 1, diaryEntryElements.length - 1);
+    updateDiaryButton();
+  }
+
   const observerDiary = new MutationObserver(() => {
     const modal = document.getElementById('diaryModal');
     if (modal.classList.contains('active') && !diaryInitialized) {
@@ -1482,4 +2141,4 @@
   observerDiary.observe(document.getElementById('diaryModal'), { attributes: true, attributeFilter: ['class'] });
 </script>
 </body>
-        </html>
+  </html>
