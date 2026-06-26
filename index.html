@@ -1,114 +1,104 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Диспансер №15 — Дело Зубатки</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Oswald:wght@400;700&display=swap');
-    * { margin:0; padding:0; box-sizing:border-box; }
-    html, body { width:100%; height:100%; background:#000; overflow:hidden; font-family:'Share Tech Mono', monospace; user-select:none; }
-    body::before {
-      content:''; position:fixed; inset:0;
-      background:repeating-linear-gradient(to bottom, transparent 0px, transparent 3px, rgba(0,0,0,0.13) 3px, rgba(0,0,0,0.13) 4px);
-      pointer-events:none; z-index:9999;
-    }
-    #stage { position:fixed; inset:0; }
-    .slide { position:absolute; inset:0; opacity:0; pointer-events:none; transition:opacity 0.8s ease; overflow:hidden; }
-    .slide.active { opacity:1; pointer-events:all; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Диспансер №15 — Дело Зубатки</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Oswald:wght@400;700&display=swap');
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { width:100%; height:100%; background:#000; overflow:hidden; font-family:'Share Tech Mono',monospace; }
+  body::before {
+    content:''; position:fixed; inset:0;
+    background:repeating-linear-gradient(to bottom,transparent 0px,transparent 3px,rgba(0,0,0,0.13) 3px,rgba(0,0,0,0.13) 4px);
+    pointer-events:none; z-index:9999;
+  }
+  #stage { position:fixed; inset:0; }
+  .slide { position:absolute; inset:0; opacity:0; pointer-events:none; transition:opacity 0.8s ease; overflow:hidden; }
+  .slide.active { opacity:1; pointer-events:all; }
 
-    /* ВСЕ ФОТО — БЕЗ ОБРЕЗКИ, КАК ЕСТЬ */
-    .slide img.bg {
-      position:absolute; inset:0;
-      width:100%; height:100%;
-      display:block;
-      object-fit:contain;  /* теперь ВСЕ фото вписываются без обрезки */
-      background:#0a0a0a;
-    }
+  .slide img.bg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center top; display:block; }
+  .slide img.bg.vertical { object-fit:contain; background:#000; }
 
-    /* лёгкий зум только на первом слайде */
-    #s1 img.bg { transform:scale(1); transition:transform 0s; }
-    #s1.active img.bg { transform:scale(1.5); transition:transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94); }
+  /* зум только первый */
+  #s1 img.bg { transform:scale(1); transition:transform 0s; }
+  #s1.active img.bg { transform:scale(1.5); transition:transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94); }
 
-    .slide-overlay { position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.35) 45%, rgba(0,0,0,0.05) 100%); }
-    .slide-overlay.none { display:none; }
-    .slide-overlay.soft { background:rgba(0,0,0,0.15); }
-    .slide-overlay.dark { background:rgba(0,0,0,0.7); }
-    .slide-overlay.medium { background:rgba(0,0,0,0.5); }
+  .slide-overlay { position:absolute; inset:0; background:linear-gradient(to top,rgba(0,0,0,0.92) 0%,rgba(0,0,0,0.35) 45%,rgba(0,0,0,0.05) 100%); }
+  .slide-overlay.none { display:none; }
+  .slide-overlay.soft { background:rgba(0,0,0,0.15); }
+  .slide-overlay.dark { background:rgba(0,0,0,0.7); }
 
-    .slide-content {
-      position:absolute; bottom:100px; left:28px;
-      z-index:10; max-width:min(520px,90vw);
-      opacity:0; transform:translateY(18px);
-      transition:opacity 0.7s ease 0.5s, transform 0.7s ease 0.5s;
-    }
-    .slide.active .slide-content { opacity:1; transform:translateY(0); }
+  .slide-content {
+    position:absolute; bottom:100px; left:28px;
+    z-index:10; max-width:min(520px,90vw);
+    opacity:0; transform:translateY(18px);
+    transition:opacity 0.7s ease 0.5s, transform 0.7s ease 0.5s;
+  }
+  .slide.active .slide-content { opacity:1; transform:translateY(0); }
 
-    .badge { display:inline-block; font-family:'Oswald',sans-serif; font-size:0.58rem; font-weight:700; letter-spacing:0.22em; text-transform:uppercase; color:#c0392b; border:1px solid #c0392b; border-left:3px solid #c0392b; padding:3px 10px; margin-bottom:12px; }
-    .slide-title { font-family:'Oswald',sans-serif; font-size:clamp(1.4rem,4vw,2.2rem); font-weight:700; text-transform:uppercase; color:#fff; letter-spacing:0.05em; line-height:1.15; margin-bottom:12px; }
-    .slide-title .red { color:#c0392b; text-shadow:0 0 12px #ff3b2b; }
-    .divider { width:60px; height:2px; background:#c0392b; box-shadow:0 0 8px #ff3b2b; margin-bottom:14px; }
-    .slide-text { font-size:clamp(0.72rem,2vw,0.85rem); line-height:1.9; color:#c8c8b8; }
-    .slide-text em { color:#f0c040; font-style:normal; }
-    .slide-text strong { color:#fff; }
-    .slide-text .danger { color:#c0392b; text-shadow:0 0 8px #ff3b2b; font-family:'Oswald',sans-serif; font-size:1.1em; font-weight:700; }
-    .slide-text .shout { color:#ff6b4a; font-weight:700; font-size:1.2em; }
+  .badge { display:inline-block; font-family:'Oswald',sans-serif; font-size:0.58rem; font-weight:700; letter-spacing:0.22em; text-transform:uppercase; color:#c0392b; border:1px solid #c0392b; border-left:3px solid #c0392b; padding:3px 10px; margin-bottom:12px; }
+  .slide-title { font-family:'Oswald',sans-serif; font-size:clamp(1.4rem,4vw,2.2rem); font-weight:700; text-transform:uppercase; color:#fff; letter-spacing:0.05em; line-height:1.15; margin-bottom:12px; }
+  .slide-title .red { color:#c0392b; text-shadow:0 0 12px #ff3b2b; }
+  .divider { width:60px; height:2px; background:#c0392b; box-shadow:0 0 8px #ff3b2b; margin-bottom:14px; }
+  .slide-text { font-size:clamp(0.72rem,2vw,0.85rem); line-height:1.9; color:#c8c8b8; }
+  .slide-text em { color:#f0c040; font-style:normal; }
+  .slide-text strong { color:#fff; }
+  .slide-text .danger { color:#c0392b; text-shadow:0 0 8px #ff3b2b; font-family:'Oswald',sans-serif; font-size:1.1em; font-weight:700; }
 
-    .door-choice { display:flex; flex-direction:column; gap:10px; margin-top:6px; }
-    .door-btn {
-      font-family:'Oswald',sans-serif; font-size:0.85rem; font-weight:700;
-      letter-spacing:0.1em; text-transform:uppercase;
-      color:#fff; background:rgba(0,0,0,0.7);
-      border:1px solid rgba(192,57,43,0.5); border-left:3px solid #c0392b;
-      padding:11px 18px; cursor:pointer; text-align:left;
-      transition:background 0.2s, border-color 0.2s, box-shadow 0.2s, opacity 0.3s;
-      outline:none; max-width:380px; position:relative;
-      -webkit-tap-highlight-color:transparent;
-    }
-    .door-btn:hover { background:rgba(192,57,43,0.15); border-color:#c0392b; box-shadow:0 0 16px rgba(192,57,43,0.3); }
-    .door-btn span { font-size:0.68rem; color:#888; display:block; margin-top:3px; font-family:'Share Tech Mono',monospace; font-weight:400; letter-spacing:0.05em; text-transform:none; }
-    .door-btn.visited { border-color:rgba(76,255,106,0.5); border-left-color:#4cff6a; }
-    .door-btn.visited::after { content:'✓'; position:absolute; right:14px; top:50%; transform:translateY(-50%); color:#4cff6a; font-size:1.1rem; text-shadow:0 0 8px #4cff6a; }
-    .door-btn.visited span { color:#4cff6a; opacity:0.7; }
+  /* ВЫБОР ДВЕРИ */
+  .door-choice { display:flex; flex-direction:column; gap:10px; margin-top:6px; }
+  .door-btn {
+    font-family:'Oswald',sans-serif; font-size:0.85rem; font-weight:700;
+    letter-spacing:0.1em; text-transform:uppercase;
+    color:#fff; background:rgba(0,0,0,0.7);
+    border:1px solid rgba(192,57,43,0.5); border-left:3px solid #c0392b;
+    padding:11px 18px; cursor:pointer; text-align:left;
+    transition:background 0.2s, border-color 0.2s, box-shadow 0.2s, opacity 0.3s;
+    outline:none; -webkit-tap-highlight-color:transparent; max-width:380px;
+    position:relative;
+  }
+  .door-btn:hover { background:rgba(192,57,43,0.15); border-color:#c0392b; box-shadow:0 0 16px rgba(192,57,43,0.3); }
+  .door-btn span { font-size:0.68rem; color:#888; display:block; margin-top:3px; font-family:'Share Tech Mono',monospace; font-weight:400; letter-spacing:0.05em; text-transform:none; }
+  /* галочка когда посещена */
+  .door-btn.visited { border-color:rgba(76,255,106,0.5); border-left-color:#4cff6a; }
+  .door-btn.visited::after { content:'✓'; position:absolute; right:14px; top:50%; transform:translateY(-50%); color:#4cff6a; font-size:1.1rem; text-shadow:0 0 8px #4cff6a; }
+  .door-btn.visited span { color:#4cff6a; opacity:0.7; }
 
-    .clue-wrap { display:flex; flex-direction:column; gap:8px; margin-top:4px; }
-    .clue-item {
-      border:1px solid rgba(255,255,255,0.12); padding:10px 14px;
-      display:flex; gap:12px; align-items:center;
-      cursor:pointer; transition:background 0.2s, border-color 0.2s;
-      max-width:400px; background:rgba(0,0,0,0.5);
-      backdrop-filter:blur(4px);
-    }
-    .clue-item:hover { background:rgba(192,57,43,0.15); border-color:rgba(192,57,43,0.6); }
-    .clue-icon { font-size:1.6rem; flex-shrink:0; }
-    .clue-name { font-family:'Oswald',sans-serif; font-size:0.9rem; font-weight:700; color:#fff; }
-    .clue-reveal { font-size:0.72rem; color:#f0c040; margin-top:4px; display:none; }
-    .clue-item.open .clue-reveal { display:block; }
-    .clue-hint { font-size:0.65rem; color:#888; margin-top:6px; font-style:italic; }
+  /* УЛИКИ */
+  .clue-wrap { display:flex; flex-direction:column; gap:8px; margin-top:4px; }
+  .clue-item { border:1px solid rgba(255,255,255,0.12); padding:10px 14px; display:flex; gap:12px; align-items:center; cursor:pointer; transition:background 0.2s, border-color 0.2s; max-width:400px; }
+  .clue-item:hover { background:rgba(192,57,43,0.1); border-color:rgba(192,57,43,0.6); }
+  .clue-icon { font-size:1.4rem; flex-shrink:0; }
+  .clue-name { font-family:'Oswald',sans-serif; font-size:0.9rem; font-weight:700; color:#fff; }
+  .clue-reveal { font-size:0.72rem; color:#f0c040; margin-top:4px; display:none; }
+  .clue-item.open .clue-reveal { display:block; }
+  .clue-hint { font-size:0.65rem; color:#555; margin-top:6px; }
 
-    #btn-next {
-      position:fixed; bottom:28px; left:28px; z-index:500;
-      font-family:'Oswald',sans-serif; font-size:0.9rem; font-weight:700;
-      letter-spacing:0.2em; text-transform:uppercase;
-      color:#fff; background:transparent;
-      border:1px solid rgba(192,57,43,0.7); border-left:3px solid #c0392b;
-      padding:11px 26px; cursor:pointer; outline:none;
-      transition:background 0.2s, box-shadow 0.2s;
-      -webkit-tap-highlight-color:transparent;
-    }
-    #btn-next:hover { background:rgba(192,57,43,0.15); box-shadow:0 0 16px rgba(192,57,43,0.3); }
-    #btn-next::after { content:' ▶'; animation:blink 1.2s step-end infinite; }
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+  /* КНОПКА ДАЛЕЕ */
+  #btn-next {
+    position:fixed; bottom:28px; left:28px; z-index:500;
+    font-family:'Oswald',sans-serif; font-size:0.9rem; font-weight:700;
+    letter-spacing:0.2em; text-transform:uppercase;
+    color:#fff; background:transparent;
+    border:1px solid rgba(192,57,43,0.7); border-left:3px solid #c0392b;
+    padding:11px 26px; cursor:pointer; outline:none;
+    transition:background 0.2s, box-shadow 0.2s;
+    -webkit-tap-highlight-color:transparent;
+  }
+  #btn-next:hover { background:rgba(192,57,43,0.15); box-shadow:0 0 16px rgba(192,57,43,0.3); }
+  #btn-next::after { content:' ▶'; animation:blink 1.2s step-end infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
 
-    #flash { position:fixed; inset:0; background:#000; opacity:0; pointer-events:none; z-index:8000; transition:opacity 0.15s ease; }
-    #flash.go { opacity:0.75; }
+  /* ФЛЭШ */
+  #flash { position:fixed; inset:0; background:#000; opacity:0; pointer-events:none; z-index:8000; transition:opacity 0.15s ease; }
+  #flash.go { opacity:0.75; }
 
-    @media(max-width:500px) {
-      .slide-content { left:16px; bottom:90px; }
-      #btn-next { left:16px; bottom:20px; }
-      .clue-item { padding:8px 12px; }
-    }
-  </style>
+  @media(max-width:500px) {
+    .slide-content { left:16px; bottom:90px; }
+    #btn-next { left:16px; bottom:20px; }
+  }
+</style>
 </head>
 <body>
 <div id="flash"></div>
@@ -116,62 +106,39 @@
 
   <!-- 1. ВХОД -->
   <div class="slide active" id="s1">
-    <img class="bg" src="entrance.jpg" alt="вход" />
+    <img class="bg" src="entrance.jpg" alt="">
     <div class="slide-overlay"></div>
     <div class="slide-content">
       <div class="badge">⚠ Активный розыск</div>
       <div class="slide-title">Объект <span class="red">ЗУБАТКА</span><br>сбежал из учреждения</div>
       <div class="divider"></div>
       <div class="slide-text">
-        <span class="shout">— Ой, боже!</span> Это случилось сегодня ночью.<br><br>
-        Последний раз её видели:<br>
-        <em>— смеющейся как безумная чайка</em><br>
-        <em>— сверкающей брекетами в темноте</em><br>
-        <em>— разбрасывающей мемы по всему коридору</em>
+        Последний раз был замечен:<br>
+        <em>— смеющимся как чайка</em><br>
+        <em>— сверкающим брекетами</em><br>
+        <em>— распространяющим мемы</em>
       </div>
     </div>
   </div>
 
   <!-- 2. ДВОР -->
   <div class="slide" id="s2">
-    <img class="bg" src="yard.jpg" alt="двор" />
+    <img class="bg" src="yard.jpg" alt="">
     <div class="slide-overlay"></div>
     <div class="slide-content">
       <div class="badge">📄 Отчёт врача — рассекречено</div>
       <div class="slide-title">Двор <span class="red">учреждения</span></div>
       <div class="divider"></div>
       <div class="slide-text">
-        <span class="shout">— Да что ж такое!</span><br><br>
-        <strong>«Пациентка вела себя спокойно<br>примерно <em>7 секунд</em>. А потом…»</strong><br><br>
-        После получения доступа к интернету произошёл <span class="danger">инцидент</span>.<br>
-        <em>— Она смеялась так, что стены дрожали.</em>
+        <strong>«Пациентка вела себя спокойно<br>примерно <em>7 секунд</em>.»</strong><br><br>
+        После получения доступа к интернету —<br>произошёл инцидент.
       </div>
     </div>
   </div>
 
-  <!-- 3. КОРИДОР — анализ звука (corridor2.jpg) -->
+  <!-- 3. КОРИДОР — ВЫБОР (возврат сюда после каждой комнаты) -->
   <div class="slide" id="s3">
-    <img class="bg" src="corridor2.jpg" alt="коридор после анализа" />
-    <div class="slide-overlay"></div>
-    <div class="slide-content">
-      <div class="badge">🎧 Акустический анализ</div>
-      <div class="slide-title">В коридоре <span class="red">что-то не так</span></div>
-      <div class="divider"></div>
-      <div class="slide-text">
-        <span class="shout">— Тихо… Вы слышите?</span><br><br>
-        Мы провели статистику звуков в коридоре.<br>
-        <strong>Результат:</strong> за последний час зафиксировано:<br>
-        <em>— 47 всплесков смеха</em><br>
-        <em>— 23 звука падающих мемов</em><br>
-        <em>— 1 неопознанный звук — <span class="danger">"ЗУБАТКА"</span></em><br><br>
-        Это явно неспроста. Нам нужно <strong>выбрать направление</strong>.
-      </div>
-    </div>
-  </div>
-
-  <!-- 4. КОРИДОР — ВЫБОР (corridor1.jpg) -->
-  <div class="slide" id="s4">
-    <img class="bg" src="corridor1.jpg" alt="коридор" />
+    <img class="bg" src="corridor1.jpg" alt="">
     <div class="slide-overlay"></div>
     <div class="slide-content">
       <div class="badge" id="corridor-badge">🚪 Выберите направление</div>
@@ -191,125 +158,106 @@
           <span>Система видеонаблюдения</span>
         </button>
       </div>
+      <!-- подсказка сколько осталось -->
       <div id="rooms-hint" style="margin-top:14px;font-size:0.68rem;color:#666;line-height:1.6;"></div>
     </div>
   </div>
 
-  <!-- ПАЛАТА №15: шаг 1 — corridor2.jpg (повторно, но без текста) -->
+  <!-- ПАЛАТА №15: шаг 1 — анализ звука -->
   <div class="slide" id="s-ward1">
-    <img class="bg" src="corridor2.jpg" alt="коридор" />
+    <img class="bg vertical" src="corridor2.jpg" alt="">
     <div class="slide-overlay none"></div>
   </div>
-  <!-- ПАЛАТА №15: шаг 2 — ward.jpg -->
+  <!-- ПАЛАТА №15: шаг 2 — палата с дырой -->
   <div class="slide" id="s-ward2">
-    <img class="bg" src="ward.jpg" alt="палата с дырой" />
+    <img class="bg vertical" src="ward.jpg" alt="">
     <div class="slide-overlay none"></div>
   </div>
-  <!-- ПАЛАТА №15: шаг 3 — report.jpg -->
+  <!-- ПАЛАТА №15: шаг 3 — личное дело -->
   <div class="slide" id="s-ward3">
-    <img class="bg" src="report.jpg" alt="личное дело" />
+    <img class="bg vertical" src="report.jpg" alt="">
     <div class="slide-overlay none"></div>
   </div>
 
-  <!-- УЛИКИ — clues.jpg -->
-  <div class="slide" id="s-clues">
-    <img class="bg" src="clues.jpg" alt="улики" />
+  <!-- ПАЛАТА №14: шаг 1 — улики -->
+  <div class="slide" id="s-shorts1">
+    <img class="bg vertical" src="clues.jpg" alt="">
     <div class="slide-overlay soft"></div>
     <div class="slide-content">
       <div class="badge">🔍 Улики на тумбочке</div>
       <div class="slide-title">Вещественные <span class="red">доказательства</span></div>
       <div class="divider"></div>
-      <div class="slide-text" style="margin-bottom:8px;">
-        <span class="shout">— Ого…</span> Вот что она оставила после себя.
-      </div>
       <div class="clue-wrap">
         <div class="clue-item" onclick="this.classList.toggle('open')">
           <div class="clue-icon">🦷</div>
-          <div><div class="clue-name">Брекет</div><div class="clue-reveal">«Этот брекет видал больше мемов, чем весь интернет. Он светится в темноте.»</div></div>
+          <div><div class="clue-name">Брекет</div><div class="clue-reveal">Этот брекет видал больше приколов, чем ты за жизнь.</div></div>
         </div>
         <div class="clue-item" onclick="this.classList.toggle('open')">
           <div class="clue-icon">📱</div>
-          <div><div class="clue-name">Телефон</div><div class="clue-reveal">«На экране — 600 непросмотренных шортсов. Все с котами. Все с её смехом.»</div></div>
+          <div><div class="clue-name">Мем</div><div class="clue-reveal">Этот мем признан опасным в 17 странах.</div></div>
         </div>
         <div class="clue-item" onclick="this.classList.toggle('open')">
           <div class="clue-icon">👓</div>
-          <div><div class="clue-name">Очки</div><div class="clue-reveal">«С ними она видит мир в формате «лол». Даже стены кажутся смешными.»</div></div>
+          <div><div class="clue-name">Очки</div><div class="clue-reveal">С ними она видит мир в формате «лол».</div></div>
         </div>
       </div>
-      <div class="clue-hint">👆 нажмите на предмет, чтобы узнать детали</div>
+      <div class="clue-hint">↑ нажмите на предмет для досье</div>
     </div>
   </div>
-
-  <!-- ПАЛАТА №14: shorts.jpg -->
-  <div class="slide" id="s-shorts1">
-    <img class="bg" src="shorts.jpg" alt="палата с шортсами" />
+  <!-- ПАЛАТА №14: шаг 2 — шортсы -->
+  <div class="slide" id="s-shorts2">
+    <img class="bg vertical" src="shorts.jpg" alt="">
     <div class="slide-overlay none"></div>
   </div>
 
-  <!-- КОМНАТА ВИДЕОНАБЛЮДЕНИЯ — cameras.jpg -->
+  <!-- КАМЕРЫ -->
   <div class="slide" id="s-cameras">
-    <img class="bg" src="cameras.jpg" alt="комната видеонаблюдения" />
-    <div class="slide-overlay medium"></div>
-    <div class="slide-content">
-      <div class="badge">📹 Система видеонаблюдения</div>
-      <div class="slide-title">Последние <span class="red">кадры</span></div>
-      <div class="divider"></div>
-      <div class="slide-text">
-        <span class="shout">— О, нет…</span><br><br>
-        Камера №5 зафиксировала <span class="danger">невероятное</span>:<br>
-        <em>— Зубатка смеётся, глядя в объектив</em><br>
-        <em>— Её брекеты светятся как звёзды</em><br>
-        <em>— Через 3 секунды камера перегрелась и отключилась</em><br><br>
-        <strong>Вывод:</strong> Её смех буквально <span class="danger">уничтожает</span> технику.
-      </div>
-    </div>
+    <img class="bg" src="cameras.jpg" alt="">
+    <div class="slide-overlay none"></div>
   </div>
 
-  <!-- ИТОГ -->
+  <!-- ИТОГ В КОРИДОРЕ — когда все 3 посещены -->
   <div class="slide" id="s-conclusion">
-    <img class="bg" src="corridor1.jpg" alt="коридор" style="filter:brightness(0.2) saturate(0);" />
+    <img class="bg" src="corridor1.jpg" alt="" style="filter:brightness(0.2) saturate(0);">
     <div class="slide-overlay dark"></div>
     <div class="slide-content">
       <div class="badge">📋 Расследование завершено</div>
       <div class="slide-title">Вывод по всем <span class="red">объектам</span></div>
       <div class="divider"></div>
       <div class="slide-text">
-        <span class="shout">— Ну всё, приплыли…</span><br><br>
-        Палата №15 — <em>пуста. Дыра в стене размером с улыбку.</em><br>
-        Палата №14 — <em>пуста. 600 шортсов с её смехом.</em><br>
-        Камеры — <em>камера №5 буквально расплавилась от смеха.</em><br><br>
+        Палата №15 — <em>пуста. Дыра в стене.</em><br>
+        Палата №14 — <em>пуста. 600 шортсов.</em><br>
+        Камеры — <em>камера №5 уничтожена смехом.</em><br><br>
         <strong>Вывод:</strong> Зубатка покинула объект.<br>
         Местонахождение — <span class="danger">неизвестно.</span><br><br>
-        <span class="danger">ОБЪЯВЛЯЕТСЯ ЭВАКУАЦИЯ РАССУДКА.</span>
+        Объявляется <span class="danger">эвакуация рассудка.</span>
       </div>
     </div>
   </div>
 
   <!-- ЭКСТРЕННОЕ СООБЩЕНИЕ -->
   <div class="slide" id="s10">
-    <img class="bg" src="corridor1.jpg" alt="коридор" style="filter:brightness(0.1) saturate(0);" />
+    <img class="bg" src="corridor1.jpg" alt="" style="filter:brightness(0.1) saturate(0);">
     <div class="slide-overlay dark"></div>
     <div class="slide-content">
       <div class="badge">🚨 Экстренное сообщение</div>
       <div class="slide-title">Объект <span class="red">ЗУБАТКА</span><br>покинула учреждение</div>
       <div class="divider"></div>
       <div class="slide-text">
-        <span class="shout">— АААА! Она сбежала!</span><br><br>
         Зафиксировано в <em>02:19</em>.<br><br>
         Предполагаемое местонахождение:<br>
         <em>— интернет</em><br>
         <em>— чат друзей</em><br>
-        <em>— комментарии под мемами</em><br>
-        <em>— ближайший источник хаоса</em><br><br>
-        <span class="danger">Степень опасности: КРИТИЧЕСКАЯ.</span><br>
-        <span class="shout">СПАСАЙТЕСЬ, КТО МОЖЕТ!</span>
+        <em>— комментарии</em><br>
+        <em>— ближайший источник мемов</em><br><br>
+        <span class="danger">Степень опасности: КРИТИЧЕСКАЯ.</span>
       </div>
     </div>
   </div>
 
-  <!-- ФИНАЛ — birthday.jpg -->
+  <!-- ФИНАЛ -->
   <div class="slide" id="s11">
-    <img class="bg" src="birthday.jpg" alt="с днём рождения" />
+    <img class="bg vertical" src="birthday.jpg" alt="">
     <div class="slide-overlay none"></div>
     <audio id="bday-music" src="music.mp3" loop preload="auto"></audio>
   </div>
@@ -319,120 +267,122 @@
 <button id="btn-next" onclick="nextSlide()">Далее</button>
 
 <script>
-  (function(){
-    const allSlides = {};
-    document.querySelectorAll('.slide').forEach(s => { allSlides[s.id] = s; });
+  const allSlides = {};
+  document.querySelectorAll('.slide').forEach(s => { allSlides[s.id] = s; });
 
-    let cur = 's1', busy = false;
-    const visited = { ward: false, shorts: false, cameras: false };
-    let roomQueue = [];
-    let afterRoomFn = null;
-    let linearNext = null;
+  let cur = 's1', busy = false;
+  // какие комнаты посещены
+  const visited = { ward: false, shorts: false, cameras: false };
+  // текущая комната и её шаги
+  let roomQueue = [];
 
-    const flash = document.getElementById('flash');
-    const btnNext = document.getElementById('btn-next');
-    const music = document.getElementById('bday-music');
+  const flash    = document.getElementById('flash');
+  const btnNext  = document.getElementById('btn-next');
+  const music    = document.getElementById('bday-music');
 
-    const roomSteps = {
-      ward:    ['s-ward1','s-ward2','s-ward3','s-clues'],
-      shorts:  ['s-shorts1'],
-      cameras: ['s-cameras']
-    };
+  // маршруты внутри комнат
+  const roomSteps = {
+    ward:    ['s-ward1','s-ward2','s-ward3'],
+    shorts:  ['s-shorts1','s-shorts2'],
+    cameras: ['s-cameras']
+  };
 
-    function updateCorridorUI() {
-      if (visited.ward)    document.getElementById('btn-ward').classList.add('visited');
-      if (visited.shorts)  document.getElementById('btn-shorts').classList.add('visited');
-      if (visited.cameras) document.getElementById('btn-cameras').classList.add('visited');
+  // линейный next для кнопки (когда не в развилке)
+  let linearNext = null;
 
-      const done = [visited.ward, visited.shorts, visited.cameras].filter(Boolean).length;
-      const hint = document.getElementById('rooms-hint');
-      const allVisited = done === 3;
+  function updateCorridorUI() {
+    // галочки на кнопках
+    if (visited.ward)    document.getElementById('btn-ward').classList.add('visited');
+    if (visited.shorts)  document.getElementById('btn-shorts').classList.add('visited');
+    if (visited.cameras) document.getElementById('btn-cameras').classList.add('visited');
 
-      if (allVisited) {
-        hint.innerHTML = '<span style="color:#4cff6a">✓ Все комнаты осмотрены. Нажмите «Далее» для вывода.</span>';
-        linearNext = 's-conclusion';
-        document.getElementById('corridor-badge').textContent = '📋 Все данные собраны';
-        document.querySelector('#s4 .slide-title .red').textContent = 'ВЫВОД';
-      } else {
-        hint.innerHTML = `Осмотрено: <span style="color:#f0c040">${done} из 3</span> — вернитесь и проверьте остальные.`;
-        linearNext = null;
-        document.getElementById('corridor-badge').textContent = '🚪 Выберите направление';
-        document.querySelector('#s4 .slide-title .red').textContent = 'идём?';
-      }
+    const done = [visited.ward, visited.shorts, visited.cameras].filter(Boolean).length;
+    const hint = document.getElementById('rooms-hint');
+    if (done === 3) {
+      hint.innerHTML = '<span style="color:#4cff6a">✓ Все комнаты осмотрены. Нажмите «Далее» для вывода.</span>';
+      linearNext = 's-conclusion';
+    } else {
+      hint.innerHTML = `Осмотрено: <span style="color:#f0c040">${done} из 3</span> — вернитесь и проверьте остальные.`;
+      linearNext = null;
     }
+  }
 
-    window.enterRoom = function(room) {
-      if (busy) return;
-      roomQueue = [...roomSteps[room]];
-      const first = roomQueue.shift();
-      goTo(first, () => {
-        visited[room] = true;
-        updateCorridorUI();
-      });
-    };
-
-    function goTo(id, afterFn) {
-      if (busy || !allSlides[id]) return;
-      busy = true;
-      if (afterFn) afterRoomFn = afterFn;
-
-      flash.classList.add('go');
-      setTimeout(() => {
-        allSlides[cur].classList.remove('active');
-        cur = id;
-        allSlides[cur].classList.add('active');
-        flash.classList.remove('go');
-
-        if (cur === 's11') {
-          btnNext.style.display = 'none';
-          if (music) {
-            music.volume = 0;
-            music.play().catch(()=>{});
-            let v = 0;
-            const fade = setInterval(()=>{ v = Math.min(v+0.04, 1); music.volume = v; if(v>=1) clearInterval(fade); }, 150);
-          }
-        }
-
-        setTimeout(()=>{ busy = false; }, 400);
-      }, 220);
-    }
-
-    window.nextSlide = function() {
-      if (roomQueue.length > 0) {
-        const next = roomQueue.shift();
-        goTo(next);
-        return;
-      }
-
-      if (afterRoomFn) {
-        const fn = afterRoomFn;
-        afterRoomFn = null;
-        goTo('s4');
-        setTimeout(fn, 500);
-        return;
-      }
-
-      if (cur === 's1') { goTo('s2'); return; }
-      if (cur === 's2') { goTo('s3'); return; }
-      if (cur === 's3') { goTo('s4'); updateCorridorUI(); return; }
-      if (cur === 's4' && linearNext) { goTo(linearNext); return; }
-      if (cur === 's-conclusion') { goTo('s10'); return; }
-      if (cur === 's10') { goTo('s11'); return; }
-    };
-
-    updateCorridorUI();
-
-    document.addEventListener('keydown', e => {
-      if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+  function enterRoom(room) {
+    roomQueue = [...roomSteps[room]];
+    const first = roomQueue.shift();
+    // после последнего шага комнаты — возврат в коридор
+    goTo(first, () => {
+      visited[room] = true;
+      updateCorridorUI();
     });
+  }
 
-    let tx = 0;
-    document.addEventListener('touchstart', e=>{ tx = e.touches[0].clientX; }, {passive:true});
-    document.addEventListener('touchend', e=>{
-      const dx = e.changedTouches[0].clientX - tx;
-      if (dx < -50) nextSlide();
-    }, {passive:true});
-  })();
+  // afterFn — вызывается когда заканчивается вся очередь комнаты
+  let afterRoomFn = null;
+
+  function goTo(id, afterFn) {
+    if (busy || !allSlides[id]) return;
+    busy = true;
+    if (afterFn) afterRoomFn = afterFn;
+
+    flash.classList.add('go');
+    setTimeout(() => {
+      allSlides[cur].classList.remove('active');
+      cur = id;
+      allSlides[cur].classList.add('active');
+      flash.classList.remove('go');
+
+      // кнопка Далее
+      if (cur === 's11') {
+        btnNext.style.display = 'none';
+        if (music) {
+          music.volume = 0;
+          music.play().catch(()=>{});
+          let v = 0;
+          const fade = setInterval(()=>{ v=Math.min(v+0.04,1); music.volume=v; if(v>=1)clearInterval(fade); },150);
+        }
+      }
+
+      setTimeout(()=>{ busy=false; },400);
+    }, 220);
+  }
+
+  function nextSlide() {
+    // если в очереди комнаты есть ещё шаги
+    if (roomQueue.length > 0) {
+      const next = roomQueue.shift();
+      goTo(next);
+      return;
+    }
+    // если очередь пустая и есть колбэк комнаты — возврат в коридор
+    if (afterRoomFn) {
+      const fn = afterRoomFn;
+      afterRoomFn = null;
+      goTo('s3');
+      setTimeout(fn, 500); // обновляем UI после перехода
+      return;
+    }
+    // линейный переход
+    if (cur === 's1') { goTo('s2'); return; }
+    if (cur === 's2') { goTo('s3'); updateCorridorUI(); return; }
+    if (cur === 's3' && linearNext) { goTo(linearNext); return; }
+    if (cur === 's-conclusion') { goTo('s10'); return; }
+    if (cur === 's10') { goTo('s11'); return; }
+  }
+
+  // инит коридора
+  updateCorridorUI();
+
+  document.addEventListener('keydown', e => {
+    if (e.key==='ArrowRight'||e.key===' ') { e.preventDefault(); nextSlide(); }
+  });
+
+  let tx = 0;
+  document.addEventListener('touchstart', e=>{ tx=e.touches[0].clientX; },{passive:true});
+  document.addEventListener('touchend', e=>{
+    const dx = e.changedTouches[0].clientX - tx;
+    if (dx < -50) nextSlide();
+  },{passive:true});
 </script>
 </body>
-                                 </html>
+</html>
