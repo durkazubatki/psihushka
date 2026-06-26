@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Диспансер №15 — Дело Зубатки</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Oswald:wght@400;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Oswald:wght@400;700&family=Caveat:wght@400;700&display=swap');
     * { margin:0; padding:0; box-sizing:border-box; }
     html, body {
       width:100%; height:100%; background:#000; overflow:hidden;
@@ -18,6 +18,7 @@
     }
     #stage { position:fixed; inset:0; }
 
+    /* === СЛАЙДЫ === */
     .slide {
       position:absolute; inset:0; opacity:0; pointer-events:none;
       transition: opacity 0.8s ease;
@@ -102,7 +103,6 @@
       font-weight:700;
       font-size:1.15em;
     }
-    .slide-text .diagnosis { color:#4fc3f7; font-weight:700; }
 
     .door-choice { display:flex; flex-direction:column; gap:12px; margin-top:8px; }
     .door-btn {
@@ -207,27 +207,398 @@
     }
     .video-container video { max-width:100%; max-height:100%; object-fit:contain; }
 
-    #ambient-music {
-      position:fixed;
-      bottom:-9999px;
-      opacity:0;
-      pointer-events:none;
-      width:1px;
-      height:1px;
+    /* ============================================ */
+    /* КНОПКА ОТКРЫТИЯ ИНВЕНТАРЯ */
+    /* ============================================ */
+    #inventory-toggle {
+      position:fixed; bottom:32px; right:32px; z-index:1500;
+      font-family:'Oswald',sans-serif; font-size:0.7rem; font-weight:700;
+      letter-spacing:0.15em; text-transform:uppercase;
+      color:#fff; background:rgba(0,0,0,0.7);
+      border:1px solid rgba(192,57,43,0.3); border-left:3px solid #c0392b;
+      padding:12px 20px; cursor:pointer; outline:none;
+      transition:background 0.3s, transform 0.3s;
+      -webkit-tap-highlight-color:transparent;
+      backdrop-filter:blur(4px);
+      border-radius:4px;
+    }
+    #inventory-toggle:hover { background:rgba(192,57,43,0.1); transform:scale(1.02); }
+
+    /* ============================================ */
+    /* ИНВЕНТАРЬ (выезжает снизу) */
+    /* ============================================ */
+    #inventory {
+      position:fixed; bottom:-120px; left:0; right:0;
+      z-index:1400;
+      background:rgba(0,0,0,0.92);
+      border-top:1px solid rgba(192,57,43,0.2);
+      padding:12px 16px;
+      display:flex;
+      justify-content:center;
+      gap:16px;
+      backdrop-filter:blur(8px);
+      height:100px;
+      align-items:center;
+      transition:bottom 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    #inventory.open { bottom:0; }
+
+    .inv-slot {
+      width:72px;
+      height:72px;
+      background:rgba(20,20,20,0.9);
+      border:1px solid rgba(255,255,255,0.05);
+      border-radius:10px;
+      cursor:pointer;
+      transition:all 0.3s ease;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:2.2rem;
+      position:relative;
+      overflow:hidden;
+    }
+    .inv-slot:hover {
+      border-color:rgba(192,57,43,0.4);
+      background:rgba(40,40,40,0.9);
+      transform:scale(1.05);
+    }
+    .inv-slot img {
+      width:56px;
+      height:56px;
+      object-fit:contain;
+      border-radius:4px;
+    }
+    .inv-slot .label {
+      position:absolute;
+      bottom:2px;
+      font-size:0.4rem;
+      color:#666;
+      font-family:'Share Tech Mono',monospace;
+      letter-spacing:0.05em;
+      text-transform:uppercase;
+      background:rgba(0,0,0,0.6);
+      padding:0 6px;
+      border-radius:2px;
     }
 
+    /* ============================================ */
+    /* МОДАЛЬНЫЕ ОКНА */
+    /* ============================================ */
+    .modal-overlay {
+      position:fixed; inset:0;
+      z-index:2000;
+      background:rgba(0,0,0,0.75);
+      backdrop-filter:blur(6px);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      animation:fadeIn 0.3s ease;
+    }
+    .modal-overlay.active { display:flex; }
+    @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
+    .modal-window {
+      background:rgba(10,10,10,0.95);
+      border:1px solid rgba(192,57,43,0.2);
+      border-radius:16px;
+      padding:24px;
+      max-width:440px;
+      width:90%;
+      max-height:80vh;
+      overflow-y:auto;
+      box-shadow:0 0 60px rgba(0,0,0,0.8);
+      position:relative;
+    }
+    .modal-window .close-btn {
+      position:absolute; top:12px; right:16px;
+      background:none; border:none;
+      color:#666; font-size:1.8rem;
+      cursor:pointer;
+      transition:color 0.3s;
+      font-family:'Share Tech Mono',monospace;
+    }
+    .modal-window .close-btn:hover { color:#c0392b; }
+    .modal-title {
+      font-family:'Oswald',sans-serif;
+      font-size:1.2rem;
+      font-weight:700;
+      text-transform:uppercase;
+      color:#fff;
+      letter-spacing:0.1em;
+      margin-bottom:16px;
+      text-align:center;
+    }
+    .modal-title .red { color:#c0392b; }
+
+    /* ============================================ */
+    /* ПЛЕЕР */
+    /* ============================================ */
+    .player-display {
+      text-align:center;
+      margin:12px 0;
+    }
+    .player-display .track-name {
+      color:#fff;
+      font-size:1rem;
+      font-family:'Oswald',sans-serif;
+      font-weight:700;
+      letter-spacing:0.05em;
+      min-height:2em;
+    }
+    .player-display .track-artist {
+      color:#666;
+      font-size:0.7rem;
+      font-family:'Share Tech Mono',monospace;
+    }
+    .player-controls {
+      display:flex;
+      justify-content:center;
+      gap:16px;
+      margin:16px 0;
+    }
+    .player-controls button {
+      background:rgba(192,57,43,0.1);
+      border:1px solid rgba(192,57,43,0.2);
+      color:#fff;
+      width:48px;
+      height:48px;
+      border-radius:50%;
+      font-size:1.2rem;
+      cursor:pointer;
+      transition:all 0.3s;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .player-controls button:hover {
+      background:rgba(192,57,43,0.2);
+      border-color:#c0392b;
+      transform:scale(1.05);
+    }
+    .player-tracks {
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      margin-top:12px;
+      border-top:1px solid rgba(255,255,255,0.05);
+      padding-top:12px;
+    }
+    .player-tracks .track-item {
+      padding:8px 12px;
+      background:rgba(255,255,255,0.03);
+      border-radius:6px;
+      cursor:pointer;
+      transition:all 0.3s;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      color:#888;
+      font-size:0.75rem;
+      font-family:'Share Tech Mono',monospace;
+    }
+    .player-tracks .track-item:hover {
+      background:rgba(192,57,43,0.05);
+      color:#fff;
+    }
+    .player-tracks .track-item.active-track {
+      background:rgba(192,57,43,0.1);
+      color:#c0392b;
+      border-left:2px solid #c0392b;
+    }
+    .player-tracks .track-item .track-num {
+      color:#444;
+      margin-right:12px;
+      font-size:0.6rem;
+    }
+
+    /* ============================================ */
+    /* ТЕЛЕФОН — ЧАТ */
+    /* ============================================ */
+    .chat-container {
+      max-height:300px;
+      overflow-y:auto;
+      padding-right:4px;
+      margin-bottom:12px;
+    }
+    .chat-container::-webkit-scrollbar { width:4px; }
+    .chat-container::-webkit-scrollbar-track { background:rgba(255,255,255,0.02); }
+    .chat-container::-webkit-scrollbar-thumb { background:#c0392b; border-radius:2px; }
+
+    .chat-msg {
+      padding:8px 12px;
+      margin-bottom:6px;
+      border-radius:8px;
+      max-width:85%;
+      font-size:0.8rem;
+      line-height:1.6;
+      font-family:'Share Tech Mono',monospace;
+      animation:msgAppear 0.3s ease;
+    }
+    @keyframes msgAppear { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+
+    .chat-msg.left {
+      background:rgba(255,255,255,0.05);
+      color:#b8b8a8;
+      align-self:flex-start;
+      border-left:2px solid rgba(192,57,43,0.3);
+    }
+    .chat-msg.right {
+      background:rgba(192,57,43,0.08);
+      color:#e8d8d8;
+      align-self:flex-end;
+      margin-left:auto;
+      border-right:2px solid rgba(192,57,43,0.2);
+    }
+    .chat-msg .msg-time {
+      font-size:0.45rem;
+      color:#444;
+      display:block;
+      margin-top:4px;
+    }
+    .chat-msg .meme-text {
+      color:#f0c040;
+      font-weight:700;
+      font-size:1.1em;
+    }
+    .chat-msg .em { color:#f0c040; font-style:normal; }
+
+    .chat-input-area {
+      display:flex;
+      gap:8px;
+      margin-top:8px;
+      border-top:1px solid rgba(255,255,255,0.05);
+      padding-top:12px;
+    }
+    .chat-input-area input {
+      flex:1;
+      background:rgba(255,255,255,0.03);
+      border:1px solid rgba(255,255,255,0.05);
+      border-radius:6px;
+      padding:8px 12px;
+      color:#fff;
+      font-family:'Share Tech Mono',monospace;
+      font-size:0.7rem;
+      outline:none;
+      transition:border-color 0.3s;
+    }
+    .chat-input-area input:focus { border-color:rgba(192,57,43,0.3); }
+    .chat-input-area input::placeholder { color:#444; }
+    .chat-input-area button {
+      background:rgba(192,57,43,0.1);
+      border:1px solid rgba(192,57,43,0.2);
+      color:#fff;
+      padding:8px 16px;
+      border-radius:6px;
+      cursor:pointer;
+      font-family:'Oswald',sans-serif;
+      font-size:0.6rem;
+      letter-spacing:0.05em;
+      transition:all 0.3s;
+    }
+    .chat-input-area button:hover {
+      background:rgba(192,57,43,0.2);
+      border-color:#c0392b;
+    }
+
+    /* ============================================ */
+    /* ДНЕВНИК — СТИЛЬ БУМАГИ */
+    /* ============================================ */
+    .diary-page {
+      background:linear-gradient(180deg, #f5efe0 0%, #e8ddc8 100%);
+      border-radius:8px;
+      padding:24px 20px;
+      box-shadow:0 0 40px rgba(0,0,0,0.5), inset 0 0 30px rgba(0,0,0,0.05);
+      position:relative;
+      min-height:300px;
+      color:#2a241a;
+    }
+    .diary-page::before {
+      content:'';
+      position:absolute;
+      inset:0;
+      background:repeating-linear-gradient(transparent 0px, transparent 27px, rgba(0,0,0,0.03) 27px, rgba(0,0,0,0.03) 28px);
+      pointer-events:none;
+      border-radius:8px;
+    }
+    .diary-page .diary-date {
+      font-family:'Caveat', cursive;
+      font-size:1.2rem;
+      color:#8a3a3a;
+      text-align:right;
+      margin-bottom:8px;
+      font-weight:700;
+    }
+    .diary-page .diary-entry-text {
+      font-family:'Caveat', cursive;
+      font-size:1.2rem;
+      line-height:2.2;
+      color:#2a241a;
+      margin-bottom:12px;
+      opacity:0;
+      transform:translateY(10px);
+      transition:opacity 0.6s ease, transform 0.6s ease;
+    }
+    .diary-page .diary-entry-text.visible {
+      opacity:1;
+      transform:translateY(0);
+    }
+    .diary-page .diary-entry-text .highlight { color:#c0392b; font-weight:700; }
+    .diary-page .diary-entry-text .danger-text { color:#b22222; font-weight:700; }
+    .diary-page .diary-entry-text .em { color:#8a6a3a; font-style:italic; }
+
+    .diary-page .diary-divider {
+      border:none;
+      height:1px;
+      background:linear-gradient(to right, transparent, rgba(0,0,0,0.1), transparent);
+      margin:12px 0;
+    }
+
+    .diary-unlock-btn {
+      display:block;
+      margin:12px auto 0;
+      font-family:'Oswald',sans-serif;
+      font-size:0.6rem;
+      font-weight:700;
+      letter-spacing:0.1em;
+      text-transform:uppercase;
+      color:#fff;
+      background:rgba(192,57,43,0.15);
+      border:1px solid rgba(192,57,43,0.2);
+      padding:8px 20px;
+      border-radius:6px;
+      cursor:pointer;
+      transition:all 0.3s;
+    }
+    .diary-unlock-btn:hover {
+      background:rgba(192,57,43,0.25);
+      border-color:#c0392b;
+    }
+
+    #btn-next { z-index:900; }
+
+    /* ============================================ */
+    /* АДАПТИВ */
+    /* ============================================ */
     @media(max-width:500px) {
       .slide-content { left:16px; bottom:80px; max-width:95vw; }
       #btn-next { left:16px; bottom:20px; padding:12px 20px; font-size:0.75rem; }
+      #inventory-toggle { bottom:20px; right:16px; padding:10px 16px; font-size:0.6rem; }
       .slide-title { font-size:clamp(1.3rem,3.5vw,1.8rem); }
       .slide-text { font-size:clamp(0.7rem,1.6vw,0.85rem); }
       .door-btn { font-size:0.7rem; padding:12px 16px; max-width:100%; }
       .door-btn span { font-size:0.5rem; }
-      .clue-item { padding:10px 12px; }
-      .clue-name { font-size:0.75rem; }
+      #inventory { height:80px; padding:8px 12px; gap:12px; }
+      #inventory.open { bottom:0; }
+      .inv-slot { width:56px; height:56px; font-size:1.8rem; }
+      .inv-slot img { width:42px; height:42px; }
+      .modal-window { padding:16px; max-width:95%; }
+      .player-controls button { width:40px; height:40px; font-size:1rem; }
       .video-grid { grid-template-columns: 1fr 1fr; gap:8px; max-width:100%; }
       .video-btn { font-size:0.55rem; padding:10px 6px; }
       .video-btn .diag { font-size:0.4rem; }
+      .diary-page { padding:16px; }
+      .diary-page .diary-entry-text { font-size:1rem; }
     }
   </style>
 </head>
@@ -270,7 +641,7 @@
     </div>
   </div>
 
-  <!-- 3. КОРИДОР — анализ звука (СМЕХ) -->
+  <!-- 3. КОРИДОР — анализ звука -->
   <div class="slide" id="s3">
     <img class="bg" src="corridor2.jpg" alt="коридор после анализа" />
     <div class="slide-overlay light"></div>
@@ -315,16 +686,9 @@
     </div>
   </div>
 
-  <!-- ПАЛАТА №15: ward.jpg -->
-  <div class="slide" id="s-ward1">
-    <img class="bg" src="ward.jpg" alt="палата с дырой" />
-    <div class="slide-overlay none"></div>
-  </div>
-  <!-- ПАЛАТА №15: report.jpg -->
-  <div class="slide" id="s-ward2">
-    <img class="bg" src="report.jpg" alt="личное дело" />
-    <div class="slide-overlay none"></div>
-  </div>
+  <!-- ПАЛАТА №15 -->
+  <div class="slide" id="s-ward1"><img class="bg" src="ward.jpg" alt="палата с дырой" /><div class="slide-overlay none"></div></div>
+  <div class="slide" id="s-ward2"><img class="bg" src="report.jpg" alt="личное дело" /><div class="slide-overlay none"></div></div>
 
   <!-- УЛИКИ -->
   <div class="slide" id="s-clues">
@@ -405,34 +769,13 @@
         <span class="shout">— Что за…</span> Диагнозы по камерам:
       </div>
       <div class="video-grid">
-        <button class="video-btn" onclick="playVideo('cam1.mp4')">
-          📹 КАМЕРА 1
-          <span class="diag">🔴 Острый приступ ржача</span>
-        </button>
-        <button class="video-btn" onclick="playVideo('cam2.mp4')">
-          📹 КАМЕРА 2
-          <span class="diag">🗣️ Уже разговаривает с туалетом</span>
-        </button>
-        <button class="video-btn" onclick="playVideo('cam3.mp4')">
-          📹 КАМЕРА 3
-          <span class="diag">🏋️ Рекорд по несмеянию: 19 сек</span>
-        </button>
-        <button class="video-btn" onclick="playVideo('cam4.mp4')">
-          📹 КАМЕРА 4
-          <span class="diag">💪 Делает рекорд на пресс</span>
-        </button>
-        <button class="video-btn" onclick="playVideo('cam5.mp4')">
-          📹 КАМЕРА 5
-          <span class="diag">💃 Танцует у кровати 😏</span>
-        </button>
-        <button class="video-btn" onclick="playVideo('cam6.mp4')">
-          📹 КАМЕРА 6
-          <span class="diag">📊 Сходство со смехом 91%</span>
-        </button>
-        <button class="video-btn" onclick="playVideo('cam7.mp4')" style="grid-column: span 2;">
-          📹 КАМЕРА 7
-          <span class="diag">🌚 Просто негр</span>
-        </button>
+        <button class="video-btn" onclick="playVideo('cam1.mp4')">📹 КАМЕРА 1<span class="diag">🔴 Острый приступ ржача</span></button>
+        <button class="video-btn" onclick="playVideo('cam2.mp4')">📹 КАМЕРА 2<span class="diag">🗣️ Уже разговаривает с туалетом</span></button>
+        <button class="video-btn" onclick="playVideo('cam3.mp4')">📹 КАМЕРА 3<span class="diag">🏋️ Рекорд по несмеянию: 19 сек</span></button>
+        <button class="video-btn" onclick="playVideo('cam4.mp4')">📹 КАМЕРА 4<span class="diag">💪 Делает рекорд на пресс</span></button>
+        <button class="video-btn" onclick="playVideo('cam5.mp4')">📹 КАМЕРА 5<span class="diag">💃 Танцует у кровати 😏</span></button>
+        <button class="video-btn" onclick="playVideo('cam6.mp4')">📹 КАМЕРА 6<span class="diag">📊 Сходство со смехом 91%</span></button>
+        <button class="video-btn" onclick="playVideo('cam7.mp4')" style="grid-column: span 2;">📹 КАМЕРА 7<span class="diag">🌚 Просто негр</span></button>
       </div>
       <div class="clue-hint" style="margin-top:6px;">🎥 Нажмите на камеру для просмотра записи</div>
     </div>
@@ -447,13 +790,7 @@
       </video>
     </div>
     <div style="position:absolute; bottom:30px; left:50%; transform:translateX(-50%); z-index:100;">
-      <button onclick="closeVideo()" style="
-        font-family:'Oswald',sans-serif; font-size:0.8rem; font-weight:700;
-        letter-spacing:0.15em; text-transform:uppercase;
-        color:#fff; background:rgba(0,0,0,0.6);
-        border:1px solid rgba(192,57,43,0.3); padding:12px 28px;
-        cursor:pointer; transition:background 0.3s;
-      ">✕ ЗАКРЫТЬ ВИДЕО</button>
+      <button onclick="closeVideo()" style="font-family:'Oswald',sans-serif; font-size:0.8rem; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:#fff; background:rgba(0,0,0,0.6); border:1px solid rgba(192,57,43,0.3); padding:12px 28px; cursor:pointer; transition:background 0.3s;">✕ ЗАКРЫТЬ ВИДЕО</button>
     </div>
     <div class="slide-overlay none"></div>
   </div>
@@ -500,7 +837,7 @@
     </div>
   </div>
 
-  <!-- ФИНАЛ — birthday.jpg -->
+  <!-- ФИНАЛ -->
   <div class="slide" id="s11">
     <img class="bg" src="birthday.jpg" alt="с днём рождения" />
     <div class="slide-overlay none"></div>
@@ -517,7 +854,85 @@
 
 <button id="btn-next" onclick="nextSlide()">Далее</button>
 
+<!-- ============================================ -->
+<!-- КНОПКА ОТКРЫТИЯ ИНВЕНТАРЯ -->
+<!-- ============================================ -->
+<button id="inventory-toggle" onclick="toggleInventory()">🎒 ИНВЕНТАРЬ</button>
+
+<!-- ============================================ -->
+<!-- ИНВЕНТАРЬ (выезжает снизу) -->
+<!-- ============================================ -->
+<div id="inventory">
+  <!-- Слот 1: Плеер -->
+  <div class="inv-slot" onclick="openModal('playerModal')" title="Музыкальный плеер">
+    <img src="player_icon.jpg" alt="плеер" onerror="this.style.display='none';this.parentElement.textContent='🎵'" />
+    <span class="label">Плеер</span>
+  </div>
+
+  <!-- Слот 2: Телефон -->
+  <div class="inv-slot" onclick="openModal('phoneModal')" title="Сообщения от Зубатки">
+    <span style="font-size:2rem;">📱</span>
+    <span class="label">Телефон</span>
+  </div>
+
+  <!-- Слот 3: Дневник -->
+  <div class="inv-slot" onclick="openModal('diaryModal')" title="Дневник расследования">
+    <span style="font-size:2rem;">📜</span>
+    <span class="label">Дневник</span>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- МОДАЛЬНЫЕ ОКНА -->
+<!-- ============================================ -->
+
+<!-- === ПЛЕЕР === -->
+<div class="modal-overlay" id="playerModal">
+  <div class="modal-window">
+    <button class="close-btn" onclick="closeModal('playerModal')">✕</button>
+    <div class="modal-title">🎵 МУЗЫКАЛЬНЫЙ <span class="red">ПЛЕЕР</span></div>
+    <div class="player-display">
+      <div class="track-name" id="current-track-name">Выберите трек</div>
+      <div class="track-artist" id="current-track-artist">Зубатка Records</div>
+    </div>
+    <div class="player-controls">
+      <button onclick="prevTrack()" title="Предыдущий">⏮</button>
+      <button onclick="togglePlay()" id="play-btn" title="Play/Pause">▶</button>
+      <button onclick="nextTrack()" title="Следующий">⏭</button>
+      <button onclick="toggleLoop()" id="loop-btn" title="Зациклить" style="font-size:0.8rem;">🔁</button>
+    </div>
+    <div class="player-tracks" id="track-list"></div>
+  </div>
+</div>
+
+<!-- === ТЕЛЕФОН (ЧАТ) === -->
+<div class="modal-overlay" id="phoneModal">
+  <div class="modal-window">
+    <button class="close-btn" onclick="closeModal('phoneModal')">✕</button>
+    <div class="modal-title">📱 ПЕРЕПИСКА С <span class="red">ЗУБАТКОЙ</span></div>
+    <div class="chat-container" id="chat-container"></div>
+    <div class="chat-input-area">
+      <input type="text" id="chat-input" placeholder="Напишите что-нибудь..." />
+      <button onclick="sendMessage()">Отправить</button>
+    </div>
+  </div>
+</div>
+
+<!-- === ДНЕВНИК (стиль бумаги, записи открываются постепенно) === -->
+<div class="modal-overlay" id="diaryModal">
+  <div class="modal-window" style="max-width:480px;">
+    <button class="close-btn" onclick="closeModal('diaryModal')">✕</button>
+    <div class="modal-title">📜 ДНЕВНИК <span class="red">РАССЛЕДОВАНИЯ</span></div>
+    <div class="diary-page" id="diary-page">
+      <!-- Записи будут добавлены JS -->
+    </div>
+  </div>
+</div>
+
 <script>
+  // ============================================
+  // ОСНОВНАЯ ЛОГИКА СЛАЙДОВ
+  // ============================================
   (function(){
     const allSlides = {};
     document.querySelectorAll('.slide').forEach(s => { allSlides[s.id] = s; });
@@ -527,7 +942,6 @@
     let roomQueue = [];
     let afterRoomFn = null;
     let linearNext = null;
-
     const typingIntervals = {};
 
     const flash = document.getElementById('flash');
@@ -542,7 +956,6 @@
 
     let ambientStarted = false;
 
-    // ФОНОВАЯ МУЗЫКА
     function startAmbientMusic() {
       if (!ambientStarted && ambientMusic) {
         ambientMusic.volume = 0.08;
@@ -553,12 +966,10 @@
     document.addEventListener('click', startAmbientMusic, { once: true });
     document.addEventListener('touchstart', startAmbientMusic, { once: true });
 
-    // ЗВУК ПЕЧАТИ
     let lastTypeTime = 0;
     function playTypeSound() {
       if (!typeSound) return;
       const now = Date.now();
-      // Не даём звуку играть чаще чем раз в 30 мс
       if (now - lastTypeTime < 30) return;
       lastTypeTime = now;
       try {
@@ -568,21 +979,17 @@
       } catch(e) {}
     }
 
-    // ====== ФУНКЦИЯ ПЕЧАТИ ======
     function typeTextForSlide(slideElement) {
       const textEl = slideElement.querySelector('.slide-text[data-type]');
       if (!textEl) return;
-
       const slideId = slideElement.id;
       if (typingIntervals[slideId]) {
         clearInterval(typingIntervals[slideId]);
         delete typingIntervals[slideId];
       }
-
       if (!textEl.getAttribute('data-original')) {
         textEl.setAttribute('data-original', textEl.innerHTML);
       }
-
       const fullHtml = textEl.getAttribute('data-original');
       textEl.innerHTML = '';
 
@@ -614,7 +1021,6 @@
       let tokenIndex = 0;
       let charIndex = 0;
       let displayedHtml = '';
-
       const speed = textEl.dataset.type === 'fast' ? 20 : 40;
 
       function typeNext() {
@@ -626,7 +1032,6 @@
           }
           return;
         }
-
         while (tokenIndex < tokens.length) {
           const token = tokens[tokenIndex];
           if (token.type === 'tag') {
@@ -640,7 +1045,6 @@
             charIndex++;
             printedChars++;
             textEl.innerHTML = displayedHtml + '<span class="cursor"></span>';
-            // Воспроизводим звук печати (кроме пробелов и переносов строк)
             if (char !== ' ' && char !== '\n' && char !== '\r') {
               playTypeSound();
             }
@@ -651,14 +1055,12 @@
             continue;
           }
         }
-
         textEl.innerHTML = fullHtml;
         if (typingIntervals[slideId]) {
           clearInterval(typingIntervals[slideId]);
           delete typingIntervals[slideId];
         }
       }
-
       typeNext();
       typingIntervals[slideId] = setInterval(typeNext, speed);
     }
@@ -675,16 +1077,12 @@
       typeTextForSlide(activeSlide);
     }
 
-    const observer = new MutationObserver(() => {
-      startTypingForActiveSlide();
-    });
+    const observer = new MutationObserver(startTypingForActiveSlide);
     document.querySelectorAll('.slide').forEach(s => {
       observer.observe(s, { attributes: true, attributeFilter: ['class'] });
     });
-
     setTimeout(startTypingForActiveSlide, 700);
 
-    // СМЕХ
     function playLaugh() {
       if (laughSound && cur === 's3') {
         laughSound.currentTime = 0;
@@ -696,7 +1094,6 @@
       if (laughSound) { laughSound.pause(); laughSound.currentTime = 0; }
     }
 
-    // МУЗЫКА НА ФИНАЛ
     function playBirthday() {
       if (birthdayMusic && cur === 's11') {
         birthdayMusic.currentTime = 0;
@@ -706,7 +1103,6 @@
       }
     }
 
-    // ВИДЕО
     window.playVideo = function(src) {
       videoSource.src = src;
       videoPlayer.load();
@@ -767,16 +1163,13 @@
       if (afterFn) afterRoomFn = afterFn;
 
       stopLaugh();
-
       flash.classList.add('go');
       setTimeout(() => {
         allSlides[cur].classList.remove('active');
         cur = id;
         allSlides[cur].classList.add('active');
         flash.classList.remove('go');
-
         setTimeout(startTypingForActiveSlide, 400);
-
         if (id === 's3') setTimeout(playLaugh, 500);
         if (id === 's11') {
           setTimeout(playBirthday, 600);
@@ -785,7 +1178,6 @@
           btnNext.style.display = 'block';
           if (ambientMusic && cur !== 's11') ambientMusic.volume = 0.08;
         }
-
         setTimeout(() => { busy = false; }, 400);
       }, 220);
     }
@@ -830,6 +1222,264 @@
       if (e.changedTouches[0].clientX - tx < -50) nextSlide();
     }, {passive:true});
   })();
+
+  // ============================================
+  // ИНВЕНТАРЬ — ОТКРЫТИЕ/ЗАКРЫТИЕ
+  // ============================================
+  let inventoryOpen = false;
+
+  function toggleInventory() {
+    inventoryOpen = !inventoryOpen;
+    document.getElementById('inventory').classList.toggle('open', inventoryOpen);
+    document.getElementById('inventory-toggle').textContent = inventoryOpen ? '✕ ЗАКРЫТЬ' : '🎒 ИНВЕНТАРЬ';
+  }
+
+  // Закрытие инвентаря при клике вне его
+  document.addEventListener('click', function(e) {
+    const inventory = document.getElementById('inventory');
+    const toggle = document.getElementById('inventory-toggle');
+    if (inventoryOpen && !inventory.contains(e.target) && !toggle.contains(e.target)) {
+      toggleInventory();
+    }
+  });
+
+  // ============================================
+  // МОДАЛЬНЫЕ ОКНА
+  // ============================================
+  function openModal(id) {
+    document.getElementById(id).classList.add('active');
+  }
+
+  function closeModal(id) {
+    document.getElementById(id).classList.remove('active');
+  }
+
+  document.querySelectorAll('.modal-overlay').forEach(el => {
+    el.addEventListener('click', function(e) {
+      if (e.target === this) {
+        this.classList.remove('active');
+      }
+    });
+  });
+
+  // ============================================
+  // ПЛЕЕР
+  // ============================================
+  const tracks = [
+    { name: 'Зубатка — Смех в темноте', file: 'track1.mp3' },
+    { name: 'Зубатка — Мемный дождь', file: 'track2.mp3' },
+    { name: 'Зубатка — Эвакуация рассудка', file: 'track3.mp3' },
+  ];
+
+  let currentTrack = 0;
+  let isPlaying = false;
+  let isLooping = false;
+  let audioPlayer = null;
+
+  function initPlayer() {
+    const list = document.getElementById('track-list');
+    list.innerHTML = '';
+    tracks.forEach((track, index) => {
+      const div = document.createElement('div');
+      div.className = 'track-item' + (index === currentTrack ? ' active-track' : '');
+      div.innerHTML = `<span><span class="track-num">${String(index+1).padStart(2,'0')}</span>${track.name}</span>`;
+      div.onclick = () => { playTrack(index); };
+      list.appendChild(div);
+    });
+    updateTrackDisplay();
+  }
+
+  function playTrack(index) {
+    if (audioPlayer) {
+      audioPlayer.pause();
+      audioPlayer = null;
+    }
+    currentTrack = index;
+    audioPlayer = new Audio(tracks[index].file);
+    audioPlayer.volume = 0.4;
+    audioPlayer.loop = isLooping;
+    audioPlayer.play().catch(() => {});
+    isPlaying = true;
+    document.getElementById('play-btn').textContent = '⏸';
+    updateTrackDisplay();
+    document.querySelectorAll('.track-item').forEach((el, i) => {
+      el.classList.toggle('active-track', i === index);
+    });
+  }
+
+  function togglePlay() {
+    if (!audioPlayer) {
+      playTrack(currentTrack);
+      return;
+    }
+    if (isPlaying) {
+      audioPlayer.pause();
+      isPlaying = false;
+      document.getElementById('play-btn').textContent = '▶';
+    } else {
+      audioPlayer.play().catch(() => {});
+      isPlaying = true;
+      document.getElementById('play-btn').textContent = '⏸';
+    }
+  }
+
+  function nextTrack() {
+    const next = (currentTrack + 1) % tracks.length;
+    playTrack(next);
+  }
+
+  function prevTrack() {
+    const prev = (currentTrack - 1 + tracks.length) % tracks.length;
+    playTrack(prev);
+  }
+
+  function toggleLoop() {
+    isLooping = !isLooping;
+    if (audioPlayer) audioPlayer.loop = isLooping;
+    document.getElementById('loop-btn').style.color = isLooping ? '#c0392b' : '#fff';
+  }
+
+  function updateTrackDisplay() {
+    document.getElementById('current-track-name').textContent = tracks[currentTrack].name;
+  }
+
+  initPlayer();
+
+  // ============================================
+  // ТЕЛЕФОН — ЧАТ
+  // ============================================
+  const chatMessages = [
+    { from: 'zubatka', text: 'Ха-ха! Ты меня ищешь? 😏' },
+    { from: 'zubatka', text: 'Я уже в интернете! Там так весело!' },
+    { from: 'zubatka', text: 'Смотри, какой мем я нашла:' },
+    { from: 'zubatka', text: '🧠 <span class="meme-text">«Когда думаешь, что всё под контролем, а ты в психушке»</span>' },
+    { from: 'zubatka', text: 'А ещё я танцевала у кровати! 💃' },
+    { from: 'zubatka', text: 'Ты тоже так можешь? 😂' },
+    { from: 'zubatka', text: 'Ладно, я побежала. У меня там <span class="em">рекорд по несмеянию</span> висит!' },
+  ];
+
+  let chatIndex = 0;
+  let chatContainer = document.getElementById('chat-container');
+
+  function addChatMessage(text, from = 'zubatka') {
+    const div = document.createElement('div');
+    div.className = 'chat-msg ' + (from === 'zubatka' ? 'left' : 'right');
+    const time = new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+    div.innerHTML = text + `<span class="msg-time">${time}</span>`;
+    chatContainer.appendChild(div);
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+  }
+
+  function initChat() {
+    chatContainer.innerHTML = '';
+    chatIndex = 0;
+    setTimeout(() => {
+      addChatMessage(chatMessages[0].text);
+      chatIndex = 1;
+    }, 500);
+  }
+
+  window.sendMessage = function() {
+    const input = document.getElementById('chat-input');
+    const text = input.value.trim();
+    if (!text) return;
+    addChatMessage(text, 'user');
+    input.value = '';
+    setTimeout(() => {
+      if (chatIndex < chatMessages.length) {
+        addChatMessage(chatMessages[chatIndex].text);
+        chatIndex++;
+      } else {
+        addChatMessage('😜 Ха-ха! Ты слишком серьёзный! Давай лучше посмотрим мемы!');
+      }
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }, 600 + Math.random() * 800);
+  };
+
+  document.getElementById('chat-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') sendMessage();
+  });
+
+  let chatInitialized = false;
+  const observerPhone = new MutationObserver(() => {
+    const modal = document.getElementById('phoneModal');
+    if (modal.classList.contains('active') && !chatInitialized) {
+      chatInitialized = true;
+      initChat();
+    }
+  });
+  observerPhone.observe(document.getElementById('phoneModal'), { attributes: true, attributeFilter: ['class'] });
+
+  // ============================================
+  // ДНЕВНИК — СТИЛЬ БУМАГИ, ЗАПИСИ ПОСТЕПЕННО
+  // ============================================
+  const diaryEntries = [
+    { date: '02:15', text: 'Объект <span class="highlight">Зубатка</span> замечен в коридоре. Поведение: <span class="danger-text">неадекватное</span>.' },
+    { date: '02:19', text: 'Объект сбежал из палаты №15. В стене обнаружена <span class="highlight">дыра размером с улыбку</span>.' },
+    { date: '02:25', text: 'В палате №14 найдено <span class="highlight">600 шортсов</span> с её смехом. Диагноз: <span class="danger-text">шортсозависимость</span>.' },
+    { date: '02:33', text: 'Камера №5 зафиксировала смех. Камера <span class="danger-text">расплавилась</span>.' },
+    { date: '02:40', text: 'Объект покинул учреждение. Местонахождение: <span class="highlight">интернет</span>. Эвакуация рассудка — <span class="danger-text">КРИТИЧЕСКАЯ</span>.' },
+  ];
+
+  let diaryUnlocked = 0;
+
+  function initDiary() {
+    const container = document.getElementById('diary-page');
+    container.innerHTML = '';
+    diaryUnlocked = 0;
+
+    // Показываем первую запись сразу
+    diaryEntries.forEach((entry, index) => {
+      const div = document.createElement('div');
+      div.className = 'diary-entry-text';
+      div.style.transitionDelay = (index * 0.3) + 's';
+      div.innerHTML = `<span class="diary-date">${entry.date}</span> ${entry.text}`;
+      container.appendChild(div);
+    });
+
+    // Кнопка "Разблокировать следующую запись"
+    const btn = document.createElement('button');
+    btn.className = 'diary-unlock-btn';
+    btn.textContent = '📖 РАЗБЛОКИРОВАТЬ СЛЕДУЮЩУЮ ЗАПИСЬ';
+    btn.onclick = function() {
+      if (diaryUnlocked < diaryEntries.length - 1) {
+        diaryUnlocked++;
+        const entries = container.querySelectorAll('.diary-entry-text');
+        if (entries[diaryUnlocked]) {
+          entries[diaryUnlocked].classList.add('visible');
+        }
+        if (diaryUnlocked >= diaryEntries.length - 1) {
+          this.textContent = '✅ ВСЕ ЗАПИСИ РАЗБЛОКИРОВАНЫ';
+          this.disabled = true;
+          this.style.opacity = '0.5';
+        } else {
+          this.textContent = `📖 РАЗБЛОКИРОВАТЬ СЛЕДУЮЩУЮ ЗАПИСЬ (${diaryUnlocked+1}/${diaryEntries.length})`;
+        }
+      }
+    };
+
+    // Показываем первую запись
+    setTimeout(() => {
+      const firstEntry = container.querySelector('.diary-entry-text');
+      if (firstEntry) {
+        firstEntry.classList.add('visible');
+        diaryUnlocked = 0;
+        btn.textContent = `📖 РАЗБЛОКИРОВАТЬ СЛЕДУЮЩУЮ ЗАПИСЬ (1/${diaryEntries.length})`;
+      }
+    }, 300);
+
+    container.appendChild(btn);
+  }
+
+  let diaryInitialized = false;
+  const observerDiary = new MutationObserver(() => {
+    const modal = document.getElementById('diaryModal');
+    if (modal.classList.contains('active') && !diaryInitialized) {
+      diaryInitialized = true;
+      initDiary();
+    }
+  });
+  observerDiary.observe(document.getElementById('diaryModal'), { attributes: true, attributeFilter: ['class'] });
 </script>
 </body>
-</html>
+        </html>
