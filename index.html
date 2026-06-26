@@ -17,10 +17,24 @@
     .slide { position:absolute; inset:0; opacity:0; pointer-events:none; transition:opacity 0.8s ease; overflow:hidden; }
     .slide.active { opacity:1; pointer-events:all; }
 
-    .slide img.bg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center top; display:block; }
-    .slide img.bg.vertical { object-fit:contain; background:#0a0a0a; }
+    /* все фото — без обрезки, с сохранением пропорций */
+    .slide img.bg {
+      position:absolute; inset:0;
+      width:100%; height:100%;
+      display:block;
+    }
+    /* горизонтальные фото — покрывают экран */
+    .slide img.bg.landscape {
+      object-fit:cover;
+      object-position:center center;
+    }
+    /* вертикальные фото — вписываются в экран с чёрными полями */
+    .slide img.bg.vertical {
+      object-fit:contain;
+      background:#0a0a0a;
+    }
 
-    /* зум на первом слайде */
+    /* зум только на первом слайде (вход) */
     #s1 img.bg { transform:scale(1); transition:transform 0s; }
     #s1.active img.bg { transform:scale(1.5); transition:transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94); }
 
@@ -46,7 +60,6 @@
     .slide-text strong { color:#fff; }
     .slide-text .danger { color:#c0392b; text-shadow:0 0 8px #ff3b2b; font-family:'Oswald',sans-serif; font-size:1.1em; font-weight:700; }
 
-    /* ВЫБОР ДВЕРИ */
     .door-choice { display:flex; flex-direction:column; gap:10px; margin-top:6px; }
     .door-btn {
       font-family:'Oswald',sans-serif; font-size:0.85rem; font-weight:700;
@@ -64,7 +77,6 @@
     .door-btn.visited::after { content:'✓'; position:absolute; right:14px; top:50%; transform:translateY(-50%); color:#4cff6a; font-size:1.1rem; text-shadow:0 0 8px #4cff6a; }
     .door-btn.visited span { color:#4cff6a; opacity:0.7; }
 
-    /* УЛИКИ */
     .clue-wrap { display:flex; flex-direction:column; gap:8px; margin-top:4px; }
     .clue-item { border:1px solid rgba(255,255,255,0.12); padding:10px 14px; display:flex; gap:12px; align-items:center; cursor:pointer; transition:background 0.2s, border-color 0.2s; max-width:400px; }
     .clue-item:hover { background:rgba(192,57,43,0.1); border-color:rgba(192,57,43,0.6); }
@@ -74,7 +86,6 @@
     .clue-item.open .clue-reveal { display:block; }
     .clue-hint { font-size:0.65rem; color:#555; margin-top:6px; }
 
-    /* КНОПКА ДАЛЕЕ */
     #btn-next {
       position:fixed; bottom:28px; left:28px; z-index:500;
       font-family:'Oswald',sans-serif; font-size:0.9rem; font-weight:700;
@@ -89,7 +100,6 @@
     #btn-next::after { content:' ▶'; animation:blink 1.2s step-end infinite; }
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
 
-    /* ФЛЭШ */
     #flash { position:fixed; inset:0; background:#000; opacity:0; pointer-events:none; z-index:8000; transition:opacity 0.15s ease; }
     #flash.go { opacity:0.75; }
 
@@ -103,9 +113,9 @@
 <div id="flash"></div>
 <div id="stage">
 
-  <!-- 1. ВХОД -->
+  <!-- 1. ВХОД (entrance.jpg) -->
   <div class="slide active" id="s1">
-    <img class="bg" src="entrance.jpg" alt="entrance" />
+    <img class="bg landscape" src="entrance.jpg" alt="вход" />
     <div class="slide-overlay"></div>
     <div class="slide-content">
       <div class="badge">⚠ Активный розыск</div>
@@ -120,9 +130,9 @@
     </div>
   </div>
 
-  <!-- 2. ДВОР -->
+  <!-- 2. ДВОР (yard.jpg) -->
   <div class="slide" id="s2">
-    <img class="bg" src="yard.jpg" alt="yard" />
+    <img class="bg landscape" src="yard.jpg" alt="двор" />
     <div class="slide-overlay"></div>
     <div class="slide-content">
       <div class="badge">📄 Отчёт врача — рассекречено</div>
@@ -135,9 +145,9 @@
     </div>
   </div>
 
-  <!-- 3. КОРИДОР — ВЫБОР -->
+  <!-- 3. КОРИДОР (corridor1.jpg) -->
   <div class="slide" id="s3">
-    <img class="bg" src="corridor1.jpg" alt="corridor" />
+    <img class="bg landscape" src="corridor1.jpg" alt="коридор" />
     <div class="slide-overlay"></div>
     <div class="slide-content">
       <div class="badge" id="corridor-badge">🚪 Выберите направление</div>
@@ -161,26 +171,25 @@
     </div>
   </div>
 
-  <!-- ПАЛАТА №15: шаг 1 — анализ звука -->
+  <!-- ПАЛАТА №15: corridor2.jpg (анализ звука) -->
   <div class="slide" id="s-ward1">
-    <img class="bg vertical" src="corridor2.jpg" alt="corridor2" />
+    <img class="bg landscape" src="corridor2.jpg" alt="коридор после анализа" />
     <div class="slide-overlay none"></div>
-    <!-- контент для наглядности (без оверлея) -->
   </div>
-  <!-- ПАЛАТА №15: шаг 2 — палата с дырой -->
+  <!-- ПАЛАТА №15: ward.jpg (палата с дырой) -->
   <div class="slide" id="s-ward2">
-    <img class="bg vertical" src="ward.jpg" alt="ward" />
+    <img class="bg vertical" src="ward.jpg" alt="палата с дырой" />
     <div class="slide-overlay none"></div>
   </div>
-  <!-- ПАЛАТА №15: шаг 3 — личное дело -->
+  <!-- ПАЛАТА №15: report.jpg (личное дело) -->
   <div class="slide" id="s-ward3">
-    <img class="bg vertical" src="report.jpg" alt="report" />
+    <img class="bg vertical" src="report.jpg" alt="личное дело" />
     <div class="slide-overlay none"></div>
   </div>
 
-  <!-- ПАЛАТА №14: шаг 1 — улики -->
+  <!-- ПАЛАТА №14: clues.jpg (улики) -->
   <div class="slide" id="s-shorts1">
-    <img class="bg vertical" src="clues.jpg" alt="clues" />
+    <img class="bg vertical" src="clues.jpg" alt="улики" />
     <div class="slide-overlay soft"></div>
     <div class="slide-content">
       <div class="badge">🔍 Улики на тумбочке</div>
@@ -203,21 +212,21 @@
       <div class="clue-hint">↑ нажмите на предмет для досье</div>
     </div>
   </div>
-  <!-- ПАЛАТА №14: шаг 2 — шортсы -->
+  <!-- ПАЛАТА №14: shorts.jpg -->
   <div class="slide" id="s-shorts2">
-    <img class="bg vertical" src="shorts.jpg" alt="shorts" />
+    <img class="bg vertical" src="shorts.jpg" alt="палата с шортсами" />
     <div class="slide-overlay none"></div>
   </div>
 
-  <!-- КАМЕРЫ -->
+  <!-- КАМЕРЫ (cameras.jpg) -->
   <div class="slide" id="s-cameras">
-    <img class="bg" src="cameras.jpg" alt="cameras" />
+    <img class="bg landscape" src="cameras.jpg" alt="комната видеонаблюдения" />
     <div class="slide-overlay none"></div>
   </div>
 
-  <!-- ИТОГ В КОРИДОРЕ — ВЫВОД И ЭВАКУАЦИЯ (появляется только когда все 3 посещены) -->
+  <!-- ИТОГ (corridor1.jpg, затемнённый) -->
   <div class="slide" id="s-conclusion">
-    <img class="bg" src="corridor1.jpg" alt="corridor1" style="filter:brightness(0.2) saturate(0);" />
+    <img class="bg landscape" src="corridor1.jpg" alt="коридор" style="filter:brightness(0.2) saturate(0);" />
     <div class="slide-overlay dark"></div>
     <div class="slide-content">
       <div class="badge">📋 Расследование завершено</div>
@@ -234,9 +243,9 @@
     </div>
   </div>
 
-  <!-- ЭКСТРЕННОЕ СООБЩЕНИЕ -->
+  <!-- ЭКСТРЕННОЕ СООБЩЕНИЕ (corridor1.jpg, затемнённый) -->
   <div class="slide" id="s10">
-    <img class="bg" src="corridor1.jpg" alt="corridor1" style="filter:brightness(0.1) saturate(0);" />
+    <img class="bg landscape" src="corridor1.jpg" alt="коридор" style="filter:brightness(0.1) saturate(0);" />
     <div class="slide-overlay dark"></div>
     <div class="slide-content">
       <div class="badge">🚨 Экстренное сообщение</div>
@@ -254,9 +263,9 @@
     </div>
   </div>
 
-  <!-- ФИНАЛ — С ДНЁМ РОЖДЕНИЯ -->
+  <!-- ФИНАЛ — birthday.jpg -->
   <div class="slide" id="s11">
-    <img class="bg vertical" src="birthday.jpg" alt="birthday" />
+    <img class="bg vertical" src="birthday.jpg" alt="с днём рождения" />
     <div class="slide-overlay none"></div>
     <audio id="bday-music" src="music.mp3" loop preload="auto"></audio>
   </div>
@@ -274,7 +283,7 @@
     const visited = { ward: false, shorts: false, cameras: false };
     let roomQueue = [];
     let afterRoomFn = null;
-    let linearNext = null; // для последовательных переходов
+    let linearNext = null;
 
     const flash = document.getElementById('flash');
     const btnNext = document.getElementById('btn-next');
@@ -298,7 +307,6 @@
       if (allVisited) {
         hint.innerHTML = '<span style="color:#4cff6a">✓ Все комнаты осмотрены. Нажмите «Далее» для вывода.</span>';
         linearNext = 's-conclusion';
-        // меняем текст в коридоре
         document.getElementById('corridor-badge').textContent = '📋 Все данные собраны';
         document.querySelector('#s3 .slide-title .red').textContent = 'ВЫВОД';
       } else {
@@ -309,10 +317,8 @@
       }
     }
 
-    // вход в комнату
     window.enterRoom = function(room) {
       if (busy) return;
-      // если комната уже посещена — всё равно можно зайти повторно, но очередь не сбрасываем
       roomQueue = [...roomSteps[room]];
       const first = roomQueue.shift();
       goTo(first, () => {
@@ -333,7 +339,6 @@
         allSlides[cur].classList.add('active');
         flash.classList.remove('go');
 
-        // если финал — скрыть кнопку и запустить музыку
         if (cur === 's11') {
           btnNext.style.display = 'none';
           if (music) {
@@ -349,14 +354,12 @@
     }
 
     window.nextSlide = function() {
-      // 1. если есть шаги в комнате
       if (roomQueue.length > 0) {
         const next = roomQueue.shift();
         goTo(next);
         return;
       }
 
-      // 2. если есть afterFn (возврат в коридор)
       if (afterRoomFn) {
         const fn = afterRoomFn;
         afterRoomFn = null;
@@ -365,20 +368,15 @@
         return;
       }
 
-      // 3. линейные переходы по сюжету
       if (cur === 's1') { goTo('s2'); return; }
       if (cur === 's2') { goTo('s3'); updateCorridorUI(); return; }
       if (cur === 's3' && linearNext) { goTo(linearNext); return; }
       if (cur === 's-conclusion') { goTo('s10'); return; }
       if (cur === 's10') { goTo('s11'); return; }
-
-      // fallback — если что-то пошло не так
     };
 
-    // инициализация
     updateCorridorUI();
 
-    // клавиатура
     document.addEventListener('keydown', e => {
       if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
     });
@@ -389,15 +387,7 @@
       const dx = e.changedTouches[0].clientX - tx;
       if (dx < -50) nextSlide();
     }, {passive:true});
-
-    // если все три комнаты посещены, но пользователь не нажал "Далее" — можно явно подсветить
-    // также вешаем доп проверку при загрузке
-    window.addEventListener('load', function() {
-      // проверяем, не были ли комнаты уже помечены из localStorage? (не нужно)
-      // просто обновим UI
-      updateCorridorUI();
-    });
   })();
 </script>
 </body>
-  </html>
+</html>
